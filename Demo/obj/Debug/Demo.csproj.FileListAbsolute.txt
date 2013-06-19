@@ -1,0 +1,7 @@
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\bin\Debug\Demo.exe
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\bin\Debug\Demo.pdb
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\bin\Debug\DeviceIoControl.dll
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\bin\Debug\DeviceIoControl.pdb
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\obj\Debug\ResolveAssemblyReference.cache
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\obj\Debug\Demo.exe
+C:\Visual Studio Projects\C#\Shared.Classes\AlphaOmega.Debug\DeviceIoControl\Demo\obj\Debug\Demo.pdb
