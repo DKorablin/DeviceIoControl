@@ -188,11 +188,11 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Fixed drive</summary>
 				Fixed,
 			}
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wGenConfig;
 			/// <summary>Number of cylinders</summary>
 			public UInt16 wNumCyls;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wReserved;
 			/// <summary>Number of heads</summary>
 			public UInt16 wNumHeads;
@@ -202,17 +202,17 @@ namespace AlphaOmega.Debug.Native
 			public UInt16 wBytesPerSector;
 			/// <summary>Sectors per track</summary>
 			public UInt16 wSectorsPerTrack;//14
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
 			public UInt16[] wVendorUnique;//20
 			/// <summary>Serial number</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
 			public Char[] sSerialNumber;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wBufferType;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wBufferSize;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wECCSize;//66
 			/// <summary>Firmware version</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
@@ -220,19 +220,19 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Model number</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
 			public Char[] sModelNumber;//162
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wMoreVendorUnique;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wDoubleWordIO;
 			/// <summary>Capabilities</summary>
 			public UInt16 wCapabilities;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wReserved1;
 			/// <summary>Device PIO mode</summary>
 			public UInt16 wPIOTiming;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wDMATiming;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wBS;//176
 			/// <summary>Current number of cylinders</summary>
 			public UInt16 wNumCurrentCyls;
@@ -242,15 +242,15 @@ namespace AlphaOmega.Debug.Native
 			public UInt16 wNumCurrentSectorsPerTrack;
 			/// <summary>Current sector capacity</summary>
 			public UInt32 ulCurrentSectorCapacity;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wMultSectorStuff;
 			/// <summary>User addressable space</summary>
 			public UInt32 ulTotalAddressableSectors;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wSingleWordDMA;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			public UInt16 wMultiWordDMA;
-			/// <summary>banana banana banana</summary>
+			/// <summary>banana</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
 			public Byte[] bReserved;
 
@@ -605,6 +605,16 @@ namespace AlphaOmega.Debug.Native
 			/// </summary>
 			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE_GPT.</remarks>
 			public Guid DiskId;
+		}
+		/// <summary>Contains information used to verify a disk extent.</summary>
+		/// <remarks>It is the output buffer for the IOCTL_DISK_VERIFY control code.</remarks>
+		[StructLayout(LayoutKind.Sequential)]
+		public struct VERIFY_INFORMATION
+		{
+			/// <summary>The starting offset of the disk extent.</summary>
+			public UInt64 StartingOffset;
+			/// <summary>The length of the disk extent, in bytes.</summary>
+			public UInt32 Length;
 		}
 		/// <summary>The DISK_PERFORMANCE structure is used in conjunction with the IOCTL_DISK_PERFORMANCE request to collect summary disk statistics for purposes of measuring disk performance.</summary>
 		/// <remarks>Counting halts whenever the performance counters are disabled, but the counters are not reset, so the cumulative values assigned to the structure members might potentially reflect disk activity across several enablings and disablings of the counters.</remarks>

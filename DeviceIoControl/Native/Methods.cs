@@ -2,12 +2,11 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
 using System.Threading;
 
 namespace AlphaOmega.Debug.Native
 {
-	[SuppressUnmanagedCodeSecurity]
+	/// <summary>Native methods</summary>
 	internal static class Methods
 	{
 		/// <summary>
@@ -37,14 +36,30 @@ namespace AlphaOmega.Debug.Native
 			UInt32 dwFlagsAndAttributes,
 			IntPtr hTemplateFile);
 
-		/// <summary>Connect to device</summary>
+		/// <summary>Opens specified device</summary>
 		/// <param name="lpFileName">Device path</param>
-		/// <returns>Handle to opened device</returns>
+		/// <returns>Handle to the opened device</returns>
 		public static IntPtr OpenDevice(String lpFileName)
 		{
-			IntPtr result = Methods.CreateFile(lpFileName,
+			return Methods.OpenDevice(lpFileName,
 				WinAPI.FILE_ACCESS_FLAGS.GENERIC_READ | WinAPI.FILE_ACCESS_FLAGS.GENERIC_WRITE,
-				WinAPI.FILE_SHARE.READ | WinAPI.FILE_SHARE.WRITE,
+				WinAPI.FILE_SHARE.READ | WinAPI.FILE_SHARE.WRITE);
+		}
+		/// <summary>Opens specified device</summary>
+		/// <param name="lpFileName">Device path</param>
+		/// <param name="dwDesiredAccess">Desired access flage</param>
+		/// <param name="dwShareMode">Share mode</param>
+		/// <exception cref="ArgumentNullException">lpFileName is null or empty</exception>
+		/// <exception cref="Win32Exception">Device does not opened</exception>
+		/// <returns>Handle to the opened device</returns>
+		public static IntPtr OpenDevice(String lpFileName, WinAPI.FILE_ACCESS_FLAGS dwDesiredAccess, WinAPI.FILE_SHARE dwShareMode)
+		{
+			if(String.IsNullOrEmpty(lpFileName))
+				throw new ArgumentNullException("lpFileName");
+
+			IntPtr result = Methods.CreateFile(lpFileName,
+				dwDesiredAccess,
+				dwShareMode,
 				IntPtr.Zero,
 				WinAPI.CreateDisposition.OPEN_EXISTING,
 				0,
@@ -52,13 +67,13 @@ namespace AlphaOmega.Debug.Native
 
 			if(result == Constant.INVALID_HANDLE_VALUE)
 				throw new Win32Exception();
-
 			return result;
 		}
 
 		[DllImport("kernel32.dll", EntryPoint = "CloseHandle", SetLastError = true)]
 		public static extern Boolean CloseHandle(IntPtr hObject);
 
+		[SuppressUnmanagedCodeSecurity]
 		[DllImport("kernel32.dll", EntryPoint = "GetDevicePowerState", SetLastError = true)]
 		public static extern Boolean GetDevicePowerState(IntPtr hDevice, out Boolean pfOn);
 
@@ -75,7 +90,8 @@ namespace AlphaOmega.Debug.Native
 		/// A trailing backslash is required. If this parameter is NULL, the function uses the root of the current directory.
 		/// </param>
 		/// <returns>The return value specifies the type of drive.</returns>
-		[DllImport("kernel32.dll", EntryPoint="GetDriveTypeA", SetLastError = true)]
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", EntryPoint = "GetDriveTypeA", SetLastError = true)]
 		public static extern WinAPI.DRIVE GetDriveTypeA(
 			[In] String lpRootPathName);
 
@@ -110,6 +126,37 @@ namespace AlphaOmega.Debug.Native
 			ref UInt32 lpBytesReturned,
 			[In] ref NativeOverlapped lpOverlapped);
 
+		public static T DeviceIoControl<T>(
+			IntPtr hDevice,
+			UInt32 dwIoControlCode,
+			Object inParams,
+			out UInt32 lpBytesReturned) where T : struct
+		{
+			T result;
+			if(Methods.DeviceIoControl<T>(
+				hDevice,
+				dwIoControlCode,
+				inParams,
+				out lpBytesReturned,
+				out result))
+				return result;
+			else
+				throw new Win32Exception();
+		}
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>
+		/// <param name="hDevice">A handle to the device on which the operation is to be performed. The device is typically a volume, directory, file, or stream.</param>
+		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+		/// <param name="inParams">
+		/// A pointer to the input buffer that contains the data required to perform the operation. The format of this data depends on the value of the dwIoControlCode parameter.
+		/// This parameter can be NULL if dwIoControlCode specifies an operation that does not require input data.
+		/// </param>
+		/// <param name="lpBytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes.</param>
+		/// <param name="outBuffer">
+		/// A pointer to the output buffer that is to receive the data returned by the operation. The format of this data depends on the value of the dwIoControlCode parameter.
+		/// This parameter can be NULL if dwIoControlCode specifies an operation that does not return data.
+		/// </param>
+		/// <returns>If the operation completes successfully, the return value is nonzero.</returns>
 		public static Boolean DeviceIoControl<T>(
 			IntPtr hDevice,
 			UInt32 dwIoControlCode,
@@ -159,24 +206,6 @@ namespace AlphaOmega.Debug.Native
 				if(lpOutBuffer != IntPtr.Zero)
 					Marshal.FreeHGlobal(lpOutBuffer);
 			}
-		}
-
-		public static T DeviceIoControl<T>(
-			IntPtr hDevice,
-			UInt32 dwIoControlCode,
-			Object inParams,
-			out UInt32 lpBytesReturned) where T : struct
-		{
-			T result;
-			if(Methods.DeviceIoControl<T>(
-				hDevice,
-				dwIoControlCode,
-				inParams,
-				out lpBytesReturned,
-				out result))
-				return result;
-			else
-				throw new Win32Exception();
 		}
 	}
 }

@@ -158,6 +158,11 @@
         </member>
         <member name="P:AlphaOmega.Debug.Volume.DiskExtents">
             <summary>Represents a physical location on a disk.</summary>
+            <remarks>Вызов не работает в Windows 7</remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Volume.IsClustered">
+            <summary>Determines whether the specified volume is clustered.</summary>
+            <exception cref="T:System.ComponentModel.Win32Exception">The volume is offline or Cluster service is not installed.</exception>
         </member>
         <member name="T:AlphaOmega.Debug.WinAPI">
             <summary>Native structures</summary>
@@ -381,6 +386,10 @@
             <summary>Self-Monitoring Analysis and Reporting Technology info</summary>
             <remarks>Smart can be null if SAMRT commands not supported</remarks>
         </member>
+        <member name="P:AlphaOmega.Debug.Disc.IsWritable">
+            <summary>Determines whether the specified disk is writable.</summary>
+            <exception cref="T:System.ComponentModel.Win32Exception">WinAPI operation fails.</exception>
+        </member>
         <member name="T:AlphaOmega.Debug.Native.FsctlAPI">
             <summary>File System control API</summary>
         </member>
@@ -462,6 +471,389 @@
             Но если разбить на куски, скажем, по 512 байт, то чтение всего массива может занять несколько минут. Проще сразу передать достаточно большой массив.
             </remarks>
         </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS">
+            <summary>Contains statistical information from the file system.</summary>
+            <remarks>
+            There are two types of files: user and metadata. User files are available for the user.
+            Metadata files are system files that contain information, which the file system uses for its internal organization.
+            The number of read and write operations measured is the number of paging operations.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.FileSystemType">
+            <summary>The type of file system.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.Version">
+            <summary>This member is set to 1 (one).</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.SizeOfCompleteStructure">
+            <summary>The size of this structure plus the size of the file system-specific structure that follows this structure, multiplied by the number of processors.</summary>
+            <remarks>
+            This value must be a multiple of 64. For example, if the size of FILESYSTEM_STATISTICS is 0x38, the size of NTFS_STATISTICS is 0xd4, and if there are 2 processors, the buffer allocated must be 0x280.
+            sizeof(FILESYSTEM_STATISTICS) = 0x38
+            sizeof(NTFS_STATISTICS) = 0xd4
+            Total Size = 0x10c
+            size of the complete structure = 0x140 (which is the aligned length, a multiple of 64)
+            multiplied by 2 (the number of processors) = 0x280
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.UserFileReads">
+            <summary>The number of read operations on user files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.UserFileReadBytes">
+            <summary>The number of bytes read from user files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.UserDiskReads">
+            <summary>
+            The number of read operations on user files.
+            This value includes sub-read operations.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.UserFileWrites">
+            <summary>The number of write operations on user files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.UserFileWriteBytes">
+            <summary>The number of bytes written to user files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.UserDiskWrites">
+            <summary>
+            The number of write operations on user files.
+            This value includes sub-write operations.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.MetaDataReads">
+            <summary>The number of read operations on metadata files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.MetaDataReadBytes">
+            <summary>The number of bytes read from metadata files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.MetaDataDiskReads">
+            <summary>
+            The number of read operations on metadata files.
+            This value includes sub-read operations.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.MetaDataWrites">
+            <summary>The number of write operations on metadata files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.MetaDataWriteBytes">
+            <summary>The number of bytes written to metadata files.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.MetaDataDiskWrites">
+            <summary>
+            The number of write operations on metadata files.
+            This value includes sub-write operations.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.Ntfs">
+            <summary>Contains statistical information from the NTFS file system.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.Fat">
+            <summary>Contains statistical information from the FAT file system.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.ExFat">
+            <summary>Contains statistical information from the exFAT file system.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.FILESYSTEM_STATISTICS_TYPE">
+            <summary>The type of file system.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.FILESYSTEM_STATISTICS_TYPE.NTFS">
+            <summary>
+            The file system is the NTFS file system.
+            If this value is set, this structure is followed by an <see cref="T:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS"/> structure.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.FILESYSTEM_STATISTICS_TYPE.FAT">
+            <summary>
+            The file system is a FAT file system.
+            If this value is set, this structure is followed by a <see cref="T:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS"/> structure.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FILESYSTEM_STATISTICS.FILESYSTEM_STATISTICS_TYPE.EXFAT">
+            <summary>
+            The file system is an exFAT file system.
+            If this value is set, this structure is followed by an <see cref="T:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS"/> structure.
+            </summary>
+            <remarks>This value is not supported until Windows Vista with SP1.</remarks>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS">
+            <summary>Contains statistical information from the FAT file system.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.CreateHits">
+            <summary>The number of create operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.SuccessfulCreates">
+            <summary>The number of successful create operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.FailedCreates">
+            <summary>The number of failed create operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.NonCachedReads">
+            <summary>The number of read operations that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.NonCachedReadBytes">
+            <summary>The number of bytes read from a file that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.NonCachedWrites">
+            <summary>The number of write operations that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.NonCachedWriteBytes">
+            <summary>The number of bytes written to a file that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.NonCachedDiskReads">
+            <summary>The number of read operations that were not cached. This value includes sub-read operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.FAT_STATISTICS.NonCachedDiskWrites">
+            <summary>The number of write operations that were not cached. This value includes sub-write operations.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS">
+            <summary>Contains statistical information from the exFAT file system.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.CreateHits">
+            <summary>The number of create operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.SuccessfulCreates">
+            <summary>The number of successful create operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.FailedCreates">
+            <summary>The number of failed create operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.NonCachedReads">
+            <summary>The number of read operations that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.NonCachedReadBytes">
+            <summary>The number of bytes read from a file that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.NonCachedWrites">
+            <summary>The number of write operations that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.NonCachedWriteBytes">
+            <summary>The number of bytes written to a file that were not cached.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.NonCachedDiskReads">
+            <summary>The number of read operations that were not cached. This value includes sub-read operations.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.EXFAT_STATISTICS.NonCachedDiskWrites">
+            <summary>The number of write operations that were not cached. This value includes sub-write operations.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS">
+            <summary>Contains statistical information from the NTFS file system.</summary>
+            <remarks>
+            The MFT, MFT mirror, root index, user index, bitmap, and MFT bitmap are counted as metadata files.
+            The log file is not counted as a metadata file.
+            The number of read and write operations measured is the number of paging operations.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.LogFileFullExceptions">
+            <summary>The number of exceptions generated due to the log file being full.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.OtherExceptions">
+            <summary>The number of other exceptions generated.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftReads">
+            <summary>The number of read operations on the master file table (MFT).</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftReadBytes">
+            <summary>The number of bytes read from the MFT.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWrites1">
+            <summary>The number of write operations on the MFT.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWriteBytes">
+            <summary>The number of bytes written to the MFT.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWritesUserLevel">
+            <summary>The number of MFT writes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWritesFlushForLogFileFull">
+            <summary>The number of flushes of the MFT performed because the log file was full.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWritesLazyWriter">
+            <summary>The number of MFT write operations performed by the lazy writer thread.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWritesUserRequest">
+            <summary>Reserved.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Mft2Writes">
+            <summary>The number of write operations on the MFT mirror.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Mft2WriteBytes">
+            <summary>The number of bytes written to the MFT mirror.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Mft2WritesUserLevel">
+            <summary>The number of MFT mirror writes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Mft2WritesFlushForLogFileFull">
+            <summary>The number of flushes of the MFT mirror performed because the log file was full.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Mft2WritesLazyWriter">
+            <summary>The number of MFT mirror write operations performed by the lazy writer thread.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Mft2WritesUserRequest">
+            <summary>Reserved.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.RootIndexReads">
+            <summary>The number of read operations on the root index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.RootIndexReadBytes">
+            <summary>The number of bytes read from the root index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.RootIndexWrites">
+            <summary>The number of write operations on the root index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.RootIndexWriteBytes">
+            <summary>The number of bytes written to the root index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapReads">
+            <summary>The number of read operations on the cluster allocation bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapReadBytes">
+            <summary>The number of bytes read from the cluster allocation bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWrites1">
+            <summary>The number of write operations on the cluster allocation bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWriteBytes">
+            <summary>The number of bytes written to the cluster allocation bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWritesFlushForLogFileFull">
+            <summary>The number of flushes of the bitmap performed because the log file was full.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWritesLazyWriter">
+            <summary>The number of bitmap write operations performed by the lazy writer thread.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWritesUserRequest">
+            <summary>Reserved.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWritesUserLevel">
+            <summary>The number of bitmap writes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapReads">
+            <summary>The number of read operations on the MFT bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapReadBytes">
+            <summary>The number of bytes read from the MFT bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapWrites">
+            <summary>The number of write operations on the MFT bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapWriteBytes">
+            <summary>The number of bytes written to the MFT bitmap.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapWritesFlushForLogFileFull">
+            <summary>The number of flushes of the MFT bitmap performed because the log file was full.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapWritesLazyWriter">
+            <summary>The number of MFT bitmap write operations performed by the lazy writer thread.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapWritesUserRequest">
+            <summary>Reserved.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftBitmapWritesUserLevel">
+            <summary>The number of MFT bitmap writes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.UserIndexReads">
+            <summary>The number of read operations on the user index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.UserIndexReadBytes">
+            <summary>The number of bytes read from the user index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.UserIndexWrites">
+            <summary>The number of write operations on the user index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.UserIndexWriteBytes">
+            <summary>The number of bytes written to the user index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.LogFileReads">
+            <summary>The number of read operations on the log file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.LogFileReadBytes">
+            <summary>The number of bytes read from the log file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.LogFileWrites">
+            <summary>The number of write operations on the log file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.LogFileWriteBytes">
+            <summary>The number of bytes written to the log file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.Allocate">
+            <summary>Allocate clusters</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWrites">
+            <summary>Number of writes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWrites.Write">
+            <summary>
+            The number of MFT writes due to a write operation.
+            The number of MFT mirror writes due to a write operation.
+            The number of MFT bitmap writes due to a write operation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWrites.Create">
+            <summary>
+            The number of MFT writes due to a create operation.
+            The number of MFT mirror writes due to a create operation.
+            The number of bitmap writes due to a create operation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWrites.SetInfo">
+            <summary>
+            The number of MFT writes due to setting file information.
+            The number of MFT mirror writes due to setting file information.
+            The number of bitmap writes due to setting file information.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.MftWrites.Flush">
+            <summary>
+            The number of MFT writes due to a flush operation.
+            The number of MFT mirror writes due to a flush operation.
+            The number of bitmap writes due to a flush operation.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWrites">
+            <summary>The number of bitmap writes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWrites.Write">
+            <summary>The number of bitmap writes due to a write operation.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWrites.Create">
+            <summary>The number of bitmap writes due to a create operation.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.BitmapWrites.SetInfo">
+            <summary>The number of bitmap writes due to setting file information.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct">
+            <summary>Allocate clusters</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.Calls">
+            <summary>The number of individual calls to allocate clusters.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.Clusters">
+            <summary>The number of clusters allocated.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.Hints">
+            <summary>The number of times a hint was specified.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.RunsReturned">
+            <summary>The number of runs used to satisfy all the requests.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.HintsHonored">
+            <summary>The number of times the hint was useful.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.HintsClusters">
+            <summary>The number of clusters allocated through the hint.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.Cache">
+            <summary>The number of times the cache was useful other than the hint.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.CacheClusters">
+            <summary>The number of clusters allocated through the cache other than the hint.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.CacheMiss">
+            <summary>The number of times the cache was not useful.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.FsctlAPI.NTFS_STATISTICS.AllocateStruct.CacheMissClusters">
+            <summary>The number of clusters allocated without the cache.</summary>
+        </member>
         <member name="T:AlphaOmega.Debug.SmartInfo">
             <summary>Self-Monitoring Analysis and Reporting Technology information class</summary>
         </member>
@@ -472,6 +864,16 @@
         <member name="M:AlphaOmega.Debug.SmartInfo.GetEnumerator">
             <summary>Get SMART attributes with thresholds</summary>
             <returns></returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.SmartInfo.GetAttributes">
+            <summary>S.M.A.R.T. attibutes</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.SmartInfo.GetAttributeParamsNative">
+            <summary>S.M.A.R.T. attributes native structure</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.SmartInfo.GetThresholdParamsNative">
+            <summary>S.M.A.R.T. threshold native structure</summary>
+            <remarks>Reset thresholds cache</remarks>
         </member>
         <member name="M:AlphaOmega.Debug.SmartInfo.GetDeviceInfo(System.UInt32@)">
             <summary>Get system device info structure</summary>
@@ -491,28 +893,15 @@
         <member name="P:AlphaOmega.Debug.SmartInfo.SystemParams">
             <summary>Native info structure</summary>
         </member>
-        <member name="P:AlphaOmega.Debug.SmartInfo.EnabledParams">
+        <member name="P:AlphaOmega.Debug.SmartInfo.SmartEnabled">
             <summary>Send a SMART_ENABLE_SMART_OPERATIONS command to the drive (DrvNum == 0..3)</summary>
-        </member>
-        <member name="P:AlphaOmega.Debug.SmartInfo.AttributeParams">
-            <summary>SMART attributes native structure</summary>
-        </member>
-        <member name="P:AlphaOmega.Debug.SmartInfo.ThresholdParams">
-            <summary>SMART threshold native structure</summary>
         </member>
         <member name="P:AlphaOmega.Debug.SmartInfo.StatusParams">
             <summary>SMART status native structure</summary>
         </member>
-        <member name="P:AlphaOmega.Debug.SmartInfo.Attributes">
-            <summary>SMART attibutes</summary>
-        </member>
         <member name="P:AlphaOmega.Debug.SmartInfo.Thresholds">
             <summary>SMART thresholds</summary>
-        </member>
-        <member name="P:AlphaOmega.Debug.SmartInfo.Item(System.UInt32)">
-            <summary>Get SMART attribute with threshold value</summary>
-            <param name="index">Index from smart attribute array</param>
-            <returns></returns>
+            <remarks>Threshols are cached because they are unchanged</remarks>
         </member>
         <member name="T:AlphaOmega.Debug.DeviceIoControl">
             <summary>Device info</summary>
@@ -528,6 +917,7 @@
             <summary>Create instance of device info class by device ID or drive letter</summary>
             <param name="deviceId">ID of device</param>
             <param name="deviceName">name of device</param>
+            <exception cref="T:System.ArgumentException">Device id does not specified</exception>
         </member>
         <member name="M:AlphaOmega.Debug.DeviceIoControl.IoControl``1(System.UInt32,System.Object)">
             <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
@@ -543,6 +933,17 @@
             <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
             <param name="bytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes.</param>
             <returns>Return object</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.DeviceIoControl.IoControl(System.UInt32)">
+            <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+            <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+            <returns>Result of method execution</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.DeviceIoControl.IoControl(System.UInt32,System.Object)">
+            <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+            <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+            <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
+            <returns>Result of method execution</returns>
         </member>
         <member name="M:AlphaOmega.Debug.DeviceIoControl.IoControl``1(System.UInt32,System.Object,``0@)">
             <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
@@ -601,6 +1002,9 @@
         <member name="P:AlphaOmega.Debug.DeviceIoControl.IsDeviceOn">
             <summary>Get device power state</summary>
         </member>
+        <member name="T:AlphaOmega.Debug.Native.Methods">
+            <summary>Native methods</summary>
+        </member>
         <member name="M:AlphaOmega.Debug.Native.Methods.CreateFile(System.String,AlphaOmega.Debug.WinAPI.FILE_ACCESS_FLAGS,AlphaOmega.Debug.WinAPI.FILE_SHARE,System.IntPtr,AlphaOmega.Debug.WinAPI.CreateDisposition,System.UInt32,System.IntPtr)">
             <summary>
             Creates or opens a file or I/O device.
@@ -621,9 +1025,18 @@
             <returns>If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot.</returns>
         </member>
         <member name="M:AlphaOmega.Debug.Native.Methods.OpenDevice(System.String)">
-            <summary>Connect to device</summary>
+            <summary>Opens specified device</summary>
             <param name="lpFileName">Device path</param>
-            <returns>Handle to opened device</returns>
+            <returns>Handle to the opened device</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.Native.Methods.OpenDevice(System.String,AlphaOmega.Debug.WinAPI.FILE_ACCESS_FLAGS,AlphaOmega.Debug.WinAPI.FILE_SHARE)">
+            <summary>Opens specified device</summary>
+            <param name="lpFileName">Device path</param>
+            <param name="dwDesiredAccess">Desired access flage</param>
+            <param name="dwShareMode">Share mode</param>
+            <exception cref="T:System.ArgumentNullException">lpFileName is null or empty</exception>
+            <exception cref="T:System.ComponentModel.Win32Exception">Device does not opened</exception>
+            <returns>Handle to the opened device</returns>
         </member>
         <member name="M:AlphaOmega.Debug.Native.Methods.GetDriveTypeA(System.String)">
             <summary>Determines whether a disk drive is a removable, fixed, CD-ROM, RAM disk, or network drive.</summary>
@@ -656,6 +1069,22 @@
             </param>
             <returns>If the operation completes successfully, the return value is nonzero.</returns>
         </member>
+        <member name="M:AlphaOmega.Debug.Native.Methods.DeviceIoControl``1(System.IntPtr,System.UInt32,System.Object,System.UInt32@,``0@)">
+            <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>
+            <param name="hDevice">A handle to the device on which the operation is to be performed. The device is typically a volume, directory, file, or stream.</param>
+            <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+            <param name="inParams">
+            A pointer to the input buffer that contains the data required to perform the operation. The format of this data depends on the value of the dwIoControlCode parameter.
+            This parameter can be NULL if dwIoControlCode specifies an operation that does not require input data.
+            </param>
+            <param name="lpBytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes.</param>
+            <param name="outBuffer">
+            A pointer to the output buffer that is to receive the data returned by the operation. The format of this data depends on the value of the dwIoControlCode parameter.
+            This parameter can be NULL if dwIoControlCode specifies an operation that does not return data.
+            </param>
+            <returns>If the operation completes successfully, the return value is nonzero.</returns>
+        </member>
         <member name="T:AlphaOmega.Debug.Storage">
             <summary>Storage IO control commands</summary>
         </member>
@@ -663,20 +1092,46 @@
             <summary>Create instance of storage IO commands class</summary>
             <param name="device">Device</param>
         </member>
+        <member name="M:AlphaOmega.Debug.Storage.PreventMediaRemoval(System.Boolean)">
+            <summary>Enables or disables the mechanism that ejects media, for those devices possessing that locking capability.</summary>
+            <param name="prevent">Prevent device to eject media</param>
+        </member>
+        <member name="M:AlphaOmega.Debug.Storage.EjectMedia">
+            <summary>Causes the device to eject the media if the device supports ejection capabilities.</summary>
+            <exception cref="T:System.ComponentModel.Win32Exception">Device exception</exception>
+        </member>
+        <member name="M:AlphaOmega.Debug.Storage.GetHotPlugInfo">
+            <summary>Retrieves the hotplug configuration of the specified device.</summary>
+            <returns>Hotplug information for a device.</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.Storage.PredictFailure">
+            <summary>Polls for a prediction of device failure.</summary>
+            <summary>Report whether a device is currently predicting a failure.</summary>
+        </member>
         <member name="P:AlphaOmega.Debug.Storage.Device">
             <summary>Device</summary>
         </member>
         <member name="P:AlphaOmega.Debug.Storage.Properties">
             <summary>Device descriptors</summary>
         </member>
-        <member name="P:AlphaOmega.Debug.Storage.HotPlugInfo">
-            <summary>Retrieves the hotplug configuration of the specified device.</summary>
-        </member>
         <member name="P:AlphaOmega.Debug.Storage.DeviceNumber">
             <summary>Contains information about a device.</summary>
         </member>
+        <member name="P:AlphaOmega.Debug.Storage.SerialNumber">
+            <summary>Queries the USB generic parent driver for the serial number of a USB device.</summary>
+            <remarks>
+            If a USB device has a CSM-1 content security interface, a USB client driver can query for its serial number using this request.
+            USB client drivers that help implement a digital rights management (DRM) system can use this information to ensure that only legitimate customers have access to digitized intellectual property.
+            </remarks>
+        </member>
         <member name="P:AlphaOmega.Debug.Storage.MediaTypes">
             <summary>Contains information about the media types supported by a device.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Storage.CheckVerify">
+            <summary>Determines whether the media has changed on a removable-media device that the caller has opened for read or write access.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Storage.CheckVerify2">
+            <summary>Determines whether the media has changed on a removable-media device - the caller has opened with FILE_READ_ATTRIBUTES.</summary>
         </member>
         <member name="M:AlphaOmega.Debug.Constant.CTL_CODE(System.UInt16,System.UInt16,AlphaOmega.Debug.WinAPI.FILE_ACCESS)">
             <summary>This macro is used to create a unique system I/O control code (IOCTL).</summary>
@@ -717,8 +1172,23 @@
             </remarks>
             <returns>IO control code</returns>
         </member>
+        <member name="P:AlphaOmega.Debug.Constant.AttributeNames">
+            <summary>S.M.A.R.T. attributes names</summary>
+        </member>
         <member name="T:AlphaOmega.Debug.Constant.ERROR">
             <summary>WIN32 Error</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.ERROR.NO_ERROR">
+            <summary>The operation completed successfully.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.ERROR.WRITE_PROTECT">
+            <summary>The media is write protected.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.ERROR.NOT_READY">
+            <summary>The device is not ready.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.ERROR.MORE_DATA">
+            <summary>More data is available.</summary>
         </member>
         <member name="T:AlphaOmega.Debug.Constant.IOCTL_VOLUME">
             <summary>Volume</summary>
@@ -734,15 +1204,41 @@
         <member name="T:AlphaOmega.Debug.Constant.IOCTL_DISC">
             <summary>Disc</summary>
         </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.GET_DRIVE_GEOMETRY">
+            <summary>Retrieves information about the physical disk's geometry: type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365169%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.GET_PARTITION_INFO">
+            <summary>Retrieves information about the type, size, and nature of a disk partition.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365179%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.SET_PARTITION_INFO">
+            <summary>Sets partition information for the specified disk partition.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365190%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.GET_DRIVE_LAYOUT">
+            <summary>Retrieves information for each entry in the partition tables for a disk.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365173%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.SET_DRIVE_LAYOUT">
+            <summary>Partitions a disk as specified by drive layout and partition information data.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365188%28v=vs.85%29.aspx</remarks>
+        </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.PERFORMANCE">
             <summary>
             Increments a reference counter that enables the collection of disk performance statistics, such as the numbers of bytes read and written since the driver last processed this request, for a corresponding disk monitoring application.
             In Microsoft Windows 2000 this IOCTL is handled by the filter driver diskperf.
             In Windows XP and later operating systems, the partition manager handles this request for disks and ftdisk.sys and dmio.sys handle this request for volumes.
             </summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365183%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.IS_WRITABLE">
+            <summary>Determines whether the specified disk is writable.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365182%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.PERFORMANCE_OFF">
             <summary>Disables the counters that were enabled by previous calls to IOCTL_DISK_PERFORMANCE. This request is available in Windows XP and later operating systems. Caller must be running at IRQL = PASSIVE_LEVEL.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365184%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.SMART_GET_VERSION">
             <summary>Returns version information, a capabilities mask, and a bitmask for the device.</summary>
@@ -755,29 +1251,61 @@
         </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_DISC.GET_DRIVE_GEOMETRY_EX">
             <summary>Returns information about the physical disk's geometry (media type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector).</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365171%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="T:AlphaOmega.Debug.Constant.IOCTL_STORAGE">
             <summary>Storage</summary>
         </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.CHECK_VERIFY">
+            <summary>Determines whether the media has changed on a removable-media device that the caller has opened for read or write access.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560535%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.CHECK_VERIFY2">
+            <summary>Determines whether the media has changed on a removable-media device - the caller has opened with FILE_READ_ATTRIBUTES.</summary>
+            <remarks>
+            Because no file system is mounted when a device is opened in this way, this request can be processed much more quickly than an IOCTL_STORAGE_CHECK_VERIFY request.
+            http://msdn.microsoft.com/en-us/library/windows/hardware/ff560538%28v=vs.85%29.aspx
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.MEDIA_REMOVAL">
+            <summary>Enables or disables the mechanism that ejects media, for those devices possessing that locking capability.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363416%28v=vs.85%29.aspx</remarks>
+        </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.EJECT_MEDIA">
             <summary>Causes the device to eject the media if the device supports ejection capabilities.</summary>
-        </member>
-        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.LOAD_MEDIA">
-            <summary>Causes media to be loaded in a device that the caller has opened for read or write access.</summary>
-            <remarks>If read or write access to the device is not necessary, the caller can improve performance by opening the device with FILE_READ_ATTRIBUTES and issuing an <see cref="T:Constant.IOCTL_STORAGE.LOAD_MEDIA2"/> request instead.</remarks>
-        </member>
-        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.LOAD_MEDIA2">
-            <summary>Causes media to be loaded in a device that the caller has opened with FILE_READ_ATTRIBUTES.</summary>
-            <remarks>Because no file system is mounted when a device is opened in this way, this request can be processed much more quickly than an <see cref="T:Constant.IOCTL_STORAGE.LOAD_MEDIA"/> request.</remarks>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560542%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.GET_MEDIA_TYPES_EX">
             <summary>Retrieves information about the types of media supported by a device.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560563(v=vs.85).aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER">
             <summary>Retrieves the serial number of a USB device.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560557%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.GET_HOTPLUG_INFO">
+            <summary>Retrieves the hotplug configuration of the specified device.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560554%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.GET_DEVICE_NUMBER">
             <summary>Retrieves the device type, device number, and, for a partitionable device, the partition number of a device.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560551%28v=vs.85%29.aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.PREDICT_FAILURE">
+            <summary>Polls for a prediction of device failure.</summary>
+            <remarks>
+            This request works with the IDE disk drives that support self-monitoring analysis and reporting technology (SMART).
+            If the drive is a SCSI drive, the class driver attempts to verify
+            if the SCSI disk supports the equivalent IDE SMART technology by check
+            the inquiry information on the Information Exception Control Page, X3T10/94-190 Rev 4.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.QUERY_PROPERTY">
+            <summary>Returns properties of a storage device or adapter. The request indicates the kind of information to retrieve, such as inquiry data for a device or capabilities and limitations of an adapter.</summary>
+            <remarks>
+            <see cref="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> can also be used to determine whether the port driver supports a particular property or which fields in the property descriptor can be modified with a subsequent change-property request.
+            http://msdn.microsoft.com/en-us/library/windows/hardware/ff560590%28v=vs.85%29.aspx
+            </remarks>
         </member>
         <member name="T:AlphaOmega.Debug.Constant.IOCTL_SCSI">
             <summary>SCSI</summary>
@@ -812,12 +1340,19 @@
         </member>
         <member name="F:AlphaOmega.Debug.Constant.FSCTL.IS_VOLUME_MOUNTED">
             <summary>Determines whether the specified volume is mounted, or if the specified file or directory is on a mounted volume.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364574(v=vs.85).aspx</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.FSCTL.FILESYSTEM_GET_STATISTICS">
+            <summary>Retrieves the information from various file system performance counters.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364565%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.FSCTL.GET_NTFS_VOLUME_DATA">
             <summary>Retrieves information about the specified NTFS file system volume.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364569%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Constant.FSCTL.GET_VOLUME_BITMAP">
             <summary>Retrieves a bitmap of occupied and available clusters on a volume.</summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364573%28v=vs.85%29.aspx</remarks>
         </member>
         <member name="T:AlphaOmega.Debug.Native.DiscAPI">
             <summary>Disc IOCTL structures</summary>
@@ -1006,13 +1541,13 @@
             <summary>Sector identity</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wGenConfig">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wNumCyls">
             <summary>Number of cylinders</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wReserved">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wNumHeads">
             <summary>Number of heads</summary>
@@ -1027,19 +1562,19 @@
             <summary>Sectors per track</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wVendorUnique">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.sSerialNumber">
             <summary>Serial number</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wBufferType">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wBufferSize">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wECCSize">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.sFirmwareRev">
             <summary>Firmware version</summary>
@@ -1048,25 +1583,25 @@
             <summary>Model number</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wMoreVendorUnique">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wDoubleWordIO">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wCapabilities">
             <summary>Capabilities</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wReserved1">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wPIOTiming">
             <summary>Device PIO mode</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wDMATiming">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wBS">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wNumCurrentCyls">
             <summary>Current number of cylinders</summary>
@@ -1081,19 +1616,19 @@
             <summary>Current sector capacity</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wMultSectorStuff">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.ulTotalAddressableSectors">
             <summary>User addressable space</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wSingleWordDMA">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.wMultiWordDMA">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.bReserved">
-            <summary>banana banana banana</summary>
+            <summary>banana</summary>
         </member>
         <member name="P:AlphaOmega.Debug.Native.DiscAPI.IDSECTOR.SerialNumber">
             <summary>Serial number</summary>
@@ -1413,6 +1948,16 @@
             </summary>
             <remarks>This member is valid when PartitionStyle is PARTITION_STYLE_GPT.</remarks>
         </member>
+        <member name="T:AlphaOmega.Debug.Native.DiscAPI.VERIFY_INFORMATION">
+            <summary>Contains information used to verify a disk extent.</summary>
+            <remarks>It is the output buffer for the IOCTL_DISK_VERIFY control code.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.DiscAPI.VERIFY_INFORMATION.StartingOffset">
+            <summary>The starting offset of the disk extent.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.DiscAPI.VERIFY_INFORMATION.Length">
+            <summary>The length of the disk extent, in bytes.</summary>
+        </member>
         <member name="T:AlphaOmega.Debug.Native.DiscAPI.DISK_PERFORMANCE">
             <summary>The DISK_PERFORMANCE structure is used in conjunction with the IOCTL_DISK_PERFORMANCE request to collect summary disk statistics for purposes of measuring disk performance.</summary>
             <remarks>Counting halts whenever the performance counters are disabled, but the counters are not reset, so the cumulative values assigned to the structure members might potentially reflect disk activity across several enablings and disablings of the counters.</remarks>
@@ -1593,20 +2138,17 @@
         </member>
         <member name="M:AlphaOmega.Debug.BytesReader.BytesToStringAnsi(System.UInt32,System.Int32@)">
             <summary>Преобразование массива байт от отступа в строку</summary>
-            <param name="padding">Отступ от начала массива</param>
+            <param name="padding">Offset from the beginning of the array</param>
             <param name="length">Результатирующий размер строки</param>
             <exception cref="T:ArgumentOutOfRangeException">Bytes array is smaller than padding</exception>
             <returns>Получаемая строка</returns>
         </member>
         <member name="M:AlphaOmega.Debug.BytesReader.GetBytes(System.UInt32,System.UInt32)">
             <summary>Get bytes from data</summary>
-            <param name="index">Starting index</param>
+            <param name="padding">Offset from the beginning of the array</param>
             <param name="length">Length</param>
             <exception cref="T:ArgumentOutOfRangeException">index>Index and length is larger than bytes array length</exception>
             <returns>Bytes from index</returns>
-        </member>
-        <member name="M:AlphaOmega.Debug.BytesReader.Dispose">
-            <summary>Release allocated memory</summary>
         </member>
         <member name="M:AlphaOmega.Debug.BytesReader.BytesToStructure``1(System.Byte[],System.UInt32@)">
             <summary>Накладывание структуры на массив байт и увеличивание отступа на размер массива</summary>
@@ -1650,6 +2192,13 @@
             <param name="structure">Структура для преобразования</param>
             <returns>Массив байт</returns>
         </member>
+        <member name="M:AlphaOmega.Debug.BytesReader.Dispose">
+            <summary>Release allocated memory</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.BytesReader.Dispose(System.Boolean)">
+            <summary>Release allocated memory</summary>
+            <param name="disposing">Free managed resources</param>
+        </member>
         <member name="P:AlphaOmega.Debug.BytesReader.Bytes">
             <summary>Bytes array</summary>
         </member>
@@ -1684,21 +2233,29 @@
             </param>
             <param name="bytesReturned">Returned length of bytes</param>
             <param name="moreDataAvailable">Not all data readed</param>
+            <exception cref="T:System.ComponentModel.Win32Exception">Win32 Exception occured. See winerror.h for details</exception>
             <returns>Represents the occupied and available clusters on a disk.</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.FileSystem.GetStatistics">
+            <summary>Retrieves the information from various file system performance counters.</summary>
+            <returns>Contains statistical information from the file system.</returns>
         </member>
         <member name="M:AlphaOmega.Debug.FileSystem.LockVolume">
             <summary>
             Locks a volume if it is not in use.
             A locked volume can be accessed only through handles to the file object (*hDevice) that locks the volume.
             </summary>
+            <exception cref="T:System.ComponentModel.Win32Exception">Device exception</exception>
             <returns>Lock action status</returns>
         </member>
         <member name="M:AlphaOmega.Debug.FileSystem.UnlockVolume">
             <summary>Unlocks a volume.</summary>
+            <exception cref="T:System.ComponentModel.Win32Exception">Device exception</exception>
             <returns>Unlock action status</returns>
         </member>
         <member name="M:AlphaOmega.Debug.FileSystem.DismountVolume">
             <summary>Dismounts a volume regardless of whether or not the volume is currently in use.</summary>
+            <exception cref="T:System.ComponentModel.Win32Exception">Device exception</exception>
             <returns>Dismount action status</returns>
         </member>
         <member name="P:AlphaOmega.Debug.FileSystem.Device">
@@ -1834,13 +2391,25 @@
             <summary>Indicates the size, in bytes, of this structure.</summary>
         </member>
         <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_HOTPLUG_INFO.MediaRemovable">
-            <summary>Specifies whether the media is removable. If set to a nonzero value, the device media is removable. If set to zero, the device media is not removable. </summary>
+            <summary>Specifies whether the media is removable.</summary>
+            <remarks>
+            If set to a nonzero value, the device media is removable.
+            If set to zero, the device media is not removable.
+            </remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_HOTPLUG_INFO.MediaHotplug">
-            <summary>Specifies whether the media is lockable. If set to a nonzero value, the device media is not lockable. If set to zero, the device media is lockable.</summary>
+            <summary>Specifies whether the media is lockable.</summary>
+            <remarks>
+            If set to a nonzero value, the device media is not lockable.
+            If set to zero, the device media is lockable.
+            </remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_HOTPLUG_INFO.DeviceHotplug">
-            <summary>Specifies whether the device is a hotplug device. If set to a nonzero value, the device is a hotplug device. If set to zero, the device is not a hotplug device.</summary>
+            <summary>Specifies whether the device is a hotplug device.</summary>
+            <remarks>
+            If set to a nonzero value, the device is a hotplug device.
+            If set to zero, the device is not a hotplug device.
+            </remarks>
         </member>
         <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_HOTPLUG_INFO.WriteCacheEnableOverride">
             <summary>Do not use; set the value to NULL.</summary>
@@ -1895,6 +2464,18 @@
         </member>
         <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_DEVICE_DESCRIPTOR.RawDeviceProperties">
             <summary>Contains an array of length one that serves as a place holder for the first byte of the bus specific property data.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Native.StorageAPI.STORAGE_PREDICT_FAILURE">
+            <summary>The STORAGE_PREDICT_FAILURE structure is used in conjunction with <see cref="F:AlphaOmega.Debug.Constant.IOCTL_STORAGE.PREDICT_FAILURE"/> to report whether a device is currently predicting a failure.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_PREDICT_FAILURE.PredictFailure">
+            <summary>Indicates when nonzero that the device is currently predicting an imminent failure.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Native.StorageAPI.STORAGE_PREDICT_FAILURE.VendorSpecific">
+            <summary>Contains an array that holds 512 bytes of vendor-specific information if the device supports failure prediction.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Native.StorageAPI.STORAGE_PREDICT_FAILURE.IsDeviceHealthy">
+            <summary>Device does not predict any failures at this time</summary>
         </member>
         <member name="T:AlphaOmega.Debug.Native.StorageAPI.STORAGE_BUS_TYPE">
             <summary>Provides a symbolic means of representing storage bus types.</summary>

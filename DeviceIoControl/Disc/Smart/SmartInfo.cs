@@ -13,10 +13,7 @@ namespace AlphaOmega.Debug
 		private readonly DeviceIoControl _device;
 		private DiscAPI.IDSECTOR? _info;
 		private DiscAPI.SENDCMDOUTPARAMS? _enabledParams;
-		private DiscAPI.SENDCMDOUTPARAMS? _attributeParams;
-		private DiscAPI.SENDCMDOUTPARAMS? _thresholdParams;
 		private DiscAPI.SENDCMDOUTPARAMS? _statusParams;
-		private DiscAPI.DRIVEATTRIBUTE[] _attributes;
 		private DiscAPI.ATTRTHRESHOLD[] _thresholds;
 
 		/// <summary>Device</summary>
@@ -55,39 +52,13 @@ namespace AlphaOmega.Debug
 		}*/
 
 		/// <summary>Send a SMART_ENABLE_SMART_OPERATIONS command to the drive (DrvNum == 0..3)</summary>
-		public DiscAPI.SENDCMDOUTPARAMS EnabledParams
+		public DiscAPI.SENDCMDOUTPARAMS SmartEnabled
 		{
 			get
 			{
-				if(!this._enabledParams.HasValue)
+				if(this._enabledParams == null)
 					this._enabledParams = this.SendCommand(DiscAPI.IDEREGS.SMART.ENABLE_SMART);
 				return this._enabledParams.Value;
-			}
-		}
-		/// <summary>SMART attributes native structure</summary>
-		public DiscAPI.SENDCMDOUTPARAMS AttributeParams
-		{
-			get
-			{
-				if(!this._attributeParams.HasValue)
-				{
-					this.ToggleEnableSmart();
-					this._attributeParams = this.ReadAttributes(DiscAPI.IDEREGS.SMART.READ_ATTRIBUTES);
-				}
-				return this._attributeParams.Value;
-			}
-		}
-		/// <summary>SMART threshold native structure</summary>
-		public DiscAPI.SENDCMDOUTPARAMS ThresholdParams
-		{
-			get
-			{
-				if(!this._thresholdParams.HasValue)
-				{
-					this.ToggleEnableSmart();
-					this._thresholdParams = this.ReadAttributes(DiscAPI.IDEREGS.SMART.READ_THRESHOLDS);
-				}
-				return this._thresholdParams.Value;
 			}
 		}
 		/// <summary>SMART status native structure</summary>
@@ -100,26 +71,8 @@ namespace AlphaOmega.Debug
 				return this._statusParams.Value;
 			}
 		}
-		/// <summary>SMART attibutes</summary>
-		public DiscAPI.DRIVEATTRIBUTE[] Attributes
-		{
-			get
-			{
-				if(this._attributes == null)
-				{
-					UInt32 padding = 2;
-					//using(BytesReader reader = new BytesReader(SmartInfo.ConvertToByte(this.AttributeParams.bBuffer)))
-					using(BytesReader reader = new BytesReader(this.AttributeParams.bBuffer))
-					{
-						this._attributes = new DiscAPI.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
-						for(Int32 loop = 0;loop < this._attributes.Length;loop++)
-							this._attributes[loop] = reader.BytesToStructure<DiscAPI.DRIVEATTRIBUTE>(ref padding);
-					}
-				}
-				return _attributes;
-			}
-		}
 		/// <summary>SMART thresholds</summary>
+		/// <remarks>Threshols are cached because they are unchanged</remarks>
 		public DiscAPI.ATTRTHRESHOLD[] Thresholds
 		{
 			get
@@ -127,8 +80,8 @@ namespace AlphaOmega.Debug
 				if(this._thresholds == null)
 				{
 					UInt32 padding = 2;
-					//using(BytesReader reader = new BytesReader(SmartInfo.ConvertToByte(this.ThresholdParams.bBuffer)))
-					using(BytesReader reader = new BytesReader(this.ThresholdParams.bBuffer))
+					DiscAPI.SENDCMDOUTPARAMS prms = this.GetThresholdParamsNative();
+					using(BytesReader reader = new BytesReader(prms.bBuffer))
 					{
 						this._thresholds = new DiscAPI.ATTRTHRESHOLD[Constant.NUM_ATTRIBUTE_STRUCTS];
 						for(Int32 loop = 0;loop < this._thresholds.Length;loop++)
@@ -136,20 +89,6 @@ namespace AlphaOmega.Debug
 					}
 				}
 				return this._thresholds;
-			}
-		}
-		/// <summary>Get SMART attribute with threshold value</summary>
-		/// <param name="index">Index from smart attribute array</param>
-		/// <returns></returns>
-		public AttributeTresholds this[UInt32 index]
-		{
-			get
-			{
-				if(index < this.Attributes.Length)
-					if(this.Attributes[index].bAttrID == this.Thresholds[index].bAttrID)
-						return new AttributeTresholds() { Attribute = this.Attributes[index], Threshold = this.Thresholds[index], };
-					else throw new ArgumentException("Invalid Attribute/Threshold ID");
-				else throw new ArgumentOutOfRangeException();
 			}
 		}
 		/// <summary>Create instance of S.M.A.R.T. info structure</summary>
@@ -162,25 +101,51 @@ namespace AlphaOmega.Debug
 		/// <returns></returns>
 		public IEnumerator<AttributeTresholds> GetEnumerator()
 		{
-			if(this.Attributes.Length != this.Thresholds.Length)
-				throw new InvalidOperationException();
-			for(UInt32 loop = 0;loop < this.Attributes.Length /*this.Attributes.Length*/;loop++)
-				yield return this[loop];
+			DiscAPI.DRIVEATTRIBUTE[] attributes = this.GetAttributes();
+			DiscAPI.ATTRTHRESHOLD[] thresholds = this.Thresholds;
+
+			if(attributes.Length != thresholds.Length)
+				throw new ArgumentException("Invalid size of attributes and thresholds");
+
+			for(UInt32 loop = 0;loop < attributes.Length;loop++)
+				yield return new AttributeTresholds() { Attribute = attributes[loop], Threshold = thresholds[loop], };
 		}
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
 		}
-		private static Byte[] ConvertToByte(UInt16[] buffer)
+		/// <summary>S.M.A.R.T. attibutes</summary>
+		public DiscAPI.DRIVEATTRIBUTE[] GetAttributes()
 		{
-			List<Byte> result = new List<Byte>();
-			foreach(UInt16 item in buffer)
-				result.AddRange(BitConverter.GetBytes(item));
-			return result.ToArray();
+			DiscAPI.DRIVEATTRIBUTE[] result = new DiscAPI.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
+			UInt32 padding = 2;
+
+			DiscAPI.SENDCMDOUTPARAMS prms = this.GetAttributeParamsNative();
+			using(BytesReader reader = new BytesReader(prms.bBuffer))
+			{
+				result = new DiscAPI.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
+				for(Int32 loop = 0;loop < result.Length;loop++)
+					result[loop] = reader.BytesToStructure<DiscAPI.DRIVEATTRIBUTE>(ref padding);
+			}
+			return result;
+		}
+		/// <summary>S.M.A.R.T. attributes native structure</summary>
+		public DiscAPI.SENDCMDOUTPARAMS GetAttributeParamsNative()
+		{
+			this.ToggleEnableSmart();
+			return this.ReadAttributes(DiscAPI.IDEREGS.SMART.READ_ATTRIBUTES);
+		}
+		/// <summary>S.M.A.R.T. threshold native structure</summary>
+		/// <remarks>Reset thresholds cache</remarks>
+		public DiscAPI.SENDCMDOUTPARAMS GetThresholdParamsNative()
+		{
+			this.ToggleEnableSmart();
+			this._thresholds = null;
+			return this.ReadAttributes(DiscAPI.IDEREGS.SMART.READ_THRESHOLDS);
 		}
 		private void ToggleEnableSmart()
 		{
-			DiscAPI.SENDCMDOUTPARAMS enabled = this.EnabledParams;
+			DiscAPI.SENDCMDOUTPARAMS enabled = this.SmartEnabled;
 		}
 		private DiscAPI.SENDCMDOUTPARAMS SendCommand(DiscAPI.IDEREGS.SMART featureReg)
 		{

@@ -1,5 +1,7 @@
 ﻿using System;
 using AlphaOmega.Debug.Native;
+using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace AlphaOmega.Debug
 {
@@ -8,9 +10,9 @@ namespace AlphaOmega.Debug
 	{
 		private readonly DeviceIoControl _device;
 		private Properties _properties;
-		private StorageAPI.STORAGE_HOTPLUG_INFO? _hotplugInfo;
 		private StorageAPI.STORAGE_DEVICE_NUMBER? _deviceNumber;
 		private StorageAPI.GET_MEDIA_TYPES? _mediaTypes;
+		private StorageAPI.MEDIA_SERIAL_NUMBER_DATA? _serialNumber;
 
 		/// <summary>Device</summary>
 		public DeviceIoControl Device { get { return this._device; } }
@@ -22,18 +24,6 @@ namespace AlphaOmega.Debug
 				if(this._properties == null)
 					this._properties = new Properties(this.Device);
 				return this._properties;
-			}
-		}
-		/// <summary>Retrieves the hotplug configuration of the specified device.</summary>
-		public StorageAPI.STORAGE_HOTPLUG_INFO HotPlugInfo
-		{
-			get
-			{
-				if(this._hotplugInfo == null)
-					this._hotplugInfo = this.Device.IoControl<StorageAPI.STORAGE_HOTPLUG_INFO>(
-						Constant.IOCTL_STORAGE.GET_HOTPLUG_INFO,
-						null);
-				return this._hotplugInfo.Value;
 			}
 		}
 		/// <summary>Contains information about a device.</summary>
@@ -48,6 +38,22 @@ namespace AlphaOmega.Debug
 				return this._deviceNumber.Value;
 			}
 		}
+		/// <summary>Queries the USB generic parent driver for the serial number of a USB device.</summary>
+		/// <remarks>
+		/// If a USB device has a CSM-1 content security interface, a USB client driver can query for its serial number using this request.
+		/// USB client drivers that help implement a digital rights management (DRM) system can use this information to ensure that only legitimate customers have access to digitized intellectual property.
+		/// </remarks>
+		public StorageAPI.MEDIA_SERIAL_NUMBER_DATA SerialNumber
+		{
+			get
+			{
+				if(this._serialNumber == null)
+					this._serialNumber = this.Device.IoControl<StorageAPI.MEDIA_SERIAL_NUMBER_DATA>(
+						Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER,
+						null);
+				return this._serialNumber.Value;
+			}
+		}
 		/// <summary>Contains information about the media types supported by a device.</summary>
 		public StorageAPI.GET_MEDIA_TYPES MediaTypes
 		{
@@ -60,12 +66,74 @@ namespace AlphaOmega.Debug
 				return this._mediaTypes.Value;
 			}
 		}
+		/// <summary>Determines whether the media has changed on a removable-media device that the caller has opened for read or write access.</summary>
+		public Boolean CheckVerify
+		{
+			get
+			{
+				Boolean result = this.Device.IoControl(Constant.IOCTL_STORAGE.CHECK_VERIFY);
+				if(result)
+					return true;
+				else
+				{
+					Int32 error = Marshal.GetLastWin32Error();
+					if(error == (Int32)Constant.ERROR.NOT_READY)
+						return false;
+					else throw new Win32Exception(error);
+				}
+			}
+		}
+		/// <summary>Determines whether the media has changed on a removable-media device - the caller has opened with FILE_READ_ATTRIBUTES.</summary>
+		public Boolean CheckVerify2
+		{
+			get
+			{
+				Boolean result = this.Device.IoControl(Constant.IOCTL_STORAGE.CHECK_VERIFY2);
+				if(result)
+					return true;
+				else
+				{
+					Int32 error = Marshal.GetLastWin32Error();
+					if(error == (Int32)Constant.ERROR.NOT_READY)
+						return false;
+					else throw new Win32Exception(error);
+				}
+			}
+		}
 
 		/// <summary>Create instance of storage IO commands class</summary>
 		/// <param name="device">Device</param>
 		internal Storage(DeviceIoControl device)
 		{
 			this._device = device;
+		}
+		/// <summary>Enables or disables the mechanism that ejects media, for those devices possessing that locking capability.</summary>
+		/// <param name="prevent">Prevent device to eject media</param>
+		public void PreventMediaRemoval(Boolean prevent)
+		{
+			this.Device.IoControl<IntPtr>(Constant.IOCTL_STORAGE.MEDIA_REMOVAL, prevent);
+		}
+		/// <summary>Causes the device to eject the media if the device supports ejection capabilities.</summary>
+		/// <exception cref="Win32Exception">Device exception</exception>
+		public void EjectMedia()
+		{
+			this.Device.IoControl<IntPtr>(Constant.IOCTL_STORAGE.EJECT_MEDIA, null);
+		}
+		/// <summary>Retrieves the hotplug configuration of the specified device.</summary>
+		/// <returns>Hotplug information for a device.</returns>
+		public StorageAPI.STORAGE_HOTPLUG_INFO GetHotPlugInfo()
+		{
+			return this.Device.IoControl<StorageAPI.STORAGE_HOTPLUG_INFO>(
+				Constant.IOCTL_STORAGE.GET_HOTPLUG_INFO,
+				null);
+		}
+		/// <summary>Polls for a prediction of device failure.</summary>
+		/// <summary>Report whether a device is currently predicting a failure.</summary>
+		public StorageAPI.STORAGE_PREDICT_FAILURE PredictFailure()
+		{
+			return this.Device.IoControl<StorageAPI.STORAGE_PREDICT_FAILURE>(
+				Constant.IOCTL_STORAGE.PREDICT_FAILURE,
+				null);
 		}
 	}
 }

@@ -15,6 +15,10 @@ namespace Demo
 			{
 				using(DeviceIoControl device = new DeviceIoControl("c:\\"))
 				{
+					var info = device.FileSystem.GetStatistics();
+					Boolean isWritable = device.Disc.IsWritable;
+					Boolean checkVerify = device.Storage.CheckVerify;
+					Boolean checkVerify2 = device.Storage.CheckVerify2;
 					Boolean isOn = device.IsDeviceOn;
 					Console.WriteLine(String.Format("Device is {0}", isOn ? "on" : "off"));
 					if(device.Disc.Version.HasValue)
@@ -55,13 +59,16 @@ namespace Demo
 					if(device.Storage.Properties.Resilency.HasValue)
 						Console.WriteLine(String.Format("Resilency: {0}", device.Storage.Properties.Resilency.Value.Size));
 
-					AlphaOmega.Debug.Native.FsctlAPI.VOLUME_BITMAP_BUFFER bitmap = device.FileSystem.GetVolumeBitmap();
+					UInt64 totalSize = 0;
+					foreach(var bitmap in device.FileSystem.GetVolumeBitmap())
+						totalSize += bitmap.BitmapSize;
+					
 					if(device.Disc.Smart != null)
 					{
 						Console.WriteLine("===INFO===");
 						//Info
 						String deviceInfo = String.Format(@"Type: {0}
-Serial number: {1}
+Serial number: {1}\
 Firmware version: {2}
 Model number: {3}
 Capabilities: 0x{4:X}

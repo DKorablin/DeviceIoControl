@@ -213,8 +213,7 @@ namespace AlphaOmega.Debug
 			query.QueryType = StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyExistsQuery;
 			query.PropertyId = propertyId;
 
-			IntPtr result;
-			return this.Info.IoControl<IntPtr>(Constant.IOCTL_STORAGE.QUERY_PROPERTY, query, out result);
+			return this.Info.IoControl(Constant.IOCTL_STORAGE.QUERY_PROPERTY, query);
 		}
 		private T IoControl<T>() where T : struct
 		{

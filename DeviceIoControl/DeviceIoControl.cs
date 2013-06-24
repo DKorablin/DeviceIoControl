@@ -51,7 +51,7 @@ namespace AlphaOmega.Debug
 			{
 				if(this._volume == null)
 					this._volume = new Volume(this);
-				return this.Volume;
+				return this._volume;
 			}
 		}
 		/// <summary>File system IO commands</summary>
@@ -85,7 +85,6 @@ namespace AlphaOmega.Debug
 		}
 		/// <summary>Create instance of device info class by device ID</summary>
 		/// <param name="deviceId">Device ID</param>
-		[Obsolete("Часть функционала работать не будет", false)]
 		public DeviceIoControl(Byte deviceId)
 			: this(deviceId, null)
 		{
@@ -93,6 +92,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Create instance of device info class by device ID or drive letter</summary>
 		/// <param name="deviceId">ID of device</param>
 		/// <param name="deviceName">name of device</param>
+		/// <exception cref="ArgumentException">Device id does not specified</exception>
 		public DeviceIoControl(Byte? deviceId, String deviceName)
 		{
 			this._deviceId = deviceId;
@@ -104,31 +104,9 @@ namespace AlphaOmega.Debug
 				Char deviceLetter = Array.Find(deviceName.ToCharArray(), delegate(Char ch) { return Char.IsLetter(ch); });
 				this._deviceName = String.Format(Constant.DriveWinNTArg1, deviceLetter);
 			} else
-				throw new ArgumentNullException();
+				throw new ArgumentException("Device id does not specified");
 
 			this._deviceHandle = Methods.OpenDevice(this.Name);
-
-			//Получить серийный номер USB
-			/*StorageAPI.MEDIA_SERIAL_NUMBER_DATA sn = this.DeviceIoControl<StorageAPI.MEDIA_SERIAL_NUMBER_DATA>(
-				Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER,
-				null);*/
-
-			//Получить информацию по устройству через ATA
-			//http://www.osronline.com/showthread.cfm?link=133005
-			//http://stackoverflow.com/questions/5070987/sending-ata-commands-directly-to-device-in-windows
-			/*AtaAPI.ATA_PASS_THROUGH_EX ataCmd = new AtaAPI.ATA_PASS_THROUGH_EX();
-			ataCmd.Length = (UInt16)System.Runtime.InteropServices.Marshal.SizeOf(typeof(AtaAPI.ATA_PASS_THROUGH_EX));
-			ataCmd.DataBufferOffset = (UInt32)System.Runtime.InteropServices.Marshal.SizeOf(typeof(AtaAPI.ATA_PASS_THROUGH_EX));
-			ataCmd.DataTransferLength = 512;
-			ataCmd.AtaFlags = AtaAPI.ATA_PASS_THROUGH_EX.AtaPassThroughFlags.DATA_IN;
-			ataCmd.TimeOutValue = 2;
-			ataCmd.PreviousTaskFile = new Byte[8];
-			ataCmd.CurrentTaskFile = new Byte[8];
-			ataCmd.CurrentTaskFile[6] = 0xec;
-
-			AtaAPI.ATA_PASS_THROUGH_EX result = this.DeviceIoControl<AtaAPI.ATA_PASS_THROUGH_EX>(
-				Constant.IOCTL_ATA.PASS_THROUGH,
-				ataCmd);*/
 		}
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
@@ -153,6 +131,22 @@ namespace AlphaOmega.Debug
 				dwIoControlCode,
 				inParams,
 				out bytesReturned);
+		}
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+		/// <returns>Result of method execution</returns>
+		public Boolean IoControl(UInt32 dwIoControlCode)
+		{
+			return this.IoControl(dwIoControlCode, null);
+		}
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
+		/// <returns>Result of method execution</returns>
+		public Boolean IoControl(UInt32 dwIoControlCode, Object inParams)
+		{
+			IntPtr dummy;
+			return this.IoControl<IntPtr>(dwIoControlCode, inParams, out dummy);
 		}
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>

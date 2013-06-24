@@ -71,11 +71,23 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>Indicates the size, in bytes, of this structure.</summary>
 			public UInt32 Size;
-			/// <summary>Specifies whether the media is removable. If set to a nonzero value, the device media is removable. If set to zero, the device media is not removable. </summary>
+			/// <summary>Specifies whether the media is removable.</summary>
+			/// <remarks>
+			/// If set to a nonzero value, the device media is removable.
+			/// If set to zero, the device media is not removable.
+			/// </remarks>
 			public Byte MediaRemovable;
-			/// <summary>Specifies whether the media is lockable. If set to a nonzero value, the device media is not lockable. If set to zero, the device media is lockable.</summary>
+			/// <summary>Specifies whether the media is lockable.</summary>
+			/// <remarks>
+			/// If set to a nonzero value, the device media is not lockable.
+			/// If set to zero, the device media is lockable.
+			/// </remarks>
 			public Byte MediaHotplug;
-			/// <summary>Specifies whether the device is a hotplug device. If set to a nonzero value, the device is a hotplug device. If set to zero, the device is not a hotplug device.</summary>
+			/// <summary>Specifies whether the device is a hotplug device.</summary>
+			/// <remarks>
+			/// If set to a nonzero value, the device is a hotplug device.
+			/// If set to zero, the device is not a hotplug device.
+			/// </remarks>
 			public Byte DeviceHotplug;
 			/// <summary>Do not use; set the value to NULL.</summary>
 			public Byte WriteCacheEnableOverride;
@@ -120,6 +132,18 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Contains an array of length one that serves as a place holder for the first byte of the bus specific property data.</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] RawDeviceProperties;
+		}
+		/// <summary>The STORAGE_PREDICT_FAILURE structure is used in conjunction with <see cref="Constant.IOCTL_STORAGE.PREDICT_FAILURE"/> to report whether a device is currently predicting a failure.</summary>
+		[StructLayout(LayoutKind.Sequential)]
+		public struct STORAGE_PREDICT_FAILURE
+		{
+			/// <summary>Indicates when nonzero that the device is currently predicting an imminent failure.</summary>
+			public UInt32 PredictFailure;
+			/// <summary>Contains an array that holds 512 bytes of vendor-specific information if the device supports failure prediction.</summary>
+			[MarshalAs(UnmanagedType.ByValArray,SizeConst=Constant.BUFFER_SIZE)]
+			public Byte[] VendorSpecific;
+			/// <summary>Device does not predict any failures at this time</summary>
+			public Boolean IsDeviceHealthy { get { return this.PredictFailure == 0; } }
 		}
 		/// <summary>Provides a symbolic means of representing storage bus types.</summary>
 		/// <remarks>Bus types below 128 (0x80) are reserved for Microsoft use</remarks>

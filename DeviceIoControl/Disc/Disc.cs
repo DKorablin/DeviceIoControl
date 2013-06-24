@@ -1,5 +1,7 @@
 ﻿using System;
 using AlphaOmega.Debug.Native;
+using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace AlphaOmega.Debug
 {
@@ -10,6 +12,7 @@ namespace AlphaOmega.Debug
 		private SmartInfo _smart;
 		private DiscAPI.GETVERSIONINPARAMS? _version;
 		private DiscAPI.DISK_GEOMETRY_EX? _driveGeometryEx;
+		private Boolean? _isWritable;
 		/// <summary>Device</summary>
 		public DeviceIoControl Device { get { return this._device; } }
 
@@ -51,6 +54,25 @@ namespace AlphaOmega.Debug
 				if(this._smart == null && this.Version != null && this.Version.Value.CommandSmart)
 					this._smart = new SmartInfo(this.Device);
 				return this._smart;
+			}
+		}
+		/// <summary>Determines whether the specified disk is writable.</summary>
+		/// <exception cref="Win32Exception">WinAPI operation fails.</exception>
+		public Boolean IsWritable
+		{
+			get
+			{
+				if(this._isWritable==null)
+					if(this.Device.IoControl(Constant.IOCTL_DISC.IS_WRITABLE))
+						this._isWritable = true;
+					else
+					{
+						Int32 error = Marshal.GetLastWin32Error();
+						if(error == (Int32)Constant.ERROR.WRITE_PROTECT)
+							this._isWritable = false;
+						else throw new Win32Exception(error);
+					}
+				return this._isWritable.Value;
 			}
 		}
 		/// <summary>Create instance of disc IO control commands class</summary>
