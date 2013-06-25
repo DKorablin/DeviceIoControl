@@ -919,6 +919,14 @@
             <param name="deviceName">name of device</param>
             <exception cref="T:System.ArgumentException">Device id does not specified</exception>
         </member>
+        <member name="M:AlphaOmega.Debug.DeviceIoControl.#ctor(System.Nullable{System.Byte},System.String,AlphaOmega.Debug.WinAPI.FILE_ACCESS_FLAGS,AlphaOmega.Debug.WinAPI.FILE_SHARE)">
+            <summary>Create instance of device info class by device ID or drive letter</summary>
+            <param name="deviceId">ID of device</param>
+            <param name="deviceName">name of device</param>
+            <param name="accessFlags">Device desired access flags</param>
+            <param name="shareMode">Opened device share mode</param>
+            <exception cref="T:System.ArgumentException">Device id does not specified</exception>
+        </member>
         <member name="M:AlphaOmega.Debug.DeviceIoControl.IoControl``1(System.UInt32,System.Object)">
             <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
             <typeparam name="T">Return type</typeparam>

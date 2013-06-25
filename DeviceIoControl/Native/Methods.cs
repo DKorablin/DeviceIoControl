@@ -133,12 +133,7 @@ namespace AlphaOmega.Debug.Native
 			out UInt32 lpBytesReturned) where T : struct
 		{
 			T result;
-			if(Methods.DeviceIoControl<T>(
-				hDevice,
-				dwIoControlCode,
-				inParams,
-				out lpBytesReturned,
-				out result))
+			if(Methods.DeviceIoControl<T>(hDevice, dwIoControlCode, inParams, out lpBytesReturned, out result))
 				return result;
 			else
 				throw new Win32Exception();

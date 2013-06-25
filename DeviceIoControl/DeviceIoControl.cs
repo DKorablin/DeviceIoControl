@@ -94,6 +94,18 @@ namespace AlphaOmega.Debug
 		/// <param name="deviceName">name of device</param>
 		/// <exception cref="ArgumentException">Device id does not specified</exception>
 		public DeviceIoControl(Byte? deviceId, String deviceName)
+			: this(deviceId, deviceName,
+			WinAPI.FILE_ACCESS_FLAGS.GENERIC_READ | WinAPI.FILE_ACCESS_FLAGS.GENERIC_WRITE,
+			WinAPI.FILE_SHARE.READ | WinAPI.FILE_SHARE.WRITE)
+		{
+		}
+		/// <summary>Create instance of device info class by device ID or drive letter</summary>
+		/// <param name="deviceId">ID of device</param>
+		/// <param name="deviceName">name of device</param>
+		/// <param name="accessFlags">Device desired access flags</param>
+		/// <param name="shareMode">Opened device share mode</param>
+		/// <exception cref="ArgumentException">Device id does not specified</exception>
+		public DeviceIoControl(Byte? deviceId, String deviceName,WinAPI.FILE_ACCESS_FLAGS accessFlags, WinAPI.FILE_SHARE shareMode)
 		{
 			this._deviceId = deviceId;
 
@@ -106,7 +118,7 @@ namespace AlphaOmega.Debug
 			} else
 				throw new ArgumentException("Device id does not specified");
 
-			this._deviceHandle = Methods.OpenDevice(this.Name);
+			this._deviceHandle = Methods.OpenDevice(this.Name, accessFlags, shareMode);
 		}
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
