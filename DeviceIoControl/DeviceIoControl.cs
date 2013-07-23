@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using AlphaOmega.Debug.Native;
+using System.IO;
 
 namespace AlphaOmega.Debug
 {
@@ -55,7 +56,7 @@ namespace AlphaOmega.Debug
 			}
 		}
 		/// <summary>File system IO commands</summary>
-		/// <remarks>FSCTL can be null if device opened by ID</remarks>
+		/// <remarks>FSCTL will be can be null if device opened by ID</remarks>
 		public FileSystem FileSystem
 		{
 			get
@@ -66,15 +67,16 @@ namespace AlphaOmega.Debug
 			}
 		}
 		/// <summary>Get device power state</summary>
+		/// <exception cref="Win32Exception">Can't gen device power state</exception>
 		public Boolean IsDeviceOn
 		{
 			get
 			{
 				Boolean isOn = false;
-				if(!Methods.GetDevicePowerState(this.Handle, out isOn))
-					throw new Win32Exception();
-				else
+				if(Methods.GetDevicePowerState(this.Handle, out isOn))
 					return isOn;
+				else
+					throw new Win32Exception();
 			}
 		}
 
@@ -106,7 +108,7 @@ namespace AlphaOmega.Debug
 		/// <param name="shareMode">Opened device share mode</param>
 		/// <exception cref="ArgumentException">Device id does not specified</exception>
 		public DeviceIoControl(Byte? deviceId, String deviceName,WinAPI.FILE_ACCESS_FLAGS accessFlags, WinAPI.FILE_SHARE shareMode)
-		{
+		{//DriveInfo.GetDrives()
 			this._deviceId = deviceId;
 
 			if(deviceId.HasValue)
@@ -190,7 +192,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Get all logical devices</summary>
 		/// <returns>Drive name and type</returns>
 		public static IEnumerable<KeyValuePair<String, WinAPI.DRIVE>> GetLogicalDrives()
-		{
+		{//DriveInfo.GetDrives();
 			foreach(String drive in Environment.GetLogicalDrives())
 				yield return new KeyValuePair<String, WinAPI.DRIVE>(drive, Methods.GetDriveTypeA(drive));
 		}

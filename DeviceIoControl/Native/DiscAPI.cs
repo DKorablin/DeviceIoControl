@@ -445,14 +445,14 @@ namespace AlphaOmega.Debug.Native
 			/// <returns>Partition table info</returns>
 			public DISK_PARTITION_INFO GetDiscPartitionInfo()
 			{
-				using(BytesReader reader = new BytesReader(this.Data))
+				using(PinnedBufferReader reader = new PinnedBufferReader(this.Data))
 					return reader.BytesToStructure<DISK_PARTITION_INFO>(0);
 			}
 			/// <summary>Detected drive parameters that are supplied by an x86 PC BIOS on boot.</summary>
 			/// <returns>Detected drive parameters</returns>
 			public DISK_DETECTION_INFO GetDiscDetectionInfo()
 			{
-				using(BytesReader reader = new BytesReader(this.Data))
+				using(PinnedBufferReader reader = new PinnedBufferReader(this.Data))
 					return reader.BytesToStructure<DISK_DETECTION_INFO>(this.GetDiscPartitionInfo().SizeOfPartitionInfo);
 			}
 			/// <summary>Contains string representation of disc size</summary>

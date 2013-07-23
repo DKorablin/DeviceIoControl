@@ -39,8 +39,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PEReader\PEReader\BytesReader.cs">
-      <Link>BytesReader.cs</Link>
+    <Compile Include="..\..\PEReader\PEReader\PinnedBufferReader.cs">
+      <Link>PinnedBufferReader.cs</Link>
     </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />

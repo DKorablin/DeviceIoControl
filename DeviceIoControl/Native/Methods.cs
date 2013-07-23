@@ -91,6 +91,7 @@ namespace AlphaOmega.Debug.Native
 		/// </param>
 		/// <returns>The return value specifies the type of drive.</returns>
 		[SuppressUnmanagedCodeSecurity]
+		[SecuritySafeCritical]
 		[DllImport("kernel32.dll", EntryPoint = "GetDriveTypeA", SetLastError = true)]
 		public static extern WinAPI.DRIVE GetDriveTypeA(
 			[In] String lpRootPathName);

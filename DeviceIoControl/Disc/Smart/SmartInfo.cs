@@ -28,7 +28,7 @@ namespace AlphaOmega.Debug
 				{
 					UInt32 bytesReturned;
 					DiscAPI.SENDCMDOUTPARAMS prms = this.GetDeviceInfo(out bytesReturned);
-					using(BytesReader reader = new BytesReader(prms.bBuffer))
+					using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
 						this._info = reader.BytesToStructure<DiscAPI.IDSECTOR>(0);
 				}
 				return this._info.Value;
@@ -81,7 +81,7 @@ namespace AlphaOmega.Debug
 				{
 					UInt32 padding = 2;
 					DiscAPI.SENDCMDOUTPARAMS prms = this.GetThresholdParamsNative();
-					using(BytesReader reader = new BytesReader(prms.bBuffer))
+					using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
 					{
 						this._thresholds = new DiscAPI.ATTRTHRESHOLD[Constant.NUM_ATTRIBUTE_STRUCTS];
 						for(Int32 loop = 0;loop < this._thresholds.Length;loop++)
@@ -121,7 +121,7 @@ namespace AlphaOmega.Debug
 			UInt32 padding = 2;
 
 			DiscAPI.SENDCMDOUTPARAMS prms = this.GetAttributeParamsNative();
-			using(BytesReader reader = new BytesReader(prms.bBuffer))
+			using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
 			{
 				result = new DiscAPI.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
 				for(Int32 loop = 0;loop < result.Length;loop++)

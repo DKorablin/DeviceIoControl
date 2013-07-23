@@ -616,7 +616,7 @@ namespace AlphaOmega.Debug.Native
 					if(index >= this.MediaInfoCount)
 						throw new ArgumentOutOfRangeException("index");
 					else
-						using(BytesReader reader = new BytesReader(this.MediaInfo))
+						using(PinnedBufferReader reader = new PinnedBufferReader(this.MediaInfo))
 							return reader.BytesToStructure<DEVICE_MEDIA_INFO>(index * (UInt32)Marshal.SizeOf(typeof(DEVICE_MEDIA_INFO)));
 				}
 			}
