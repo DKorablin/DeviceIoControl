@@ -3,3 +3,38 @@ DeviceIoControl assembly
 
 Wrapper for DeviceIoControl function. Primary task of this assembly was to read SMART data from supported devices.
 S.M.A.R.T.rar contains original source code written by Andrew I. Reshin (11.02.2001) in C++
+
+Supported messages:
+IOCTL_VOLUME
+    GET_VOLUME_DISK_EXTENTS
+    IS_CLUSTERED
+    
+IOCTL_DISC
+    PERFORMANCE
+    IS_WRITABLE
+    PERFORMANCE_OFF
+    SMART_GET_VERSION
+    SMART_SEND_DRIVE_COMMAND
+    SMART_RCV_DRIVE_DATA
+    GET_DRIVE_GEOMETRY_EX
+
+IOCTL_STORAGE
+    CHECK_VERIFY
+    CHECK_VERIFY2
+    MEDIA_REMOVAL
+    EJECT_MEDIA
+    GET_MEDIA_TYPES_EX
+    GET_MEDIA_SERIAL_NUMBER
+    GET_HOTPLUG_INFO
+    GET_DEVICE_NUMBER
+    PREDICT_FAILURE
+    QUERY_PROPERTY
+
+FSCTL
+    LOCK_VOLUME
+    UNLOCK_VOLUME
+    DISMOUNT_VOLUME
+    IS_VOLUME_MOUNTED
+    FILESYSTEM_GET_STATISTICS
+    GET_NTFS_VOLUME_DATA
+    GET_VOLUME_BITMAP
