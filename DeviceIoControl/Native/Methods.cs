@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Security.Permissions;
 using System.Threading;
+using System.Text;
 
 namespace AlphaOmega.Debug.Native
 {
@@ -26,13 +28,13 @@ namespace AlphaOmega.Debug.Native
 		/// <param name="dwFlagsAndAttributes">The file or device attributes and flags, FILE_ATTRIBUTE_NORMAL being the most common default value for files.</param>
 		/// <param name="hTemplateFile">A valid handle to a template file with the GENERIC_READ access right. The template file supplies file attributes and extended attributes for the file that is being created.</param>
 		/// <returns>If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot.</returns>
-		[DllImport("kernel32.dll", EntryPoint = "CreateFileA", SetLastError = true, CharSet = CharSet.Ansi)]
+		[DllImport("kernel32.dll", EntryPoint = "CreateFileA", SetLastError = true, ThrowOnUnmappableChar=true, CharSet = CharSet.Ansi)]
 		private static extern IntPtr CreateFile(
 			[In] String lpFileName,
-			WinAPI.FILE_ACCESS_FLAGS dwDesiredAccess,
-			WinAPI.FILE_SHARE dwShareMode,
+			WinApi.FILE_ACCESS_FLAGS dwDesiredAccess,
+			WinApi.FILE_SHARE dwShareMode,
 			IntPtr lpSecurityAttributes,
-			WinAPI.CreateDisposition dwCreationDisposition,
+			WinApi.CreateDisposition dwCreationDisposition,
 			UInt32 dwFlagsAndAttributes,
 			IntPtr hTemplateFile);
 
@@ -42,9 +44,10 @@ namespace AlphaOmega.Debug.Native
 		public static IntPtr OpenDevice(String lpFileName)
 		{
 			return Methods.OpenDevice(lpFileName,
-				WinAPI.FILE_ACCESS_FLAGS.GENERIC_READ | WinAPI.FILE_ACCESS_FLAGS.GENERIC_WRITE,
-				WinAPI.FILE_SHARE.READ | WinAPI.FILE_SHARE.WRITE);
+				WinApi.FILE_ACCESS_FLAGS.GENERIC_READ | WinApi.FILE_ACCESS_FLAGS.GENERIC_WRITE,
+				WinApi.FILE_SHARE.READ | WinApi.FILE_SHARE.WRITE);
 		}
+
 		/// <summary>Opens specified device</summary>
 		/// <param name="lpFileName">Device path</param>
 		/// <param name="dwDesiredAccess">Desired access flage</param>
@@ -52,7 +55,7 @@ namespace AlphaOmega.Debug.Native
 		/// <exception cref="ArgumentNullException">lpFileName is null or empty</exception>
 		/// <exception cref="Win32Exception">Device does not opened</exception>
 		/// <returns>Handle to the opened device</returns>
-		public static IntPtr OpenDevice(String lpFileName, WinAPI.FILE_ACCESS_FLAGS dwDesiredAccess, WinAPI.FILE_SHARE dwShareMode)
+		public static IntPtr OpenDevice(String lpFileName, WinApi.FILE_ACCESS_FLAGS dwDesiredAccess, WinApi.FILE_SHARE dwShareMode)
 		{
 			if(String.IsNullOrEmpty(lpFileName))
 				throw new ArgumentNullException("lpFileName");
@@ -61,7 +64,7 @@ namespace AlphaOmega.Debug.Native
 				dwDesiredAccess,
 				dwShareMode,
 				IntPtr.Zero,
-				WinAPI.CreateDisposition.OPEN_EXISTING,
+				WinApi.CreateDisposition.OPEN_EXISTING,
 				0,
 				IntPtr.Zero);
 
@@ -70,17 +73,121 @@ namespace AlphaOmega.Debug.Native
 			return result;
 		}
 
+		/// <summary>
+		/// The LookupAccountName function accepts the name of a system and an account as input.
+		/// It retrieves a security identifier (SID) for the account and the name of the domain on which the account was found.
+		/// The LsaLookupNames function can also retrieve computer accounts.
+		/// </summary>
+		/// <param name="lpSystemName">
+		/// A pointer to a null-terminated character string that specifies the name of the system.
+		/// This string can be the name of a remote computer.
+		/// If this string is NULL, the account name translation begins on the local system.
+		/// If the name cannot be resolved on the local system, this function will try to resolve the name using domain controllers trusted by the local system.
+		/// Generally, specify a value for <c>lpSystemName</c> only when the account is in an untrusted domain and the name of a computer in that domain is known.
+		/// </param>
+		/// <param name="lpAccountName">
+		/// A pointer to a null-terminated string that specifies the account name.
+		/// Use a fully qualified string in the <c>domain_name\user_name</c> format to ensure that <c>LookupAccountName</c> finds the account in the desired domain.
+		/// </param>
+		/// <param name="Sid">
+		/// A pointer to a buffer that receives the SID structure that corresponds to the account name pointed to by the <c>lpAccountName</c> parameter.
+		/// If this parameter is NULL, <c>cbSid</c> must be zero.
+		/// </param>
+		/// <param name="cbSid">
+		/// A pointer to a variable.
+		/// On input, this value specifies the size, in bytes, of the <c>Sid</c> buffer.
+		/// If the function fails because the buffer is too small or if <c>cbSid</c> is zero, this variable receives the required buffer size.
+		/// </param>
+		/// <param name="ReferencedDomainName">
+		/// A pointer to a buffer that receives the name of the domain where the account name is found.
+		/// For computers that are not joined to a domain, this buffer receives the computer name.
+		/// If this parameter is NULL, the function returns the required buffer size.
+		/// </param>
+		/// <param name="cchReferencedDomainName">
+		/// A pointer to a variable.
+		/// On input, this value specifies the size, in TCHARs, of the <c>ReferencedDomainName</c> buffer.
+		/// If the function fails because the buffer is too small, this variable receives the required buffer size, including the terminating null character.
+		/// If the <c>ReferencedDomainName</c> parameter is NULL, this parameter must be zero.
+		/// </param>
+		/// <param name="peUse">
+		/// A pointer to a <see cref="WinApi.SID_NAME_USE"/> enumerated type that indicates the type of the account when the function returns.
+		/// </param>
+		/// <returns>
+		/// If the function succeeds, the function returns nonzero.
+		/// If the function fails, it returns zero. For extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
+		/// </returns>
+		[DllImport("advapi32.dll", EntryPoint = "LookupAccountName", CharSet = CharSet.Auto, SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		private static extern Boolean LookupAccountName(
+			String lpSystemName,
+			String lpAccountName,
+			[MarshalAs(UnmanagedType.LPArray)] Byte[] Sid,
+			ref UInt32 cbSid,
+			StringBuilder ReferencedDomainName,
+			ref UInt32 cchReferencedDomainName,
+			out WinApi.SID_NAME_USE peUse);
+
+		/// <summary>
+		/// The LookupAccountName function accepts the name of a system and an account as input.
+		/// It retrieves a security identifier (SID) for the account and the name of the domain on which the account was found.
+		/// The LsaLookupNames function can also retrieve computer accounts.
+		/// </summary>
+		/// <param name="accountName">
+		/// A pointer to a null-terminated string that specifies the account name.
+		/// Use a fully qualified string in the domain_name\user_name format to ensure that LookupAccountName finds the account in the desired domain.
+		/// </param>
+		/// <param name="capacity">
+		/// A pointer to a variable. On input, this value specifies the size, in bytes, of the Sid buffer.
+		/// If the function fails because the buffer is too small or if cbSid is zero, this variable receives the required buffer size.
+		/// </param>
+		/// <returns>SID structure that corresponds to the account name pointed to by the accountName parameter.</returns>
+		public static Byte[] LookupAccountName(String accountName, Int32 capacity = 16)
+		{
+			Byte[] result = new Byte[capacity];
+			UInt32 cbSid = (UInt32)capacity;
+			StringBuilder referencedDomainName = new StringBuilder(capacity);
+			UInt32 cchReferencedDomainName = (UInt32)referencedDomainName.Capacity;
+			WinApi.SID_NAME_USE sidUse;
+
+			Boolean isSuccess = Methods.LookupAccountName(null,
+				accountName,
+				result,
+				ref cbSid,
+				referencedDomainName,
+				ref cchReferencedDomainName,
+				out sidUse);
+
+			if(isSuccess)
+				return result;
+			else
+			{
+				Int32 error = Marshal.GetLastWin32Error();
+				switch((Constant.ERROR)error)
+				{
+				case Constant.ERROR.INSUFFICIENT_BUFFER:
+				case Constant.ERROR.INVALID_FLAGS://On Windows Server 2003 this error is/can be returned, but processing can still continue
+					return LookupAccountName(accountName, (Int32)cbSid);
+				default:
+					throw new Win32Exception((Int32)error);
+				}
+			}
+		}
+
 		[DllImport("kernel32.dll", EntryPoint = "CloseHandle", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern Boolean CloseHandle(IntPtr hObject);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("kernel32.dll", EntryPoint = "GetDevicePowerState", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern Boolean GetDevicePowerState(IntPtr hDevice, out Boolean pfOn);
 
 		[DllImport("kernel32.dll", EntryPoint = "RequestDeviceWakeup", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern Boolean RequestDeviceWakeup(IntPtr hDevice);
 
 		[DllImport("kernel32.dll", EntryPoint = "CancelDeviceWakeupRequest", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern Boolean CancelDeviceWakeupRequest(IntPtr hDevice);
 
 		/// <summary>Determines whether a disk drive is a removable, fixed, CD-ROM, RAM disk, or network drive.</summary>
@@ -92,8 +199,8 @@ namespace AlphaOmega.Debug.Native
 		/// <returns>The return value specifies the type of drive.</returns>
 		[SuppressUnmanagedCodeSecurity]
 		[SecuritySafeCritical]
-		[DllImport("kernel32.dll", EntryPoint = "GetDriveTypeA", SetLastError = true)]
-		public static extern WinAPI.DRIVE GetDriveTypeA(
+		[DllImport("kernel32.dll", EntryPoint = "GetDriveTypeA", SetLastError = true, ThrowOnUnmappableChar = true)]
+		public static extern WinApi.DRIVE GetDriveTypeA(
 			[In] String lpRootPathName);
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
@@ -117,6 +224,7 @@ namespace AlphaOmega.Debug.Native
 		/// </param>
 		/// <returns>If the operation completes successfully, the return value is nonzero.</returns>
 		[DllImport("kernel32.dll", EntryPoint = "DeviceIoControl", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern Boolean DeviceIoControl(
 			IntPtr hDevice,
 			UInt32 dwIoControlCode,
@@ -139,6 +247,7 @@ namespace AlphaOmega.Debug.Native
 			else
 				throw new Win32Exception();
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>
 		/// <param name="hDevice">A handle to the device on which the operation is to be performed. The device is typically a volume, directory, file, or stream.</param>
@@ -153,6 +262,7 @@ namespace AlphaOmega.Debug.Native
 		/// This parameter can be NULL if dwIoControlCode specifies an operation that does not return data.
 		/// </param>
 		/// <returns>If the operation completes successfully, the return value is nonzero.</returns>
+		[EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
 		public static Boolean DeviceIoControl<T>(
 			IntPtr hDevice,
 			UInt32 dwIoControlCode,

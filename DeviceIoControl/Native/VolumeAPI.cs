@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace AlphaOmega.Debug.Native
 {
 	/// <summary>Volume IOCTL structures</summary>
-	public struct VolumeAPI
+	public struct VolumeApi
 	{
 		/// <summary>Represents a physical location on a disk. It is the output buffer for the <see cref="T:Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS"/> control code.</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365727%28v=vs.85%29.aspx</remarks>

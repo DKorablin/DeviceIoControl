@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using AlphaOmega.Debug.Native;
 using System.IO;
+using System.Globalization;
 
 namespace AlphaOmega.Debug
 {
@@ -22,7 +23,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Opened device handle</summary>
 		private IntPtr Handle { get { return this._deviceHandle; } }
 		/// <summary>Device ID</summary>
-		public Byte? ID { get { return this._deviceId; } }
+		public Byte? Id { get { return this._deviceId; } }
 		/// <summary>Name of the device</summary>
 		public String Name { get { return this._deviceName; } }
 		/// <summary>Disc IO commands</summary>
@@ -97,17 +98,17 @@ namespace AlphaOmega.Debug
 		/// <exception cref="ArgumentException">Device id does not specified</exception>
 		public DeviceIoControl(Byte? deviceId, String deviceName)
 			: this(deviceId, deviceName,
-			WinAPI.FILE_ACCESS_FLAGS.GENERIC_READ | WinAPI.FILE_ACCESS_FLAGS.GENERIC_WRITE,
-			WinAPI.FILE_SHARE.READ | WinAPI.FILE_SHARE.WRITE)
+			WinApi.FILE_ACCESS_FLAGS.GENERIC_READ | WinApi.FILE_ACCESS_FLAGS.GENERIC_WRITE,
+			WinApi.FILE_SHARE.READ | WinApi.FILE_SHARE.WRITE)
 		{
 		}
 		/// <summary>Create instance of device info class by device ID or drive letter</summary>
 		/// <param name="deviceId">ID of device</param>
 		/// <param name="deviceName">name of device</param>
-		/// <param name="accessFlags">Device desired access flags</param>
+		/// <param name="accessMode">Device desired access flags</param>
 		/// <param name="shareMode">Opened device share mode</param>
 		/// <exception cref="ArgumentException">Device id does not specified</exception>
-		public DeviceIoControl(Byte? deviceId, String deviceName,WinAPI.FILE_ACCESS_FLAGS accessFlags, WinAPI.FILE_SHARE shareMode)
+		public DeviceIoControl(Byte? deviceId, String deviceName,WinApi.FILE_ACCESS_FLAGS accessMode, WinApi.FILE_SHARE shareMode)
 		{//DriveInfo.GetDrives()
 			this._deviceId = deviceId;
 
@@ -116,11 +117,11 @@ namespace AlphaOmega.Debug
 			else if(!String.IsNullOrEmpty(deviceName))
 			{
 				Char deviceLetter = Array.Find(deviceName.ToCharArray(), delegate(Char ch) { return Char.IsLetter(ch); });
-				this._deviceName = String.Format(Constant.DriveWinNTArg1, deviceLetter);
+				this._deviceName = String.Format(CultureInfo.CurrentUICulture, Constant.DriveWinNTArg1, deviceLetter);
 			} else
 				throw new ArgumentException("Device id does not specified");
 
-			this._deviceHandle = Methods.OpenDevice(this.Name, accessFlags, shareMode);
+			this._deviceHandle = Methods.OpenDevice(this.Name, accessMode, shareMode);
 		}
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
@@ -191,11 +192,12 @@ namespace AlphaOmega.Debug
 		}
 		/// <summary>Get all logical devices</summary>
 		/// <returns>Drive name and type</returns>
-		public static IEnumerable<KeyValuePair<String, WinAPI.DRIVE>> GetLogicalDrives()
+		public static IEnumerable<LogicalDrive> GetLogicalDrives()
 		{//DriveInfo.GetDrives();
 			foreach(String drive in Environment.GetLogicalDrives())
-				yield return new KeyValuePair<String, WinAPI.DRIVE>(drive, Methods.GetDriveTypeA(drive));
+				yield return new LogicalDrive(drive, Methods.GetDriveTypeA(drive));
 		}
+
 		/// <summary>Dispose device info and close all managed handles</summary>
 		public void Dispose()
 		{
@@ -225,7 +227,7 @@ namespace AlphaOmega.Debug
 			String result = Constant.DeviceWin32;
 
 			if(Environment.OSVersion.Platform == PlatformID.Win32NT)
-				result = String.Format(Constant.DeviceWinNTArg1, deviceId);
+				result = String.Format(CultureInfo.CurrentUICulture, Constant.DeviceWinNTArg1, deviceId);
 
 			return result;
 		}

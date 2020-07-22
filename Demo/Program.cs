@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using AlphaOmega.Debug;
 using System.Diagnostics;
+using System.Security.Principal;
+using System.Threading;
 
 namespace Demo
 {
@@ -11,11 +13,17 @@ namespace Demo
 	{
 		static void Main(String[] args)
 		{
-			try
-			{
+			//try
+			//{
 				using(DeviceIoControl device = new DeviceIoControl("c:\\"))
 				{
-					var info = device.FileSystem.GetStatistics();
+					// Unsafe test code
+					//var info = device.FileSystem.GetStatisticsEx();
+
+					//WindowsIdentity.IPrincipal principal = Thread.CurrentPrincipal;
+					//WindowsIdentity id = principal.Identity as WindowsIdentity;
+					//var data = device.FileSystem.FindFilesBySid("Test@test.ru");
+
 					Boolean isWritable = device.Disc.IsWritable;
 					Boolean checkVerify = device.Storage.CheckVerify;
 					Boolean checkVerify2 = device.Storage.CheckVerify2;
@@ -24,11 +32,11 @@ namespace Demo
 					if(device.Disc.Version.HasValue)
 					{
 						String capabilities = "Capabilities: ";
-						if(device.Disc.Version.Value.CommandAta)
+						if(device.Disc.Version.Value.IsAtaSupported)
 							capabilities += "ATA,";
-						if(device.Disc.Version.Value.CommandAtapi)
+						if(device.Disc.Version.Value.IsAtapiSupported)
 							capabilities += "ATAPI,";
-						if(device.Disc.Version.Value.CommandSmart)
+						if(device.Disc.Version.Value.IsSmartSupported)
 							capabilities += "SCSI";
 						Console.WriteLine(capabilities);
 					}
@@ -38,8 +46,8 @@ namespace Demo
 						Console.WriteLine(String.Format("Device: {0}", device.Storage.Properties.Device.Value.Size));
 					if(device.Storage.Properties.Adapter.HasValue)
 						Console.WriteLine(String.Format("Adapter: {0}", device.Storage.Properties.Adapter.Value.Size));
-					if(device.Storage.Properties.ID.HasValue)
-						Console.WriteLine(String.Format("ID: {0:n0}", device.Storage.Properties.ID.Value.Size));
+					if(device.Storage.Properties.Id.HasValue)
+						Console.WriteLine(String.Format("ID: {0:n0}", device.Storage.Properties.Id.Value.Size));
 					if(device.Storage.Properties.WriteCache.HasValue)
 						Console.WriteLine(String.Format("WriteCache: {0}", device.Storage.Properties.WriteCache.Value.Size));
 					if(device.Storage.Properties.Miniport.HasValue)
@@ -56,8 +64,8 @@ namespace Demo
 						Console.WriteLine(String.Format("Power: {0}", device.Storage.Properties.Power.Value.Size));
 					if(device.Storage.Properties.CopyOffload.HasValue)
 						Console.WriteLine(String.Format("CopyOffload: {0}", device.Storage.Properties.CopyOffload.Value.Size));
-					if(device.Storage.Properties.Resilency.HasValue)
-						Console.WriteLine(String.Format("Resilency: {0}", device.Storage.Properties.Resilency.Value.Size));
+					if(device.Storage.Properties.Resiliency.HasValue)
+						Console.WriteLine(String.Format("Resilency: {0}", device.Storage.Properties.Resiliency.Value.Size));
 
 					UInt64 totalSize = 0;
 					foreach(var bitmap in device.FileSystem.GetVolumeBitmap())
@@ -104,7 +112,7 @@ Current Sector capacity: {5:n0}",
 							smartAttributes.AppendFormat(@"{0:X} {1} Value: {2} Worst: {3} Threshold: {4} RawValue: {5:n0}
 ",
 								attr.Attribute.bAttrID,
-								attr.Attribute.AttrName,
+								attr.Attribute.AttributeName,
 								attr.Attribute.bAttrValue,
 								attr.Attribute.bWorstValue,
 								attr.Threshold.bWarrantyThreshold,
@@ -120,13 +128,13 @@ Current Sector capacity: {5:n0}",
 						WinNT.DISK_PERFORMANCE perf2 = perf.QueryPerfomanceInfo();
 					}*/
 				}
-			} catch(Win32Exception exc)
-			{
-				Console.WriteLine("{0} ({1:X})", exc.Message, exc.NativeErrorCode);
-				Console.WriteLine("===================================");
-				Console.WriteLine(exc.StackTrace);
-				Console.ReadKey();
-			}
+			//} catch(Win32Exception exc)
+			//{
+			//	Console.WriteLine("{0} ({1:X})", exc.Message, exc.NativeErrorCode);
+			//	Console.WriteLine("===================================");
+			//	Console.WriteLine(exc.StackTrace);
+			//	Console.ReadKey();
+			//}
 		}
 	}
 }

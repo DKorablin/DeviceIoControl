@@ -4,10 +4,14 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("DeviceIoControl")]
 [assembly: AssemblyDescription("Native DeviceIoControl wrapper assembly")]
-[assembly: AssemblyConfiguration("")]
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 [assembly: AssemblyCompany("Danila Korablin")]
 [assembly: AssemblyProduct("DeviceIoControl")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2013")]
+[assembly: AssemblyCopyright("Copyright © Danila Korablin 2013-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,3 +22,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: System.CLSCompliant(false)]
+[assembly: InternalsVisibleTo("Demo")]

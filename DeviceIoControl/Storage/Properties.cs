@@ -7,196 +7,187 @@ namespace AlphaOmega.Debug
 	public class Properties
 	{
 		private readonly DeviceIoControl _info;
-		private StorageAPI.STORAGE_DEVICE_DESCRIPTOR? _device;
-		private StorageAPI.STORAGE_ADAPTER_DESCRIPTOR? _adapter;
-		private StorageAPI.STORAGE_DEVICE_ID_DESCRIPTOR? _id;
-		private StorageAPI.STORAGE_WRITE_CACHE_PROPERTY? _writeCache;
-		private StorageAPI.STORAGE_MINIPORT_DESCRIPTOR? _miniport;
-		private StorageAPI.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR? _accessAlignment;
-		private StorageAPI.DEVICE_SEEK_PENALTY_DESCRIPTOR? _seekPenalty;
-		private StorageAPI.DEVICE_TRIM_DESCRIPTOR? _trim;
-		private StorageAPI.DEVICE_WRITE_AGGREGATION_DESCRIPTOR? _writeAggregation;
-		private StorageAPI.DEVICE_POWER_DESCRIPTOR? _power;
-		private StorageAPI.DEVICE_COPY_OFFLOAD_DESCRIPTOR? _copyOffload;
-		private StorageAPI.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR? _resilency;
+		private StorageApi.STORAGE_DEVICE_DESCRIPTOR? _device;
+		private StorageApi.STORAGE_ADAPTER_DESCRIPTOR? _adapter;
+		private StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR? _id;
+		private StorageApi.STORAGE_WRITE_CACHE_PROPERTY? _writeCache;
+		private StorageApi.STORAGE_MINIPORT_DESCRIPTOR? _miniport;
+		private StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR? _accessAlignment;
+		private StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR? _seekPenalty;
+		private StorageApi.DEVICE_TRIM_DESCRIPTOR? _trim;
+		private StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR? _writeAggregation;
+		private StorageApi.DEVICE_POWER_DESCRIPTOR? _power;
+		private StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR? _copyOffload;
+		private StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR? _resiliency;
 
 		/// <summary>Device</summary>
-		public DeviceIoControl Info { get { return this._info; } }
+		private DeviceIoControl Info { get { return this._info; } }
 
 		/// <summary>Device property descriptor</summary>
-		public StorageAPI.STORAGE_DEVICE_DESCRIPTOR? Device
+		public StorageApi.STORAGE_DEVICE_DESCRIPTOR? Device
 		{
 			get
 			{
 				if(this._device == null)
-					this._device = this.IoControl<StorageAPI.STORAGE_DEVICE_DESCRIPTOR>();
+					this._device = this.IoControl<StorageApi.STORAGE_DEVICE_DESCRIPTOR>();
 
-				if(this._device.Value.Size == 0)
-					return null;
-				else
-					return this._device.Value;
+				return this._device.Value.Size == 0
+					? (StorageApi.STORAGE_DEVICE_DESCRIPTOR?)null
+					: this._device.Value;
 			}
 		}
 		/// <summary>Storage adapter descriptor data for a device.</summary>
-		public StorageAPI.STORAGE_ADAPTER_DESCRIPTOR? Adapter
+		public StorageApi.STORAGE_ADAPTER_DESCRIPTOR? Adapter
 		{
 			get
 			{
 				if(this._adapter == null)
-					this._adapter = this.IoControl<StorageAPI.STORAGE_ADAPTER_DESCRIPTOR>();
+					this._adapter = this.IoControl<StorageApi.STORAGE_ADAPTER_DESCRIPTOR>();
 
-				if(this._adapter.Value.Size == 0)
-					return null;
-				else
-					return this._adapter.Value;
+				return this._adapter.Value.Size == 0
+					? (StorageApi.STORAGE_ADAPTER_DESCRIPTOR?)null
+					: this._adapter.Value;
 			}
 		}
 		/// <summary>Device ID descriptor data for a device.</summary>
-		public StorageAPI.STORAGE_DEVICE_ID_DESCRIPTOR? ID
+		public StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR? Id
 		{
 			get
 			{
 				if(this._id == null)
-					this._id = this.IoControl<StorageAPI.STORAGE_DEVICE_ID_DESCRIPTOR>();
+					this._id = this.IoControl<StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR>();
 
-				if(this._id.Value.Size == 0)
-					return null;
-				else
-					return this._id.Value;
+				return this._id.Value.Size == 0
+					? (StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR?)null
+					: this._id.Value;
 			}
 		}
 		/// <summary>Device write cache property</summary>
-		public StorageAPI.STORAGE_WRITE_CACHE_PROPERTY? WriteCache
+		public StorageApi.STORAGE_WRITE_CACHE_PROPERTY? WriteCache
 		{
 			get
 			{
 				if(this._writeCache == null)
-					this._writeCache = this.IoControl<StorageAPI.STORAGE_WRITE_CACHE_PROPERTY>();
+					this._writeCache = this.IoControl<StorageApi.STORAGE_WRITE_CACHE_PROPERTY>();
 
-				if(this._writeCache.Value.Size == 0)
-					return null;
-				else
-					return this._writeCache.Value;
+				return this._writeCache.Value.Size == 0
+					? (StorageApi.STORAGE_WRITE_CACHE_PROPERTY?)null
+					: this._writeCache.Value;
 			}
 		}
 		/// <summary>Storage adapter miniport driver descriptor data for a device</summary>
-		public StorageAPI.STORAGE_MINIPORT_DESCRIPTOR? Miniport
+		public StorageApi.STORAGE_MINIPORT_DESCRIPTOR? Miniport
 		{
 			get
 			{
 				if(this._miniport == null)
-					this._miniport = this.IoControl<StorageAPI.STORAGE_MINIPORT_DESCRIPTOR>();
+					this._miniport = this.IoControl<StorageApi.STORAGE_MINIPORT_DESCRIPTOR>();
 
-				if(this._miniport.Value.Size == 0)
-					return null;
-				else
-					return this._miniport.Value;
+				return this._miniport.Value.Size == 0
+					? (StorageApi.STORAGE_MINIPORT_DESCRIPTOR?)null
+					: this._miniport.Value;
 			}
 		}
 		/// <summary>Storage access alignment descriptor data for a device</summary>
-		public StorageAPI.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR? AccessAlignment
+		public StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR? AccessAlignment
 		{
 			get
 			{
 				if(this._accessAlignment == null)
-					this._accessAlignment = this.IoControl<StorageAPI.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR>();
+					this._accessAlignment = this.IoControl<StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR>();
 
-				if(this._accessAlignment.Value.Size == 0)
-					return null;
-				else
-					return this._accessAlignment.Value;
+				return this._accessAlignment.Value.Size == 0
+					? (StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR?)null
+					: this._accessAlignment.Value;
 			}
 		}
 		/// <summary>Seek penalty descriptor data for a device</summary>
-		public StorageAPI.DEVICE_SEEK_PENALTY_DESCRIPTOR? SeekPenalty
+		public StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR? SeekPenalty
 		{
 			get
 			{
 				if(this._seekPenalty == null)
-					this._seekPenalty = this.IoControl<StorageAPI.DEVICE_SEEK_PENALTY_DESCRIPTOR>();
+					this._seekPenalty = this.IoControl<StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR>();
 
-				if(this._seekPenalty.Value.Size == 0)
-					return null;
-				else
-					return this._seekPenalty.Value;
+				return this._seekPenalty.Value.Size == 0
+					? (StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR?)null
+					: this._seekPenalty.Value;
 			}
 		}
 		/// <summary>Trim descriptor data for a device</summary>
-		public StorageAPI.DEVICE_TRIM_DESCRIPTOR? Trim
+		public StorageApi.DEVICE_TRIM_DESCRIPTOR? Trim
 		{
 			get
 			{
 				if(this._trim == null)
-					this._trim = this.IoControl<StorageAPI.DEVICE_TRIM_DESCRIPTOR>();
+					this._trim = this.IoControl<StorageApi.DEVICE_TRIM_DESCRIPTOR>();
 
-				if(this._trim.Value.Size == 0)
-					return null;
-				else
-					return this._trim.Value;
+				return this._trim.Value.Size == 0
+					? (StorageApi.DEVICE_TRIM_DESCRIPTOR?)null
+					: this._trim.Value;
 			}
 		}
 		/// <summary>Write aggregation data for a device</summary>
-		public StorageAPI.DEVICE_WRITE_AGGREGATION_DESCRIPTOR? WriteAggregation
+		public StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR? WriteAggregation
 		{
 			get
 			{
 				if(this._writeAggregation == null)
-					this._writeAggregation = this.IoControl<StorageAPI.DEVICE_WRITE_AGGREGATION_DESCRIPTOR>();
+					this._writeAggregation = this.IoControl<StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR>();
 
-				if(this._writeAggregation.Value.Size == 0)
-					return null;
-				else
-					return this._writeAggregation.Value;
+				return this._writeAggregation.Value.Size == 0
+					? (StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR?)null
+					: this._writeAggregation.Value;
 			}
 		}
 		/// <summary>Describes the power capabilities of a storage device</summary>
-		public StorageAPI.DEVICE_POWER_DESCRIPTOR? Power
+		public StorageApi.DEVICE_POWER_DESCRIPTOR? Power
 		{
 			get
 			{
 				if(this._power == null)
-					this._power = this.IoControl<StorageAPI.DEVICE_POWER_DESCRIPTOR>();
+					this._power = this.IoControl<StorageApi.DEVICE_POWER_DESCRIPTOR>();
 
-				if(this._power.Value.Size == 0)
-					return null;
-				else
-					return this._power.Value;
+				return this._power.Value.Size == 0
+					? (StorageApi.DEVICE_POWER_DESCRIPTOR?)null
+					: this._power.Value;
 			}
 		}
 		/// <summary>Copy offload capabilities for a storage device.</summary>
-		public StorageAPI.DEVICE_COPY_OFFLOAD_DESCRIPTOR? CopyOffload
+		public StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR? CopyOffload
 		{
 			get
 			{
 				if(this._copyOffload == null)
-					this._copyOffload = this.IoControl<StorageAPI.DEVICE_COPY_OFFLOAD_DESCRIPTOR>();
+					this._copyOffload = this.IoControl<StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR>();
 
-				if(this._copyOffload.Value.Size == 0)
-					return null;
-				else
-					return this._copyOffload.Value;
+				return this._copyOffload.Value.Size == 0
+					? (StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR?)null
+					: this._copyOffload.Value;
 			}
 		}
+		
 		/// <summary>Resiliency capabilities for a storage device.</summary>
-		public StorageAPI.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR? Resilency
+		public StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR? Resiliency
 		{
 			get
 			{
-				if(this._resilency == null)
-					this._resilency = this.IoControl<StorageAPI.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR>();
+				if(this._resiliency == null)
+					this._resiliency = this.IoControl<StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR>();
 
-				if(this._resilency.Value.Size == 0)
-					return null;
-				else
-					return this._resilency.Value;
+				return this._resiliency.Value.Size == 0
+					? (StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR?)null
+					: this._resiliency.Value;
 			}
 		}
+
 		/// <summary>Create instance of device properties class</summary>
 		/// <param name="device">device info</param>
 		internal Properties(DeviceIoControl device)
 		{
 			this._info = device;
 		}
+		
 		/// <summary>Проверка на существование свойства перед запросом</summary>
 		/// <param name="type">Тип возвращаемого обйекта</param>
 		/// <returns>Свойство существует</returns>
@@ -204,21 +195,23 @@ namespace AlphaOmega.Debug
 		{
 			return this.IsPropertyExists(Properties.GetPropertyId(type));
 		}
+
 		/// <summary>Проверка на существование свойства перед запросом</summary>
 		/// <param name="propertyId">Идентификатор свойства перед запросом</param>
 		/// <returns>Такое свойство существует</returns>
-		private Boolean IsPropertyExists(StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID propertyId)
+		private Boolean IsPropertyExists(StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID propertyId)
 		{
-			StorageAPI.STORAGE_PROPERTY_QUERY query = new StorageAPI.STORAGE_PROPERTY_QUERY();
-			query.QueryType = StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyExistsQuery;
+			StorageApi.STORAGE_PROPERTY_QUERY query = new StorageApi.STORAGE_PROPERTY_QUERY();
+			query.QueryType = StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyExistsQuery;
 			query.PropertyId = propertyId;
 
 			return this.Info.IoControl(Constant.IOCTL_STORAGE.QUERY_PROPERTY, query);
 		}
+
 		private T IoControl<T>() where T : struct
 		{
-			StorageAPI.STORAGE_PROPERTY_QUERY inParams = new StorageAPI.STORAGE_PROPERTY_QUERY();
-			inParams.QueryType = StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyStandardQuery;
+			StorageApi.STORAGE_PROPERTY_QUERY inParams = new StorageApi.STORAGE_PROPERTY_QUERY();
+			inParams.QueryType = StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyStandardQuery;
 			inParams.PropertyId = Properties.GetPropertyId(typeof(T));
 
 			T outParams;
@@ -228,36 +221,37 @@ namespace AlphaOmega.Debug
 			else
 				return default(T);
 		}
-		private static StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID GetPropertyId(Type type)
+
+		private static StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID GetPropertyId(Type type)
 		{
-			if(type == typeof(StorageAPI.STORAGE_DEVICE_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceProperty;
-			else if(type == typeof(StorageAPI.STORAGE_ADAPTER_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageAdapterProperty;
-			else if(type == typeof(StorageAPI.STORAGE_DEVICE_ID_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceIdProperty;
+			if(type == typeof(StorageApi.STORAGE_DEVICE_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceProperty;
+			else if(type == typeof(StorageApi.STORAGE_ADAPTER_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageAdapterProperty;
+			else if(type == typeof(StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceIdProperty;
 			/*else if(type == typeof(StorageWinAPI.STORAGE_DEVICE_UNIQUE_IDENTIFIER))
 				query.PropertyId = StorageWinAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceUniqueIdProperty;*/
-			else if(type == typeof(StorageAPI.STORAGE_WRITE_CACHE_PROPERTY))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceWriteCacheProperty;
-			else if(type == typeof(StorageAPI.STORAGE_MINIPORT_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageMiniportProperty;
-			else if(type == typeof(StorageAPI.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageAccessAlignmentProperty;
-			else if(type == typeof(StorageAPI.DEVICE_SEEK_PENALTY_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceSeekPenaltyProperty;
-			else if(type == typeof(StorageAPI.DEVICE_TRIM_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceTrimProperty;
-			else if(type == typeof(StorageAPI.DEVICE_WRITE_AGGREGATION_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceWriteAggregationProperty;
+			else if(type == typeof(StorageApi.STORAGE_WRITE_CACHE_PROPERTY))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceWriteCacheProperty;
+			else if(type == typeof(StorageApi.STORAGE_MINIPORT_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageMiniportProperty;
+			else if(type == typeof(StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageAccessAlignmentProperty;
+			else if(type == typeof(StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceSeekPenaltyProperty;
+			else if(type == typeof(StorageApi.DEVICE_TRIM_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceTrimProperty;
+			else if(type == typeof(StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceWriteAggregationProperty;
 			/*else if(type == typeof(WinNT.DEVICE_LB_PROVISIONING_DESCRIPTOR))
 				return  StorageWinAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceLBProvisioningProperty;*/
-			else if(type == typeof(StorageAPI.DEVICE_POWER_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceZeroPowerProperty;
-			else if(type == typeof(StorageAPI.DEVICE_COPY_OFFLOAD_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceCopyOffloadProperty;
-			else if(type == typeof(StorageAPI.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR))
-				return StorageAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceResiliencyProperty;
+			else if(type == typeof(StorageApi.DEVICE_POWER_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceZeroPowerProperty;
+			else if(type == typeof(StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceCopyOffloadProperty;
+			else if(type == typeof(StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceResiliencyProperty;
 			else
 				throw new NotImplementedException();
 		}

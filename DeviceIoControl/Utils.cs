@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Globalization;
 
 namespace AlphaOmega.Debug
 {
@@ -12,9 +13,16 @@ namespace AlphaOmega.Debug
 		/// <param name="buffer">Buffer</param>
 		/// <param name="start">Start position</param>
 		/// <param name="count">Count</param>
+		/// <exception cref="ArgumentNullException">buffer is null</exception>
+		/// <exception cref="ArgumentException">buffer length is less than start index</exception>
 		/// <returns>String</returns>
 		public static String SwapBytes(UInt16[] buffer, UInt64 start, UInt64 count)
 		{
+			if(buffer == null)
+				throw new ArgumentNullException("buffer");
+			if((UInt64)buffer.LongLength < start)
+				throw new ArgumentException("Start index less than buffer length.");
+
 			StringBuilder result = new StringBuilder();
 			for(UInt64 loop = start;loop < start + count;loop++)
 			{
@@ -27,9 +35,13 @@ namespace AlphaOmega.Debug
 		}
 		/// <summary>Swap chars in IDREGS array</summary>
 		/// <param name="buffer">Char buffer</param>
+		/// <exception cref="ArgumentNullException">buffer is null</exception>
 		/// <returns>Swapped string</returns>
 		public static String SwapChars(Char[] buffer)
 		{
+			if(buffer == null)
+				throw new ArgumentNullException("buffer");
+
 			StringBuilder result = new StringBuilder();
 			for(Int32 loop = 0; loop < buffer.Length; loop += 2)
 			{
@@ -68,7 +80,7 @@ namespace AlphaOmega.Debug
 				constSize *= Utils.FileSize;
 				sizePosition++;
 			}
-			return String.Format("{0:n0} {1}", length / constSize, Utils.FileSizeType[sizePosition]);
+			return String.Format(CultureInfo.CurrentUICulture, "{0:n0} {1}", length / constSize, Utils.FileSizeType[sizePosition]);
 		}
 	}
 }

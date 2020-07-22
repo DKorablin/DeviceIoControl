@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,9 +12,28 @@
     <AssemblyName>DeviceIoControl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\AlphaOmega.pfx</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>AlphaOmega.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +43,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\Win32CheckRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -34,21 +54,23 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\DeviceIoControl.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PEReader\PEReader\PinnedBufferReader.cs">
+    <Compile Include="..\..\FileReader\PinnedBufferReader.cs">
       <Link>PinnedBufferReader.cs</Link>
     </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
-    <Compile Include="Native\AtaAPI.cs" />
-    <Compile Include="Native\DiscAPI.cs" />
-    <Compile Include="Native\FsctlAPI.cs" />
-    <Compile Include="Native\StorageAPI.cs" />
-    <Compile Include="Native\VolumeAPI.cs" />
+    <Compile Include="LogicalDrive.cs" />
+    <Compile Include="Native\AtaApi.cs" />
+    <Compile Include="Native\DiscApi.cs" />
+    <Compile Include="Native\FsctlApi.cs" />
+    <Compile Include="Native\StorageApi.cs" />
+    <Compile Include="Native\VolumeApi.cs" />
     <Compile Include="Storage\Properties.cs" />
     <Compile Include="Disc\Disc.cs" />
     <Compile Include="Disc\Smart\IdentifyDma.cs" />
@@ -56,17 +78,34 @@
     <Compile Include="Disc\Performance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeviceIoControl.cs" />
-    <Compile Include="Disc\Smart\AttributeTresholds.cs" />
-    <Compile Include="Disc\Smart\SmartInfo.cs" />
+    <Compile Include="Disc\Smart\AttributeThresholds.cs" />
+    <Compile Include="Disc\Smart\SmartInfoCollection.cs" />
     <Compile Include="Storage\Storage.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Volume\Volume.cs" />
-    <Compile Include="Native\WinAPI.cs" />
+    <Compile Include="Native\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\AlphaOmega.pfx">
       <Link>AlphaOmega.pfx</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

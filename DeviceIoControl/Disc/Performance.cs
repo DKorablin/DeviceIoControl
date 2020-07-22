@@ -8,19 +8,21 @@ namespace AlphaOmega.Debug
 	{
 		private readonly DeviceIoControl _device;
 		private Boolean _counterIsActive = false;
+		
 		/// <summary>Device</summary>
-		public DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get { return this._device; } }
+		
 		/// <summary>Create instance of deviceperfomance counters</summary>
 		/// <param name="device">device</param>
 		internal Performance(DeviceIoControl device)
 		{
 			this._device = device;
 		}
-		/// <summary>Query perfomance counters</summary>
-		/// <returns>Perfomance counters</returns>
-		public DiscAPI.DISK_PERFORMANCE QueryPerfomanceInfo()
+		/// <summary>Query performance counters</summary>
+		/// <returns>Performance counters</returns>
+		public DiscApi.DISK_PERFORMANCE QueryPerformanceInfo()
 		{
-			DiscAPI.DISK_PERFORMANCE result = this.Device.IoControl<DiscAPI.DISK_PERFORMANCE>(
+			DiscApi.DISK_PERFORMANCE result = this.Device.IoControl<DiscApi.DISK_PERFORMANCE>(
 				Constant.IOCTL_DISC.PERFORMANCE,
 				null);
 			this._counterIsActive = true;
@@ -31,7 +33,7 @@ namespace AlphaOmega.Debug
 		{
 			if(this._counterIsActive)
 			{
-				this.Device.IoControl<DiscAPI.DISK_PERFORMANCE>(
+				this.Device.IoControl<DiscApi.DISK_PERFORMANCE>(
 					Constant.IOCTL_DISC.PERFORMANCE_OFF,
 					null);
 				this._counterIsActive = false;

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace AlphaOmega.Debug.Native
 {
 	/// <summary>Storage IOCTL structures</summary>
-	public struct StorageAPI
+	public struct StorageApi
 	{
 		/// <summary>Indicates the properties of a storage device or adapter to retrieve as the input buffer passed to the <see cref="T:Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> control code.</summary>
 		[StructLayout(LayoutKind.Sequential)]
@@ -65,6 +65,32 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
 			public Byte[] AdditionalParameters;
 		}
+
+		/// <summary>Contains information about the size of a device.</summary>
+		/// <remarks>The header file Ntddstor.h is available in the Windows Driver Kit (WDK).</remarks>
+		[StructLayout(LayoutKind.Sequential)]
+		public struct STORAGE_READ_CAPACITY
+		{
+			/// <summary>The version of this structure.</summary>
+			/// <remarks>The caller must set this member to sizeof(STORAGE_READ_CAPACITY).</remarks>
+			public UInt32 Version;
+			/// <summary>The size of the data returned.</summary>
+			public UInt32 Size;
+			/// <summary>The number of bytes per block.</summary>
+			public UInt32 BlockLength;
+			/// <summary>The total number of blocks on the disk.</summary>
+			public UInt64 NumberOfBlocks;
+			/// <summary>The disk size in bytes.</summary>
+			public UInt64 DiskLength;
+			
+			/// <summary>Contains string representation of disc size</summary>
+			/// <returns>Size with dimention</returns>
+			public String DiskLengthString
+			{
+				get { return Utils.FileSizeToString(this.DiskLength); }
+			}
+		}
+
 		/// <summary>The STORAGE_HOTPLUG_INFO structure provides hotplug information for a device.</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STORAGE_HOTPLUG_INFO
@@ -538,7 +564,7 @@ namespace AlphaOmega.Debug.Native
 					/// <summary>The number of cylinders on this disk.</summary>
 					public UInt64 Cylinders;
 					/// <summary>The media type.</summary>
-					public WinAPI.MEDIA_TYPE MediaType;
+					public WinApi.MEDIA_TYPE MediaType;
 					/// <summary>The number of tracks per cylinder.</summary>
 					public UInt32 TracksPerCylinder;
 					/// <summary>The number of sectors per track.</summary>
@@ -558,7 +584,7 @@ namespace AlphaOmega.Debug.Native
 					/// <summary>The number of cylinders on this disk.</summary>
 					public UInt64 Cylinders;
 					/// <summary>The media type.</summary>
-					public WinAPI.MEDIA_TYPE MediaType;
+					public WinApi.MEDIA_TYPE MediaType;
 					/// <summary>The number of tracks per cylinder.</summary>
 					public UInt32 TracksPerCylinder;
 					/// <summary>The number of sectors per track.</summary>
@@ -576,7 +602,7 @@ namespace AlphaOmega.Debug.Native
 				public struct TapeInfoStruct
 				{
 					/// <summary>The media type.</summary>
-					public WinAPI.MEDIA_TYPE MediaType;
+					public WinApi.MEDIA_TYPE MediaType;
 					/// <summary>The characteristics of the media.</summary>
 					public UInt32 MediaCharacteristics;
 					/// <summary>The current block size, in bytes.</summary>

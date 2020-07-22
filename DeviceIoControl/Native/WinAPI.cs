@@ -5,7 +5,7 @@ using System.Collections;
 namespace AlphaOmega.Debug
 {
 	/// <summary>Native structures</summary>
-	public struct WinAPI
+	public struct WinApi
 	{
 		/// <summary>The MEDIA_TYPE enumerators are used in conjunction with the IOCTL_DISK_FORMAT_TRACKS request to format the specified set of contiguous tracks on the disk.</summary>
 		/// <remarks>Removable disks include zip drivers, jaz drives, magneto-optical (MO) drives, and LS-120 floppies as well as regular floppies.</remarks>
@@ -64,6 +64,7 @@ namespace AlphaOmega.Debug
 			/// <summary>3.5",   32Mb Floppy</summary>
 			F3_32M_512,
 		}
+
 		/// <summary>Define the method codes for how buffers are passed for I/O and FS controls</summary>
 		public enum METHOD : byte
 		{
@@ -80,6 +81,32 @@ namespace AlphaOmega.Debug
 			/// </summary>
 			NEITHER = 3,
 		}
+
+		/// <summary>The SID_NAME_USE enumeration contains values that specify the type of a security identifier (SID).</summary>
+		public enum SID_NAME_USE
+		{
+			/// <summary>A user SID.</summary>
+			SidTypeUser = 1,
+			/// <summary>A group SID.</summary>
+			SidTypeGroup,
+			/// <summary>A domain SID.</summary>
+			SidTypeDomain,
+			/// <summary>An alias SID.</summary>
+			SidTypeAlias,
+			/// <summary>A SID for a well-known group.</summary>
+			SidTypeWellKnownGroup,
+			/// <summary>A SID for a deleted account.</summary>
+			SidTypeDeletedAccount,
+			/// <summary>A SID that is not valid.</summary>
+			SidTypeInvalid,
+			/// <summary>A SID of unknown type.</summary>
+			SidTypeUnknown,
+			/// <summary>A SID for a computer.</summary>
+			SidTypeComputer,
+			/// <summary>A mandatory integrity label SID.</summary>
+			SidTypeLabel,
+		}
+
 		/// <summary>Access flags</summary>
 		[Flags]
 		public enum FILE_ACCESS_FLAGS : uint
@@ -93,6 +120,7 @@ namespace AlphaOmega.Debug
 			/// <summary>All</summary>
 			GENERIC_ALL = 0x10000000,
 		}
+
 		/// <summary>Share</summary>
 		[Flags]
 		public enum FILE_SHARE : uint
@@ -114,6 +142,7 @@ namespace AlphaOmega.Debug
 			/// </summary>
 			DELETE = 0x00000004,
 		}
+
 		/// <summary>Defines the access check value for any access. </summary>
 		[Flags]
 		public enum FILE_ACCESS : ushort
@@ -127,6 +156,7 @@ namespace AlphaOmega.Debug
 			/// <remarks>Can be used with FILE_READ_ACCESS.</remarks>
 			WRITE_ACCESS = 0x0002,
 		}
+
 		/// <summary>Disposition</summary>
 		public enum CreateDisposition : uint
 		{
@@ -141,6 +171,7 @@ namespace AlphaOmega.Debug
 			/// <summary>Truncate existing</summary>
 			TRUNCATE_EXISTING = 5,
 		}
+
 		/// <summary>Drive types</summary>
 		public enum DRIVE : uint
 		{

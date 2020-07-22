@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace AlphaOmega.Debug
 {
@@ -9,14 +10,14 @@ namespace AlphaOmega.Debug
 		public enum DmaType
 		{
 			/// <summary>UDMA</summary>
-			Udma = 0,
+			UDma = 0,
 			/// <summary>DMA</summary>
 			Dma = 1,
 		}
 		private readonly DmaType _type;
-		private readonly SmartInfo _info;
+		private readonly SmartInfoCollection _info;
 		/// <summary>Device info</summary>
-		public SmartInfo Info { get { return this._info; } }
+		private SmartInfoCollection Info { get { return this._info; } }
 		/// <summary>Type of DMA</summary>
 		private DmaType Type { get { return this._type; } }
 		/// <summary>DMA/UDMA structure indexes</summary>
@@ -45,7 +46,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Create instance of DMA/UDMA info structure</summary>
 		/// <param name="info">Device info</param>
 		/// <param name="type">DMA/UDMA</param>
-		public IdentifyDma(SmartInfo info, DmaType type)
+		public IdentifyDma(SmartInfoCollection info, DmaType type)
 		{
 			this._info = info;
 			this._type = type;
@@ -69,11 +70,12 @@ namespace AlphaOmega.Debug
 			String result = String.Empty;
 			if(max.HasValue)
 			{
-				result = String.Format("Max {0} mode supported {1}{2}",
+				result = String.Format(CultureInfo.CurrentUICulture, "Max {0} mode supported {1}{2}",
 					this.Type.ToString().ToUpperInvariant(),
-					max, max > 0 ? " and below" : String.Empty);
+					max,
+					max > 0 ? " and below" : String.Empty);
 				if(selected.HasValue)
-					result += Environment.NewLine + String.Format("{0} mode selected {1}",
+					result += Environment.NewLine + String.Format(CultureInfo.CurrentUICulture, "{0} mode selected {1}",
 						this.Type.ToString().ToUpperInvariant(),
 						selected);
 			}

@@ -4,32 +4,33 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Collections;
 using AlphaOmega.Debug.Native;
+using System.Security.Permissions;
 
 namespace AlphaOmega.Debug
 {
 	/// <summary>Self-Monitoring Analysis and Reporting Technology information class</summary>
-	public class SmartInfo : IEnumerable<AttributeTresholds>
+	public class SmartInfoCollection : IEnumerable<AttributeThresholds>
 	{
 		private readonly DeviceIoControl _device;
-		private DiscAPI.IDSECTOR? _info;
-		private DiscAPI.SENDCMDOUTPARAMS? _enabledParams;
-		private DiscAPI.SENDCMDOUTPARAMS? _statusParams;
-		private DiscAPI.ATTRTHRESHOLD[] _thresholds;
+		private DiscApi.IDSECTOR? _info;
+		private DiscApi.SENDCMDOUTPARAMS? _enabledParams;
+		private DiscApi.SENDCMDOUTPARAMS? _statusParams;
+		private DiscApi.ATTRTHRESHOLD[] _thresholds;
 
 		/// <summary>Device</summary>
-		public DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get { return this._device; } }
 
 		/// <summary>Native info structure</summary>
-		public DiscAPI.IDSECTOR SystemParams
+		public DiscApi.IDSECTOR SystemParams
 		{
 			get
 			{
 				if(!this._info.HasValue)
 				{
 					UInt32 bytesReturned;
-					DiscAPI.SENDCMDOUTPARAMS prms = this.GetDeviceInfo(out bytesReturned);
+					DiscApi.SENDCMDOUTPARAMS prms = this.GetDeviceInfo(out bytesReturned);
 					using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
-						this._info = reader.BytesToStructure<DiscAPI.IDSECTOR>(0);
+						this._info = reader.BytesToStructure<DiscApi.IDSECTOR>(0);
 				}
 				return this._info.Value;
 			}
@@ -52,40 +53,40 @@ namespace AlphaOmega.Debug
 		}*/
 
 		/// <summary>Send a SMART_ENABLE_SMART_OPERATIONS command to the drive (DrvNum == 0..3)</summary>
-		public DiscAPI.SENDCMDOUTPARAMS SmartEnabled
+		public DiscApi.SENDCMDOUTPARAMS SmartEnabled
 		{
 			get
 			{
 				if(this._enabledParams == null)
-					this._enabledParams = this.SendCommand(DiscAPI.IDEREGS.SMART.ENABLE_SMART);
+					this._enabledParams = this.SendCommand(DiscApi.IDEREGS.SMART.ENABLE_SMART);
 				return this._enabledParams.Value;
 			}
 		}
 		/// <summary>SMART status native structure</summary>
-		public DiscAPI.SENDCMDOUTPARAMS StatusParams
+		public DiscApi.SENDCMDOUTPARAMS StatusParams
 		{
 			get
 			{
 				if(!this._statusParams.HasValue)
-					this._statusParams = this.SendCommand(DiscAPI.IDEREGS.SMART.RETURN_SMART_STATUS);
+					this._statusParams = this.SendCommand(DiscApi.IDEREGS.SMART.RETURN_SMART_STATUS);
 				return this._statusParams.Value;
 			}
 		}
 		/// <summary>SMART thresholds</summary>
 		/// <remarks>Threshols are cached because they are unchanged</remarks>
-		public DiscAPI.ATTRTHRESHOLD[] Thresholds
+		public DiscApi.ATTRTHRESHOLD[] Thresholds
 		{
 			get
 			{
 				if(this._thresholds == null)
 				{
 					UInt32 padding = 2;
-					DiscAPI.SENDCMDOUTPARAMS prms = this.GetThresholdParamsNative();
+					DiscApi.SENDCMDOUTPARAMS prms = this.GetThresholdParamsNative();
 					using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
 					{
-						this._thresholds = new DiscAPI.ATTRTHRESHOLD[Constant.NUM_ATTRIBUTE_STRUCTS];
+						this._thresholds = new DiscApi.ATTRTHRESHOLD[Constant.NUM_ATTRIBUTE_STRUCTS];
 						for(Int32 loop = 0;loop < this._thresholds.Length;loop++)
-							this._thresholds[loop] = reader.BytesToStructure<DiscAPI.ATTRTHRESHOLD>(ref padding);
+							this._thresholds[loop] = reader.BytesToStructure<DiscApi.ATTRTHRESHOLD>(ref padding);
 					}
 				}
 				return this._thresholds;
@@ -93,63 +94,71 @@ namespace AlphaOmega.Debug
 		}
 		/// <summary>Create instance of S.M.A.R.T. info structure</summary>
 		/// <param name="device">Device info</param>
-		internal SmartInfo(DeviceIoControl device)
+		internal SmartInfoCollection(DeviceIoControl device)
 		{
 			this._device = device;
 		}
+
 		/// <summary>Get SMART attributes with thresholds</summary>
 		/// <returns></returns>
-		public IEnumerator<AttributeTresholds> GetEnumerator()
+		public IEnumerator<AttributeThresholds> GetEnumerator()
 		{
-			DiscAPI.DRIVEATTRIBUTE[] attributes = this.GetAttributes();
-			DiscAPI.ATTRTHRESHOLD[] thresholds = this.Thresholds;
+			DiscApi.DRIVEATTRIBUTE[] attributes = this.GetAttributes();
+			DiscApi.ATTRTHRESHOLD[] thresholds = this.Thresholds;
 
 			if(attributes.Length != thresholds.Length)
 				throw new ArgumentException("Invalid size of attributes and thresholds");
 
-			for(UInt32 loop = 0;loop < attributes.Length;loop++)
-				yield return new AttributeTresholds() { Attribute = attributes[loop], Threshold = thresholds[loop], };
+			for(UInt32 loop = 0; loop < attributes.Length; loop++)
+				yield return new AttributeThresholds(attributes[loop], thresholds[loop]);
 		}
+		
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
 		}
+		
 		/// <summary>S.M.A.R.T. attibutes</summary>
-		public DiscAPI.DRIVEATTRIBUTE[] GetAttributes()
+		[EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
+		public DiscApi.DRIVEATTRIBUTE[] GetAttributes()
 		{
-			DiscAPI.DRIVEATTRIBUTE[] result = new DiscAPI.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
+			DiscApi.DRIVEATTRIBUTE[] result = new DiscApi.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
 			UInt32 padding = 2;
 
-			DiscAPI.SENDCMDOUTPARAMS prms = this.GetAttributeParamsNative();
+			DiscApi.SENDCMDOUTPARAMS prms = this.GetAttributeParamsNative();
 			using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
 			{
-				result = new DiscAPI.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
+				result = new DiscApi.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
 				for(Int32 loop = 0;loop < result.Length;loop++)
-					result[loop] = reader.BytesToStructure<DiscAPI.DRIVEATTRIBUTE>(ref padding);
+					result[loop] = reader.BytesToStructure<DiscApi.DRIVEATTRIBUTE>(ref padding);
 			}
 			return result;
 		}
+		
 		/// <summary>S.M.A.R.T. attributes native structure</summary>
-		public DiscAPI.SENDCMDOUTPARAMS GetAttributeParamsNative()
+		public DiscApi.SENDCMDOUTPARAMS GetAttributeParamsNative()
 		{
 			this.ToggleEnableSmart();
-			return this.ReadAttributes(DiscAPI.IDEREGS.SMART.READ_ATTRIBUTES);
+			return this.ReadAttributes(DiscApi.IDEREGS.SMART.READ_ATTRIBUTES);
 		}
+		
 		/// <summary>S.M.A.R.T. threshold native structure</summary>
 		/// <remarks>Reset thresholds cache</remarks>
-		public DiscAPI.SENDCMDOUTPARAMS GetThresholdParamsNative()
+		public DiscApi.SENDCMDOUTPARAMS GetThresholdParamsNative()
 		{
 			this.ToggleEnableSmart();
 			this._thresholds = null;
-			return this.ReadAttributes(DiscAPI.IDEREGS.SMART.READ_THRESHOLDS);
+			return this.ReadAttributes(DiscApi.IDEREGS.SMART.READ_THRESHOLDS);
 		}
+		
 		private void ToggleEnableSmart()
 		{
-			DiscAPI.SENDCMDOUTPARAMS enabled = this.SmartEnabled;
+			DiscApi.SENDCMDOUTPARAMS enabled = this.SmartEnabled;
 		}
-		private DiscAPI.SENDCMDOUTPARAMS SendCommand(DiscAPI.IDEREGS.SMART featureReg)
+		
+		private DiscApi.SENDCMDOUTPARAMS SendCommand(DiscApi.IDEREGS.SMART featureReg)
 		{
-			DiscAPI.SENDCMDINPARAMS inParams = DiscAPI.SENDCMDINPARAMS.Create(true);
+			DiscApi.SENDCMDINPARAMS inParams = DiscApi.SENDCMDINPARAMS.Create(true);
 			inParams.cBufferSize = Constant.BUFFER_SIZE;
 			inParams.irDriveRegs.bFeaturesReg = featureReg;
 
@@ -158,9 +167,10 @@ namespace AlphaOmega.Debug
 				inParams,
 				out bytesReturned);
 		}
-		private DiscAPI.SENDCMDOUTPARAMS ReadAttributes(DiscAPI.IDEREGS.SMART featureReg)
+		
+		private DiscApi.SENDCMDOUTPARAMS ReadAttributes(DiscApi.IDEREGS.SMART featureReg)
 		{
-			DiscAPI.SENDCMDINPARAMS inParams = DiscAPI.SENDCMDINPARAMS.Create(true);
+			DiscApi.SENDCMDINPARAMS inParams = DiscApi.SENDCMDINPARAMS.Create(true);
 			inParams.cBufferSize = Constant.BUFFER_SIZE;
 			inParams.irDriveRegs.bFeaturesReg = featureReg;
 
@@ -169,33 +179,36 @@ namespace AlphaOmega.Debug
 				inParams,
 				out bytesReturned);
 		}
+		
 		/// <summary>Get system device info structure</summary>
 		/// <param name="bytesReturned">Length of system device info</param>
 		/// <returns>System device info structure</returns>
-		private DiscAPI.SENDCMDOUTPARAMS GetDeviceInfo(out UInt32 bytesReturned)
+		private DiscApi.SENDCMDOUTPARAMS GetDeviceInfo(out UInt32 bytesReturned)
 		{
-			DiscAPI.SENDCMDINPARAMS inParams = DiscAPI.SENDCMDINPARAMS.Create(false);
+			DiscApi.SENDCMDINPARAMS inParams = DiscApi.SENDCMDINPARAMS.Create(false);
 			inParams.cBufferSize = Constant.BUFFER_SIZE;
-			inParams.irDriveRegs.bCommandReg = DiscAPI.IDEREGS.IDE.ID_CMD;
+			inParams.irDriveRegs.bCommandReg = DiscApi.IDEREGS.IDE.ID_CMD;
 
-			DiscAPI.SENDCMDOUTPARAMS outParams = this.DeviceIoControl(Constant.IOCTL_DISC.SMART_RCV_DRIVE_DATA,
+			DiscApi.SENDCMDOUTPARAMS outParams = this.DeviceIoControl(Constant.IOCTL_DISC.SMART_RCV_DRIVE_DATA,
 				inParams,
 				out bytesReturned);
+
 			return outParams;
 		}
 		/// <summary>Send device IO control command</summary>
 		/// <param name="inParams">In command params</param>
 		/// <param name="dwIoControlCode">Control code</param>
 		/// <param name="bytesReturned">Bytes returned from command operation</param>
+		/// <exception cref="InvalidOperationException">Driver is in the error state</exception>
 		/// <returns>Out device params</returns>
-		private DiscAPI.SENDCMDOUTPARAMS DeviceIoControl(UInt32 dwIoControlCode, DiscAPI.SENDCMDINPARAMS inParams, out UInt32 bytesReturned)
+		private DiscApi.SENDCMDOUTPARAMS DeviceIoControl(UInt32 dwIoControlCode, DiscApi.SENDCMDINPARAMS inParams, out UInt32 bytesReturned)
 		{
-			DiscAPI.SENDCMDOUTPARAMS result = this.Device.IoControl<DiscAPI.SENDCMDOUTPARAMS>(
+			DiscApi.SENDCMDOUTPARAMS result = this.Device.IoControl<DiscApi.SENDCMDOUTPARAMS>(
 				(UInt32)dwIoControlCode,
 				inParams,
 				out bytesReturned);
 
-			if(result.DriverStatus.bDriverError != DiscAPI.DRIVERSTATUS.SMART_ERROR.NO_ERROR)
+			if(result.DriverStatus.bDriverError != DiscApi.DRIVERSTATUS.SMART_ERROR.NO_ERROR)
 				throw new InvalidOperationException(result.DriverStatus.bDriverError.ToString());
 			else
 				return result;

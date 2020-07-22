@@ -5,7 +5,7 @@ using System.Collections;
 namespace AlphaOmega.Debug.Native
 {
 	/// <summary>Disc IOCTL structures</summary>
-	public struct DiscAPI
+	public struct DiscApi
 	{
 		/// <summary>IDE registers</summary>
 		[StructLayout(LayoutKind.Sequential)]
@@ -83,7 +83,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Contains the buffer size, in bytes.</summary>
 			public UInt32 cBufferSize;
 			/// <summary>Contains a IDEREGS structure used to report the contents of the IDE controller registers.</summary>
-			public DiscAPI.IDEREGS irDriveRegs;
+			public DiscApi.IDEREGS irDriveRegs;
 			/// <summary>
 			/// The bDriveNumber member is opaque. Do not use it.
 			/// The operating system ignores this member, because the physical drive that receives the request depends on the handle that the caller uses when making the request.
@@ -103,7 +103,7 @@ namespace AlphaOmega.Debug.Native
 			/// <returns></returns>
 			public static SENDCMDINPARAMS Create(Boolean isSmart)
 			{
-				DiscAPI.SENDCMDINPARAMS result = new DiscAPI.SENDCMDINPARAMS();
+				DiscApi.SENDCMDINPARAMS result = new DiscApi.SENDCMDINPARAMS();
 				result.irDriveRegs.bSectorCountReg = 1;
 				result.irDriveRegs.bSectorNumberReg = 1;
 				/*if(deviceId.HasValue)
@@ -111,9 +111,9 @@ namespace AlphaOmega.Debug.Native
 
 				if(isSmart)
 				{
-					result.irDriveRegs.bCylLowReg = DiscAPI.IDEREGS.SMART_CYL.LOW;
-					result.irDriveRegs.bCylHighReg = DiscAPI.IDEREGS.SMART_CYL.HI;
-					result.irDriveRegs.bCommandReg = DiscAPI.IDEREGS.IDE.SMART_CMD;
+					result.irDriveRegs.bCylLowReg = DiscApi.IDEREGS.SMART_CYL.LOW;
+					result.irDriveRegs.bCylHighReg = DiscApi.IDEREGS.SMART_CYL.HI;
+					result.irDriveRegs.bCommandReg = DiscApi.IDEREGS.IDE.SMART_CMD;
 				}
 				return result;
 			}
@@ -167,7 +167,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Contains the size in bytes of the buffer pointed to by bBuffer.</summary>
 			public UInt32 cBufferSize;
 			/// <summary>Contains a DRIVERSTATUS structure that indicates the driver status.</summary>
-			public DiscAPI.DRIVERSTATUS DriverStatus;
+			public DiscApi.DRIVERSTATUS DriverStatus;
 			/// <summary>Pointer to a buffer in which to store the data read from the drive.</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] bBuffer;
@@ -301,7 +301,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Reserved for future use</summary>
 			public Byte bReserved;
 			/// <summary>Attribute name</summary>
-			public String AttrName
+			public String AttributeName
 			{
 				get
 				{
@@ -334,7 +334,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
 			public Byte[] bReserved;
 			/// <summary>Attribute name</summary>
-			public String AttrName
+			public String AttributeName
 			{
 				get
 				{
@@ -398,11 +398,11 @@ namespace AlphaOmega.Debug.Native
 				}
 			}
 			/// <summary>ATA commands supported</summary>
-			public Boolean CommandAta { get { return (this.fCapabilities & CAP.ATA_ID_CMD) == CAP.ATA_ID_CMD; } }
+			public Boolean IsAtaSupported { get { return (this.fCapabilities & CAP.ATA_ID_CMD) == CAP.ATA_ID_CMD; } }
 			/// <summary>ATAPI commands supported</summary>
-			public Boolean CommandAtapi { get { return (this.fCapabilities & CAP.ATAPI_ID_CMD) == CAP.ATAPI_ID_CMD; } }
+			public Boolean IsAtapiSupported { get { return (this.fCapabilities & CAP.ATAPI_ID_CMD) == CAP.ATAPI_ID_CMD; } }
 			/// <summary>SMART commands supported</summary>
-			public Boolean CommandSmart { get { return (this.fCapabilities & CAP.SMART_CMD) == CAP.SMART_CMD; } }
+			public Boolean IsSmartSupported { get { return (this.fCapabilities & CAP.SMART_CMD) == CAP.SMART_CMD; } }
 		}
 		/// <summary>Bits returned in the fCapabilities member of GETVERSIONINPARAMS</summary>
 		[Flags]
@@ -422,7 +422,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Indicates the number of cylinders on the disk device.</summary>
 			public UInt64 Cylinders;
 			/// <summary>Indicates the type of disk.</summary>
-			public WinAPI.MEDIA_TYPE MediaType;
+			public WinApi.MEDIA_TYPE MediaType;
 			/// <summary>Indicates the number of tracks in a cylinder.</summary>
 			public UInt32 TracksPerCylinder;
 			/// <summary>Indicates the number of sectors in each track.</summary>
@@ -436,11 +436,21 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>information about the geometry of a physical disk.</summary>
 			public DISK_GEOMETRY Geometry;
+			
 			/// <summary>Contains the size in bytes of the disk.</summary>
 			public UInt64 DiskSize;
+			
 			/// <summary>Pointer to a variable length area containing a DISK_PARTITION_INFO structure followed by a DISK_DETECTION_INFO structure.</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] Data;
+
+			/// <summary>Contains string representation of disc size</summary>
+			/// <returns>Size with dimention</returns>
+			public String DiskSizeString
+			{
+				get { return Utils.FileSizeToString(this.DiskSize); }
+			}
+
 			/// <summary>Information about the disk's partition table.</summary>
 			/// <returns>Partition table info</returns>
 			public DISK_PARTITION_INFO GetDiscPartitionInfo()
@@ -448,18 +458,13 @@ namespace AlphaOmega.Debug.Native
 				using(PinnedBufferReader reader = new PinnedBufferReader(this.Data))
 					return reader.BytesToStructure<DISK_PARTITION_INFO>(0);
 			}
+			
 			/// <summary>Detected drive parameters that are supplied by an x86 PC BIOS on boot.</summary>
 			/// <returns>Detected drive parameters</returns>
 			public DISK_DETECTION_INFO GetDiscDetectionInfo()
 			{
 				using(PinnedBufferReader reader = new PinnedBufferReader(this.Data))
 					return reader.BytesToStructure<DISK_DETECTION_INFO>(this.GetDiscPartitionInfo().SizeOfPartitionInfo);
-			}
-			/// <summary>Contains string representation of disc size</summary>
-			/// <returns>Size with dimention</returns>
-			public override String ToString()
-			{
-				return Utils.FileSizeToString(this.DiskSize);
 			}
 		}
 		/// <summary>The DISK_DETECTION_INFO structure contains the detected drive parameters that are supplied by an x86 PC BIOS on boot.</summary>

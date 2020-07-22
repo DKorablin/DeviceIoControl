@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace AlphaOmega.Debug.Native
 {
 	/// <summary>ATA IOCTL structures</summary>
-	public struct AtaAPI
+	public struct AtaApi
 	{
 		/// <summary>The ATA_PASS_THROUGH_EX structure is used in conjunction with an <see cref="T:Constant.IOCTL_ATA.PASS_THROUGH"/> request to instruct the port driver to send an embedded ATA command to the target device.</summary>
 		[StructLayout(LayoutKind.Sequential)]
