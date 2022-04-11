@@ -43,6 +43,8 @@ namespace AlphaOmega.Debug.Native
 				StorageDeviceCopyOffloadProperty = 0xD,
 				/// <summary>Indicates that the caller is querying for the device resiliency descriptor.</summary>
 				StorageDeviceResiliencyProperty = 0xE,
+				/// <summary>Indicates that the caller is querying for the medium product type</summary>
+				StorageDeviceMediumProductType = 0xF,
 			}
 			/// <summary>Types of queries</summary>
 			public enum STORAGE_QUERY_TYPE : int
@@ -242,6 +244,40 @@ namespace AlphaOmega.Debug.Native
 			/// </summary>
 			public UInt32 Interleave;
 		}
+
+		/// <summary>Describe the product type of a storage device</summary>
+		[StructLayout(LayoutKind.Sequential)]
+		public struct STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR
+		{
+			/// <summary>Specifies the product type of the storage device</summary>
+			public enum ProductType : uint
+			{
+				/// <summary>Not indicated</summary>
+				NotIndicated=0,
+				/// <summary>CFast</summary>
+				CFast=1,
+				/// <summary>CompactFlash</summary>
+				CompactFlash=2,
+				/// <summary>Memory Stick</summary>
+				MemoryStick=3,
+				/// <summary>MultiMediaCard</summary>
+				MultiMediaCard=4,
+				/// <summary>Secure Digital Card (SD Card)</summary>
+				SDCard=5,
+				/// <summary>QXD</summary>
+				QXD=6,
+				/// <summary>Universal Flash Storage</summary>
+				UniversalFlashStorage=7,
+			}
+			/// <summary>Contains the size of this structure, in bytes, as defined by Sizeof(STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR)</summary>
+			/// <remarks>The value of this member will change as members are added to the structure</remarks>
+			public UInt32 Version;
+			/// <summary>Specifies the total size of the data returned, in bytes. This may include data that follows this structure</summary>
+			public UInt32 Size;
+			/// <summary>Specifies the product type of the storage device</summary>
+			public ProductType MediumProductType;
+		}
+
 		/// <summary>
 		/// The DEVICE_COPY_OFFLOAD_DESCRIPTOR structure is one of the query result structures returned from an <see cref="T:Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> request.
 		/// This structure contains the copy offload capabilities for a storage device.
@@ -781,6 +817,40 @@ namespace AlphaOmega.Debug.Native
 			public UInt32 DeviceNumber;
 			/// <summary>The partition number of the device, if the device can be partitioned. Otherwise, this member is –1.</summary>
 			public UInt32 PartitionNumber;
+		}
+
+		/// <summary>This structure contains information about the device firmware</summary>
+		[StructLayout(LayoutKind.Sequential)]
+		public struct STORAGE_HW_FIRMWARE_INFO
+		{
+			/// <summary>The version of this structure. This should be set to sizeof(STORAGE_HW_FIRMWARE_INFO)</summary>
+			public UInt32 Version;
+			/// <summary>The size of this structure as a buffer including slot.</summary>
+			public UInt32 Size;
+			/// <summary>Indicates that this firmware supports an upgrade.</summary>
+			public Byte SupportUpgrade;
+			/// <summary>Reserved for future use.</summary>
+			public Byte Reserved0;
+			/// <summary>The number of firmware slots on the device. This is the dimension of the Slot array</summary>
+			/// <remarks>Some devices can store more than 1 firmware image, if they have more than 1 firmware slot</remarks>
+			public Byte SlotCount;
+			/// <summary>The firmware slot containing the currently active/running firmware image.</summary>
+			public Byte ActiveSlot;
+			/// <summary>The firmware slot that is pending activation</summary>
+			public Byte PendingActivateSlot;
+			/// <summary>Indicates that the firmware applies to both the device and controller/adapter, e.g. NVMe SSD</summary>
+			public Boolean FirmwareShared;
+			/// <summary>Reserved for future use</summary>
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public Byte[] Reserved;
+			/// <summary>The alignment of the image payload, in number of bytes. The maximum is PAGE_SIZE. The transfer size is a mutliple of this size</summary>
+			/// <remarks>Some protocols require at least sector size. When this value is set to 0, this means that this value is invalid.</remarks>
+			public UInt32 ImagePayloadAlignment;
+			/// <summary>The image payload maximum size, this is used for a single command</summary>
+			public UInt32 ImagePayloadMaxSize;
+			/// <summary>Contains the slot information for each slot on the device, of type STORAGE_HW_FIRMWARE_SLOT_INFO.</summary>
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
+			public Byte[] Slot;
 		}
 	}
 }

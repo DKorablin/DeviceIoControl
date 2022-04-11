@@ -6,6 +6,8 @@ using AlphaOmega.Debug;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading;
+using System.Runtime.InteropServices;
+using AlphaOmega.Debug.Native;
 
 namespace Demo
 {
@@ -18,12 +20,20 @@ namespace Demo
 				using(DeviceIoControl device = new DeviceIoControl("c:\\"))
 				{
 					// Unsafe test code
-					//var info = device.FileSystem.GetStatisticsEx();
+					//Boolean isMoreDataAvailable;
+					//var info = device.FileSystem.GetStatisticsEx(out isMoreDataAvailable);
 
 					//WindowsIdentity.IPrincipal principal = Thread.CurrentPrincipal;
 					//WindowsIdentity id = principal.Identity as WindowsIdentity;
 					//var data = device.FileSystem.FindFilesBySid("Test@test.ru");
 
+					// ERROR: Incorrect function
+					//var changerProductData = device.Changer.ProductData;
+
+					// ERROR: The program issued a command but the command length is incorrect
+					//var firmare = device.Storage.FirmwareInfo();
+
+					var pt=device.Storage.Properties.ProductType;
 					Boolean isWritable = device.Disc.IsWritable;
 					Boolean checkVerify = device.Storage.CheckVerify;
 					Boolean checkVerify2 = device.Storage.CheckVerify2;

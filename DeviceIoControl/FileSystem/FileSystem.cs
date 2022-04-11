@@ -157,13 +157,26 @@ namespace AlphaOmega.Debug
 		/// <summary>Retrieves the information from various file system performance counters</summary>
 		/// <remarks>Support for this structure started with Windows 10</remarks>
 		/// <returns>Contains statistical information from the file system</returns>
-		public FsctlApi.FILESYSTEM_STATISTICS_EX GetStatisticsEx()
+		public FsctlApi.FILESYSTEM_STATISTICS_EX GetStatisticsEx(out Boolean moreDataAvailable)
 		{
 			UInt32 bytesReturned;
-			FsctlApi.FILESYSTEM_STATISTICS_EX result = this.Device.IoControl<FsctlApi.FILESYSTEM_STATISTICS_EX>(
+			FsctlApi.FILESYSTEM_STATISTICS_EX result;
+			Boolean resultCode = this.Device.IoControl<FsctlApi.FILESYSTEM_STATISTICS_EX>(
 				Constant.FSCTL.FILESYSTEM_GET_STATISTICS,
 				null,
-				out bytesReturned);
+				out bytesReturned,
+				out result);
+
+			if(resultCode)
+				moreDataAvailable = false;
+			else
+			{
+				Int32 error = Marshal.GetLastWin32Error();
+				if(error == (Int32)Constant.ERROR.MORE_DATA)
+					moreDataAvailable = true;
+				else
+					throw new Win32Exception(error);
+			}
 
 			return result;
 		}

@@ -184,6 +184,13 @@ namespace AlphaOmega.Debug
 			/*public static UInt32 GET_BC_PROPERTIES = Constant.CTL_CODE(0x0600, WinNT.FILE_ACCESS.READ_ACCESS);
 			public static UInt32 ALLOCATE_BC_STREAM = Constant.CTL_CODE(0x0601, WinNT.FILE_ACCESS.READ_ACCESS | WinNT.FILE_ACCESS.WRITE_ACCESS);
 			public static UInt32 FREE_BC_STREAM = Constant.CTL_CODE(0x0602, WinNT.FILE_ACCESS.READ_ACCESS | WinNT.FILE_ACCESS.WRITE_ACCESS);*/
+
+			/// <summary>Windows applications can use this control code to query the storage device for detailed firmware information</summary>
+			/// <remarks>
+			/// A successful call will return information about firmware revisions, activity status, as well as read/write attributes for each slot.
+			/// The amount of data returned will vary based on storage protocol.
+			/// </remarks>
+			public static UInt32 FIRMWARE_GET_INFO = Constant.CTL_CODE(BASE, 0x0700, WinApi.METHOD.BUFFERED, WinApi.FILE_ACCESS.ANY_ACCESS);
 		}
 		/// <summary>SCSI</summary>
 		public struct IOCTL_SCSI
@@ -199,6 +206,15 @@ namespace AlphaOmega.Debug
 			public static UInt32 RESCAN_BUS = Constant.CTL_CODE(BASE, 0x0407, WinApi.FILE_ACCESS.ANY_ACCESS);
 			public static UInt32 GET_DUMP_POINTERS = Constant.CTL_CODE(BASE, 0x0408, WinApi.FILE_ACCESS.ANY_ACCESS);
 			public static UInt32 FREE_DUMP_POINTERS = Constant.CTL_CODE(BASE, 0x0409, WinApi.FILE_ACCESS.ANY_ACCESS);
+		}
+
+		/// <summary>Changer</summary>
+		public struct IOCTL_CHANGER
+		{
+			public const UInt16 BASE = 0x00000030;
+
+			/// <summary>Retrieves the product data for the specified device</summary>
+			public static UInt32 GET_PRODUCT_DATA = Constant.CTL_CODE(BASE, 0x0002, WinApi.METHOD.BUFFERED, WinApi.FILE_ACCESS.READ_ACCESS);
 		}
 		/// <summary>IDE</summary>
 		public struct IOCTL_IDE
@@ -255,6 +271,9 @@ namespace AlphaOmega.Debug
 			public static UInt32 GET_VOLUME_BITMAP = Constant.CTL_CODE(BASE, 27, WinApi.METHOD.NEITHER, WinApi.FILE_ACCESS.ANY_ACCESS);
 
 			public static UInt32 FIND_FILES_BY_SID = Constant.CTL_CODE(BASE, 35, WinApi.METHOD.NEITHER, WinApi.FILE_ACCESS.ANY_ACCESS);
+
+			/// <summary>Retrieves the locations of boot sectors for a volume</summary>
+			public static UInt32 GET_BOOT_AREA_INFO = Constant.CTL_CODE(BASE, 140, WinApi.METHOD.BUFFERED, WinApi.FILE_ACCESS.ANY_ACCESS);
 		}
 		/// <summary>This macro is used to create a unique system I/O control code (IOCTL).</summary>
 		/// <param name="deviceType">

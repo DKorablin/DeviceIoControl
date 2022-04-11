@@ -168,7 +168,7 @@ namespace AlphaOmega.Debug.Native
 				case Constant.ERROR.INVALID_FLAGS://On Windows Server 2003 this error is/can be returned, but processing can still continue
 					return LookupAccountName(accountName, (Int32)cbSid);
 				default:
-					throw new Win32Exception((Int32)error);
+					throw new Win32Exception(error);
 				}
 			}
 		}

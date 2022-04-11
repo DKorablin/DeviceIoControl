@@ -19,54 +19,73 @@ namespace AlphaOmega.Debug
 		private Storage _storage;
 		private Volume _volume;
 		private FileSystem _fs;
+		private Changer _changer;
 
 		/// <summary>Opened device handle</summary>
 		private IntPtr Handle { get { return this._deviceHandle; } }
+
 		/// <summary>Device ID</summary>
 		public Byte? Id { get { return this._deviceId; } }
+
 		/// <summary>Name of the device</summary>
 		public String Name { get { return this._deviceName; } }
+
 		/// <summary>Disc IO commands</summary>
 		public Disc Disc
 		{
 			get
 			{
-				if(this._disc == null)
-					this._disc = new Disc(this);
-				return this._disc;
+				return this._disc == null
+					? this._disc = new Disc(this)
+					: this._disc;
 			}
 		}
+
 		/// <summary>Storage IO commands</summary>
 		public Storage Storage
 		{
 			get
 			{
-				if(this._storage == null)
-					this._storage = new Storage(this);
-				return this._storage;
+				return this._storage == null
+					? this._storage = new Storage(this)
+					: this._storage;
 			}
 		}
+
 		/// <summary>Volume IO commands</summary>
 		public Volume Volume
 		{
 			get
 			{
-				if(this._volume == null)
-					this._volume = new Volume(this);
-				return this._volume;
+				return this._volume == null
+					? this._volume = new Volume(this)
+					: this._volume;
 			}
 		}
+
 		/// <summary>File system IO commands</summary>
 		/// <remarks>FSCTL will be can be null if device opened by ID</remarks>
 		public FileSystem FileSystem
 		{
 			get
 			{
-				if(this._fs == null && this._deviceId == null)
-					this._fs = new FileSystem(this);
-				return this._fs;
+				return this._fs == null && this._deviceId == null
+					? this._fs = new FileSystem(this)
+					: this._fs;
 			}
 		}
+
+		/// <summary>Changer IO control commands</summary>
+		public Changer Changer
+		{
+			get
+			{
+				return this._changer == null
+					? this._changer = new Changer(this)
+					: this._changer;
+			}
+		}
+
 		/// <summary>Get device power state</summary>
 		/// <exception cref="Win32Exception">Can't gen device power state</exception>
 		public Boolean IsDeviceOn

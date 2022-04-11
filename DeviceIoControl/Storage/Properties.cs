@@ -19,6 +19,7 @@ namespace AlphaOmega.Debug
 		private StorageApi.DEVICE_POWER_DESCRIPTOR? _power;
 		private StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR? _copyOffload;
 		private StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR? _resiliency;
+		private StorageApi.STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR? _productType;
 
 		/// <summary>Device</summary>
 		private DeviceIoControl Info { get { return this._info; } }
@@ -33,7 +34,7 @@ namespace AlphaOmega.Debug
 
 				return this._device.Value.Size == 0
 					? (StorageApi.STORAGE_DEVICE_DESCRIPTOR?)null
-					: this._device.Value;
+					: this._device;
 			}
 		}
 		/// <summary>Storage adapter descriptor data for a device.</summary>
@@ -46,7 +47,7 @@ namespace AlphaOmega.Debug
 
 				return this._adapter.Value.Size == 0
 					? (StorageApi.STORAGE_ADAPTER_DESCRIPTOR?)null
-					: this._adapter.Value;
+					: this._adapter;
 			}
 		}
 		/// <summary>Device ID descriptor data for a device.</summary>
@@ -59,7 +60,7 @@ namespace AlphaOmega.Debug
 
 				return this._id.Value.Size == 0
 					? (StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR?)null
-					: this._id.Value;
+					: this._id;
 			}
 		}
 		/// <summary>Device write cache property</summary>
@@ -72,7 +73,7 @@ namespace AlphaOmega.Debug
 
 				return this._writeCache.Value.Size == 0
 					? (StorageApi.STORAGE_WRITE_CACHE_PROPERTY?)null
-					: this._writeCache.Value;
+					: this._writeCache;
 			}
 		}
 		/// <summary>Storage adapter miniport driver descriptor data for a device</summary>
@@ -85,7 +86,7 @@ namespace AlphaOmega.Debug
 
 				return this._miniport.Value.Size == 0
 					? (StorageApi.STORAGE_MINIPORT_DESCRIPTOR?)null
-					: this._miniport.Value;
+					: this._miniport;
 			}
 		}
 		/// <summary>Storage access alignment descriptor data for a device</summary>
@@ -98,7 +99,7 @@ namespace AlphaOmega.Debug
 
 				return this._accessAlignment.Value.Size == 0
 					? (StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR?)null
-					: this._accessAlignment.Value;
+					: this._accessAlignment;
 			}
 		}
 		/// <summary>Seek penalty descriptor data for a device</summary>
@@ -111,7 +112,7 @@ namespace AlphaOmega.Debug
 
 				return this._seekPenalty.Value.Size == 0
 					? (StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR?)null
-					: this._seekPenalty.Value;
+					: this._seekPenalty;
 			}
 		}
 		/// <summary>Trim descriptor data for a device</summary>
@@ -124,7 +125,7 @@ namespace AlphaOmega.Debug
 
 				return this._trim.Value.Size == 0
 					? (StorageApi.DEVICE_TRIM_DESCRIPTOR?)null
-					: this._trim.Value;
+					: this._trim;
 			}
 		}
 		/// <summary>Write aggregation data for a device</summary>
@@ -137,7 +138,7 @@ namespace AlphaOmega.Debug
 
 				return this._writeAggregation.Value.Size == 0
 					? (StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR?)null
-					: this._writeAggregation.Value;
+					: this._writeAggregation;
 			}
 		}
 		/// <summary>Describes the power capabilities of a storage device</summary>
@@ -150,7 +151,7 @@ namespace AlphaOmega.Debug
 
 				return this._power.Value.Size == 0
 					? (StorageApi.DEVICE_POWER_DESCRIPTOR?)null
-					: this._power.Value;
+					: this._power;
 			}
 		}
 		/// <summary>Copy offload capabilities for a storage device.</summary>
@@ -163,7 +164,7 @@ namespace AlphaOmega.Debug
 
 				return this._copyOffload.Value.Size == 0
 					? (StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR?)null
-					: this._copyOffload.Value;
+					: this._copyOffload;
 			}
 		}
 		
@@ -177,7 +178,21 @@ namespace AlphaOmega.Debug
 
 				return this._resiliency.Value.Size == 0
 					? (StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR?)null
-					: this._resiliency.Value;
+					: this._resiliency;
+			}
+		}
+
+		/// <summary>Describe the product type of a storage device</summary>
+		public StorageApi.STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR? ProductType
+		{
+			get
+			{
+				if(this._productType == null)
+					this._productType = this.IoControl<StorageApi.STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR>();
+
+				return this._productType.Value.Size == 0
+					? (StorageApi.STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR?)null
+					: this._productType;
 			}
 		}
 
@@ -252,6 +267,8 @@ namespace AlphaOmega.Debug
 				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceCopyOffloadProperty;
 			else if(type == typeof(StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR))
 				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceResiliencyProperty;
+			else if(type == typeof(StorageApi.STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR))
+				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceMediumProductType;
 			else
 				throw new NotImplementedException();
 		}

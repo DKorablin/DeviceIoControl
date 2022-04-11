@@ -159,5 +159,18 @@ namespace AlphaOmega.Debug
 				Constant.IOCTL_STORAGE.PREDICT_FAILURE,
 				null);
 		}
+
+		/// <summary>Windows applications can use this control code to query the storage device for detailed firmware information</summary>
+		/// <remarks>
+		/// A successful call will return information about firmware revisions, activity status, as well as read/write attributes for each slot.
+		/// The amount of data returned will vary based on storage protocol.
+		/// </remarks>
+		/// <returns></returns>
+		public StorageApi.STORAGE_HW_FIRMWARE_INFO FirmwareInfo()
+		{//ERROR: The program issued a command but the command length is incorrect
+			return this.Device.IoControl<StorageApi.STORAGE_HW_FIRMWARE_INFO>(
+				Constant.IOCTL_STORAGE.FIRMWARE_GET_INFO,
+				null);
+		}
 	}
 }
