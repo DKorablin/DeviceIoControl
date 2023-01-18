@@ -9,11 +9,10 @@ namespace AlphaOmega.Debug
 	/// <summary>File system control commands</summary>
 	public class FileSystem
 	{
-		private readonly DeviceIoControl _device;
 		private FsctlApi.NTFS_VOLUME_DATA_BUFFER? _volumeData;
 
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 		
 		/// <summary>Represents volume data.</summary>
 		public FsctlApi.NTFS_VOLUME_DATA_BUFFER VolumeData
@@ -37,7 +36,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Device</param>
 		public FileSystem(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
 		
 		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume.</summary>

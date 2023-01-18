@@ -10,7 +10,6 @@ namespace AlphaOmega.Debug
 	public class Storage
 	{
 		#region Fields
-		private readonly DeviceIoControl _device;
 		private Properties _properties;
 		private StorageApi.STORAGE_DEVICE_NUMBER? _deviceNumber;
 		private StorageApi.GET_MEDIA_TYPES? _mediaTypesEx;
@@ -19,17 +18,12 @@ namespace AlphaOmega.Debug
 		#endregion Fields
 
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 
 		/// <summary>Device descriptors</summary>
 		public Properties Properties
 		{
-			get
-			{
-				return this._properties == null
-					? this._properties = new Properties(this.Device)
-					: this._properties;
-			}
+			get { return this._properties ?? (this._properties = new Properties(this.Device)); }
 		}
 
 		/// <summary>Contains information about a device.</summary>
@@ -55,8 +49,7 @@ namespace AlphaOmega.Debug
 			{
 				return (this._serialNumber == null
 					? this._serialNumber = this.Device.IoControl<StorageApi.MEDIA_SERIAL_NUMBER_DATA>(
-						Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER,
-						null)
+						Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER, null)
 					: this._serialNumber).Value;
 			}
 		}
@@ -68,8 +61,7 @@ namespace AlphaOmega.Debug
 			{
 				return (this._mediaTypesEx == null
 					? this._mediaTypesEx = this.Device.IoControl<StorageApi.GET_MEDIA_TYPES>(
-						Constant.IOCTL_STORAGE.GET_MEDIA_TYPES_EX,
-						null)
+						Constant.IOCTL_STORAGE.GET_MEDIA_TYPES_EX, null)
 					: this._mediaTypesEx).Value;
 			}
 		}
@@ -125,7 +117,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Device</param>
 		internal Storage(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
 
 		/// <summary>Enables or disables the mechanism that ejects media, for those devices possessing that locking capability.</summary>

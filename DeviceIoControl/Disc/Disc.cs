@@ -8,13 +8,13 @@ namespace AlphaOmega.Debug
 	/// <summary>Disc IO control commands</summary>
 	public class Disc
 	{
-		private readonly DeviceIoControl _device;
 		private SmartInfoCollection _smart;
 		private DiscApi.GETVERSIONINPARAMS? _version;
 		private DiscApi.DISK_GEOMETRY_EX? _driveGeometryEx;
 		private Boolean? _isWritable;
+
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 
 		/// <summary>Returns version information, a capabilities mask, and a bitmask for the device.</summary>
 		/// <remarks>This IOCTL must be handled by drivers that support Self-Monitoring Analysis and Reporting Technology (SMART).</remarks>
@@ -84,7 +84,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Device</param>
 		internal Disc(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
 
 		/// <summary>Get disc performance managed</summary>

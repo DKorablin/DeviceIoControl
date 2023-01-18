@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using AlphaOmega.Debug.Native;
-using System.IO;
 using System.Globalization;
+using AlphaOmega.Debug.Native;
 
 namespace AlphaOmega.Debug
 {
@@ -33,34 +32,19 @@ namespace AlphaOmega.Debug
 		/// <summary>Disc IO commands</summary>
 		public Disc Disc
 		{
-			get
-			{
-				return this._disc == null
-					? this._disc = new Disc(this)
-					: this._disc;
-			}
+			get { return this._disc ?? (this._disc = new Disc(this)); }
 		}
 
 		/// <summary>Storage IO commands</summary>
 		public Storage Storage
 		{
-			get
-			{
-				return this._storage == null
-					? this._storage = new Storage(this)
-					: this._storage;
-			}
+			get { return this._storage ?? (this._storage = new Storage(this)); }
 		}
 
 		/// <summary>Volume IO commands</summary>
 		public Volume Volume
 		{
-			get
-			{
-				return this._volume == null
-					? this._volume = new Volume(this)
-					: this._volume;
-			}
+			get { return this._volume ?? (this._volume = new Volume(this)); }
 		}
 
 		/// <summary>File system IO commands</summary>
@@ -78,12 +62,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Changer IO control commands</summary>
 		public Changer Changer
 		{
-			get
-			{
-				return this._changer == null
-					? this._changer = new Changer(this)
-					: this._changer;
-			}
+			get { return this._changer ?? (this._changer = new Changer(this)); }
 		}
 
 		/// <summary>Get device power state</summary>
@@ -105,12 +84,14 @@ namespace AlphaOmega.Debug
 			: this(null, deviceName)
 		{
 		}
+
 		/// <summary>Create instance of device info class by device ID</summary>
 		/// <param name="deviceId">Device ID</param>
 		public DeviceIoControl(Byte deviceId)
 			: this(deviceId, null)
 		{
 		}
+
 		/// <summary>Create instance of device info class by device ID or drive letter</summary>
 		/// <param name="deviceId">ID of device</param>
 		/// <param name="deviceName">name of device</param>
@@ -121,6 +102,7 @@ namespace AlphaOmega.Debug
 			WinApi.FILE_SHARE.READ | WinApi.FILE_SHARE.WRITE)
 		{
 		}
+
 		/// <summary>Create instance of device info class by device ID or drive letter</summary>
 		/// <param name="deviceId">ID of device</param>
 		/// <param name="deviceName">name of device</param>
@@ -142,6 +124,7 @@ namespace AlphaOmega.Debug
 
 			this._deviceHandle = Methods.OpenDevice(this.Name, accessMode, shareMode);
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
@@ -152,6 +135,7 @@ namespace AlphaOmega.Debug
 			UInt32 bytesReturned;
 			return this.IoControl<T>(dwIoControlCode, inParams, out bytesReturned);
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
@@ -166,6 +150,7 @@ namespace AlphaOmega.Debug
 				inParams,
 				out bytesReturned);
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <returns>Result of method execution</returns>
@@ -173,6 +158,7 @@ namespace AlphaOmega.Debug
 		{
 			return this.IoControl(dwIoControlCode, null);
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
@@ -182,6 +168,7 @@ namespace AlphaOmega.Debug
 			IntPtr dummy;
 			return this.IoControl<IntPtr>(dwIoControlCode, inParams, out dummy);
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
@@ -193,6 +180,7 @@ namespace AlphaOmega.Debug
 			UInt32 bytesReturned;
 			return this.IoControl<T>(dwIoControlCode, inParams, out bytesReturned, out outParams);
 		}
+
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
@@ -209,6 +197,7 @@ namespace AlphaOmega.Debug
 				out bytesReturned,
 				out outParams);
 		}
+
 		/// <summary>Get all logical devices</summary>
 		/// <returns>Drive name and type</returns>
 		public static IEnumerable<LogicalDrive> GetLogicalDrives()
@@ -233,11 +222,13 @@ namespace AlphaOmega.Debug
 				else throw new Win32Exception();
 			}
 		}
+
 		/// <summary>Destructor to close native handle</summary>
 		~DeviceIoControl()
 		{
 			this.Dispose(false);
 		}
+
 		/// <summary>Get system device name</summary>
 		/// <param name="deviceId">ID of device</param>
 		/// <returns>System device name</returns>

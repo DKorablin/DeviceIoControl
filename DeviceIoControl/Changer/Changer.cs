@@ -5,12 +5,10 @@ namespace AlphaOmega.Debug
 	/// <summary>Changer IO control commands</summary>
 	public class Changer
 	{
-		private readonly DeviceIoControl _device;
-
 		private ChangerApi.CHANGER_PRODUCT_DATA? _productData;
 
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 
 		/// <summary>Retrieves the product data for the specified device</summary>
 		public ChangerApi.CHANGER_PRODUCT_DATA ProductData
@@ -29,7 +27,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Opened device</param>
 		internal Changer(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
 	}
 }

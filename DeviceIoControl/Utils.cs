@@ -5,10 +5,11 @@ using System.Globalization;
 namespace AlphaOmega.Debug
 {
 	/// <summary>Utils</summary>
-	public struct Utils
+	internal struct Utils
 	{
 		private const Int64 FileSize = 1024;
 		private static String[] FileSizeType = new String[] { "bytes", "Kb", "Mb", "Gb", };
+
 		/// <summary>Swap odd/even bytes in array of USHORTS</summary>
 		/// <param name="buffer">Buffer</param>
 		/// <param name="start">Start position</param>
@@ -24,7 +25,7 @@ namespace AlphaOmega.Debug
 				throw new ArgumentException("Start index less than buffer length.");
 
 			StringBuilder result = new StringBuilder();
-			for(UInt64 loop = start;loop < start + count;loop++)
+			for(UInt64 loop = start; loop < start + count; loop++)
 			{
 				Byte[] part = BitConverter.GetBytes((buffer[loop] << 8 | buffer[loop] >> 8));
 				String zz = Encoding.ASCII.GetString(part, 0, part.Length - 2);
@@ -33,6 +34,7 @@ namespace AlphaOmega.Debug
 
 			return result.ToString();
 		}
+
 		/// <summary>Swap chars in IDREGS array</summary>
 		/// <param name="buffer">Char buffer</param>
 		/// <exception cref="ArgumentNullException">buffer is null</exception>
@@ -50,6 +52,7 @@ namespace AlphaOmega.Debug
 			}
 			return result.ToString();
 		}
+
 		/// <summary>Find highest non-zero bit position</summary>
 		/// <param name="value">Value</param>
 		/// <param name="maxPos">highest non-zero bit position</param>
@@ -57,9 +60,10 @@ namespace AlphaOmega.Debug
 		public static Int64 HighBitPos(Int64 value, Int32 maxPos)
 		{
 			Int32 pos;
-			for(pos = maxPos;!(pos < 0 || ((value >> pos) & 1) == 1);pos--) ;
+			for(pos = maxPos; !(pos < 0 || ((value >> pos) & 1) == 1); pos--) ;
 			return pos;
 		}
+
 		/// <summary>Makes a 32 bit integer from two 16 bit shorts</summary>
 		/// <param name="low">The low order value.</param>
 		/// <param name="high">The high order value.</param>
@@ -68,6 +72,7 @@ namespace AlphaOmega.Debug
 		{
 			return (low + (high << 16));
 		}
+
 		/// <summary>Convert file size in bytes to string with dimention</summary>
 		/// <param name="length">size in bytes</param>
 		/// <returns>Size with dimention</returns>

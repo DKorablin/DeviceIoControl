@@ -9,13 +9,12 @@ namespace AlphaOmega.Debug
 	public class Volume
 	{
 		#region Fields
-		private readonly DeviceIoControl _device;
 		private Boolean? _isClustered;
 		private VolumeApi.VOLUME_DISK_EXTENTS? _diskExtents;
 		#endregion Fields
 
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 
 		/// <summary>Represents a physical location on a disk.</summary>
 		/// <remarks>Вызов не работает в Windows 7</remarks>
@@ -25,8 +24,7 @@ namespace AlphaOmega.Debug
 			{
 				if(this._diskExtents == null)
 					this._diskExtents = this.Device.IoControl<VolumeApi.VOLUME_DISK_EXTENTS>(
-						Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS,
-						null);
+						Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS, null);
 				return this._diskExtents.Value;
 			}
 		}
@@ -55,7 +53,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Device</param>
 		internal Volume(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
 	}
 }

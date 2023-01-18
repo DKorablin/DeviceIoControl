@@ -6,7 +6,6 @@ namespace AlphaOmega.Debug
 	/// <summary>Device properties</summary>
 	public class Properties
 	{
-		private readonly DeviceIoControl _info;
 		private StorageApi.STORAGE_DEVICE_DESCRIPTOR? _device;
 		private StorageApi.STORAGE_ADAPTER_DESCRIPTOR? _adapter;
 		private StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR? _id;
@@ -22,7 +21,7 @@ namespace AlphaOmega.Debug
 		private StorageApi.STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR? _productType;
 
 		/// <summary>Device</summary>
-		private DeviceIoControl Info { get { return this._info; } }
+		private DeviceIoControl Info { get; }
 
 		/// <summary>Device property descriptor</summary>
 		public StorageApi.STORAGE_DEVICE_DESCRIPTOR? Device
@@ -200,7 +199,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">device info</param>
 		internal Properties(DeviceIoControl device)
 		{
-			this._info = device;
+			this.Info = device;
 		}
 		
 		/// <summary>Проверка на существование свойства перед запросом</summary>

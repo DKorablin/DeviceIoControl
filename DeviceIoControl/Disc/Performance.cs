@@ -6,18 +6,18 @@ namespace AlphaOmega.Debug
 	/// <summary>Collect perfomance counters from HDD</summary>
 	public class Performance : IDisposable
 	{
-		private readonly DeviceIoControl _device;
 		private Boolean _counterIsActive = false;
 		
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 		
 		/// <summary>Create instance of deviceperfomance counters</summary>
 		/// <param name="device">device</param>
 		internal Performance(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
+
 		/// <summary>Query performance counters</summary>
 		/// <returns>Performance counters</returns>
 		public DiscApi.DISK_PERFORMANCE QueryPerformanceInfo()
@@ -28,6 +28,7 @@ namespace AlphaOmega.Debug
 			this._counterIsActive = true;
 			return result;
 		}
+
 		/// <summary>Close perfomace counters manager</summary>
 		public void Dispose()
 		{

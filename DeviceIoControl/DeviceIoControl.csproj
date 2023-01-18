@@ -12,8 +12,8 @@
     <AssemblyName>DeviceIoControl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>AlphaOmega.pfx</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\..\AlphaOmega %28NoPwd%29.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -43,7 +43,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\Win32CheckRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -61,7 +60,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\FileReader\ImageLoader\PinnedBufferReader.cs">
+    <Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
       <Link>PinnedBufferReader.cs</Link>
     </Compile>
     <Compile Include="Changer\Changer.cs" />
@@ -89,11 +88,6 @@
     <Compile Include="Native\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\AlphaOmega.pfx">
-      <Link>AlphaOmega.pfx</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -110,7 +104,11 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\..\..\AlphaOmega %28NoPwd%29.snk">
+      <Link>AlphaOmega %28NoPwd%29.snk</Link>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
