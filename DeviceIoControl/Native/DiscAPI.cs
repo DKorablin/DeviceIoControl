@@ -119,7 +119,7 @@ namespace AlphaOmega.Debug.Native
 			}
 		}
 
-		/// <summary>The DRIVERSTATUS structure is used in conjunction with the <see cref="SENDCMDOUTPARAMS"/> structure and the <see cref="Constant.IOCTL_STORAGE.SMART_SEND_DRIVE_COMMAND"/> request to retrieve data returned by a Self-Monitoring Analysis and Reporting Technology (SMART) command</summary>
+		/// <summary>The DRIVERSTATUS structure is used in conjunction with the <see cref="SENDCMDOUTPARAMS"/> structure and the <see cref="Constant.IOCTL_DISC.SMART_SEND_DRIVE_COMMAND"/> request to retrieve data returned by a Self-Monitoring Analysis and Reporting Technology (SMART) command</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DRIVERSTATUS
 		{
@@ -419,7 +419,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>SMART commannds supported</summary>
 			SMART_CMD = 4,
 		}
-		/// <summary>DISK_GEOMETRY is used in conjunction with the <see cref="Constant.IOCTL_DISK.GET_DRIVE_GEOMETRY"/> and the <see cref="Constant.IOCTL_DISK.GET_MEDIA_TYPES"/> requests, in order to retrieve information about the geometry of a physical disk</summary>
+		/// <summary>DISK_GEOMETRY is used in conjunction with the <see cref="Constant.IOCTL_DISC.GET_DRIVE_GEOMETRY"/> and the <see cref="Constant.IOCTL_STORAGE.GET_MEDIA_TYPES"/> requests, in order to retrieve information about the geometry of a physical disk</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_GEOMETRY
 		{

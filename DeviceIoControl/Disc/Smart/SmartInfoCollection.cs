@@ -106,7 +106,7 @@ namespace AlphaOmega.Debug
 			DiscApi.ATTRTHRESHOLD[] thresholds = this.Thresholds;
 
 			if(attributes.Length != thresholds.Length)
-				throw new ArgumentException("Invalid size of attributes and thresholds");
+				throw new InvalidOperationException("Invalid size of attributes and thresholds");
 
 			for(UInt32 loop = 0; loop < attributes.Length; loop++)
 				yield return new AttributeThresholds(attributes[loop], thresholds[loop]);

@@ -379,9 +379,11 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Storage adapter driver is a SCSI Port-miniport driver</summary>
 				StoragePortCodeSetSCSIport = 2,
 			}
-			/// <summary>Contains the size of this structure, in bytes. The value of this member will change as members are added to the structure</summary>
+			/// <summary>Contains the size of this structure, in bytes</summary>
+			/// <remarks>The value of this member will change as members are added to the structure</remarks>
 			public UInt32 Version;
-			/// <summary>Specifies the total size of the data returned, in bytes. This may include data that follows this structure</summary>
+			/// <summary>Specifies the total size of the data returned, in bytes</summary>
+			/// <remarks>This may include data that follows this structure</remarks>
 			public UInt32 Size;
 			/// <summary>Type of port driver as enumerated by the STORAGE_PORT_CODE_SET enumeration</summary>
 			public STORAGE_PORT_CODE_SET Portdriver;
@@ -394,19 +396,21 @@ namespace AlphaOmega.Debug.Native
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DEVICE_POWER_DESCRIPTOR
 		{
-			/// <summary>Contains the size of this structure, in bytes. The value of this member will change as members are added to the structure</summary>
+			/// <summary>Contains the size of this structure, in bytes</summary>
+			/// <remarks>The value of this member will change as members are added to the structure</remarks>
 			public UInt32 Version;
-			/// <summary>Specifies the total size of the data returned, in bytes. This may include data that follows this structure</summary>
+			/// <summary>Specifies the total size of the data returned, in bytes</summary>
+			/// <remarks>This may include data that follows this structure</remarks>
 			public UInt32 Size;
-			/// <summary>True if device attention is supported. Otherwise, false</summary>
+			/// <summary>True if device attention is supported</summary>
 			public Byte DeviceAttentionSupported;
-			/// <summary>True if the device supports asynchronous notifications, delivered via <see cref="Constant.IOCTL_STORAGE.EVENT_NOTIFICATION"/>. Otherwise, false</summary>
+			/// <summary>True if the device supports asynchronous notifications, delivered via IOCTL_STORAGE_EVENT_NOTIFICATION</summary>
 			public Byte AsynchronousNotificationSupported;
-			/// <summary>True if the device has been registered for runtime idle power management. Otherwise, false</summary>
+			/// <summary>True if the device has been registered for runtime idle power management</summary>
 			public Byte IdlePowerManagementEnabled;
-			/// <summary>True if the device will be powered off when put into D3 power state. Otherwise, false</summary>
+			/// <summary>True if the device will be powered off when put into D3 power state</summary>
 			public Byte D3ColdEnabled;
-			/// <summary>True if the platform supports D3ColdEnabled for this device. Otherwise, false</summary>
+			/// <summary>True if the platform supports D3ColdEnabled for this device</summary>
 			public Byte D3ColdSupported;
 			/// <summary>Reserved</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
@@ -460,15 +464,11 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Indicates that the device supports write-through caching</summary>
 				WriteThroughSupported = 2,
 			}
-			/// <summary>
-			/// Contains the size of this structure, in bytes.
-			/// The value of this member will change as members are added to the structure.
-			/// </summary>
+			/// <summary>Contains the size of this structure, in bytes</summary>
+			/// <remarks>The value of this member will change as members are added to the structure</remarks>
 			public UInt32 Version;
-			/// <summary>
-			/// Specifies the total size of the data returned, in bytes.
-			/// This may include data that follows this structure.
-			/// </summary>
+			/// <summary>Specifies the total size of the data returned, in bytes</summary>
+			/// <remarks>This may include data that follows this structure</remarks>
 			public UInt32 Size;
 			/// <summary>A value from the WRITE_CACHE_TYPE enumeration that indicates the current write cache type</summary>
 			public WRITE_CACHE_TYPE WriteCacheType;
@@ -497,6 +497,7 @@ namespace AlphaOmega.Debug.Native
 			/// </summary>
 			public Byte NVCacheEnabled;
 		}
+
 		/// <summary>Used with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> control code request to retrieve the device ID descriptor data for a device</summary>
 		/// <remarks>The device ID descriptor consists of an array of device IDs taken from the SCSI-3 vital product data (VPD) page 0x83 that was retrieved during discovery</remarks>
 		[StructLayout(LayoutKind.Sequential)]
@@ -512,6 +513,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] Identifiers;
 		}
+
 		/// <summary>Used with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> control code to retrieve the storage adapter descriptor data for a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STORAGE_ADAPTER_DESCRIPTOR
@@ -540,11 +542,11 @@ namespace AlphaOmega.Debug.Native
 			public Byte AdapterScansDown;
 			/// <summary>If this member is TRUE, the storage adapter supports SCSI tagged queuing and/or per-logical-unit internal queues, or the non-SCSI equivalent. When this member is FALSE, the storage adapter neither supports SCSI-tagged queuing nor per-logical-unit internal queues</summary>
 			public Byte CommandQueueing;
-			/// <summary>If this member is TRUE, the storage adapter supports synchronous transfers as a way of speeding up I/O. When this member is FALSE, the storage adapter does not support synchronous transfers as a way of speeding up I/O. </summary>
+			/// <summary>If this member is TRUE, the storage adapter supports synchronous transfers as a way of speeding up I/O. When this member is FALSE, the storage adapter does not support synchronous transfers as a way of speeding up I/O</summary>
 			public Byte AcceleratedTransfer;
 			/// <summary>Specifies a value of type STORAGE_BUS_TYPE that indicates the type of the bus to which the device is connected</summary>
 			public Byte BusType;
-			/// <summary>Specifies the major version number, if any, of the storage adapter. </summary>
+			/// <summary>Specifies the major version number, if any, of the storage adapter</summary>
 			public UInt16 BusMajorVersion;
 			/// <summary>Specifies the minor version number, if any, of the storage adapter</summary>
 			public UInt16 BusMinorVersion;
@@ -553,7 +555,9 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>С большого перепугу, тут структура типа Byte, а в STORAGE_DEVICE_DESCRIPTOR - Int32..</summary>
 			public STORAGE_BUS_TYPE BusTypeReal { get { return (STORAGE_BUS_TYPE)this.BusType; } }
 		}
-		/// <summary>Contains the serial number of a USB device. It is used by the <see cref="Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER"/> control code</summary>
+
+		/// <summary>Contains the serial number of a USB device</summary>
+		/// <remarks>It is used by the <see cref="Constant.IOCTL_STORAGE.GET_MEDIA_SERIAL_NUMBER"/> control code</remarks>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct MEDIA_SERIAL_NUMBER_DATA
 		{
@@ -568,6 +572,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] SerialNumberData;
 		}
+
 		/// <summary>Contains information about the media types supported by a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct GET_MEDIA_TYPES
@@ -660,12 +665,17 @@ namespace AlphaOmega.Debug.Native
 				[FieldOffset(0)]
 				public TapeInfoStruct TapeInfo;
 			}
+
 			/// <summary>The type of device</summary>
-			/// <remarks>Values from 0 through 32,767 are reserved for use by Microsoft Corporation. Values from 32,768 through 65,535 are reserved for use by other vendors</remarks>
+			/// <remarks>
+			/// Values from 0 through 32,767 are reserved for use by Microsoft Corporation.
+			/// Values from 32,768 through 65,535 are reserved for use by other vendors
+			/// </remarks>
 			public STORAGE_DEVICE_NUMBER.FileDevice DeviceType;
 			/// <summary>The number of elements in the MediaInfo array</summary>
 			public UInt32 MediaInfoCount;
-			/// <summary>A pointer to the first DEVICE_MEDIA_INFO structure in the array. There is one structure for each media type supported by the device</summary>
+			/// <summary>A pointer to the first DEVICE_MEDIA_INFO structure in the array</summary>
+			/// <remarks>There is one structure for each media type supported by the device</remarks>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32 * 10)]//32-sizeof(DEVICE_MEDIA_INFO)
 			public Byte[] MediaInfo;
 			/// <summary>Gets media info structure by index</summary>
@@ -676,7 +686,7 @@ namespace AlphaOmega.Debug.Native
 				get
 				{
 					if(index >= this.MediaInfoCount)
-						throw new ArgumentOutOfRangeException("index");
+						throw new ArgumentOutOfRangeException(nameof(index));
 					else
 						using(PinnedBufferReader reader = new PinnedBufferReader(this.MediaInfo))
 							return reader.BytesToStructure<DEVICE_MEDIA_INFO>(index * (UInt32)Marshal.SizeOf(typeof(DEVICE_MEDIA_INFO)));

@@ -58,7 +58,7 @@ namespace AlphaOmega.Debug.Native
 		public static IntPtr OpenDevice(String lpFileName, WinApi.FILE_ACCESS_FLAGS dwDesiredAccess, WinApi.FILE_SHARE dwShareMode)
 		{
 			if(String.IsNullOrEmpty(lpFileName))
-				throw new ArgumentNullException("lpFileName");
+				throw new ArgumentNullException(nameof(lpFileName));
 
 			IntPtr result = Methods.CreateFile(lpFileName,
 				dwDesiredAccess,

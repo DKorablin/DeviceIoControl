@@ -46,7 +46,7 @@ namespace AlphaOmega.Debug
 
 			/// <summary>Retrieves information about the physical disk's geometry: type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365169%28v=vs.85%29.aspx</remarks>
-			[Obsolete("IOCTL_DISK.GET_DRIVE_GEOMETRY has been superseded by IOCTL_DISK.GET_DRIVE_GEOMETRY_EX, which retrieves additional information.",false)]
+			[Obsolete("IOCTL_DISC.GET_DRIVE_GEOMETRY has been superseded by IOCTL_DISC.GET_DRIVE_GEOMETRY_EX, which retrieves additional information.", false)]
 			public static UInt32 GET_DRIVE_GEOMETRY = Constant.CTL_CODE(BASE, 0x0000, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
 			/// <summary>Retrieves information about the type, size, and nature of a disk partition</summary>

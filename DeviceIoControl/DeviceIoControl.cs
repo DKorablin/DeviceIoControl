@@ -9,7 +9,6 @@ namespace AlphaOmega.Debug
 	/// <summary>Device info</summary>
 	public class DeviceIoControl : IDisposable
 	{
-		private readonly String _deviceName;
 		private Boolean _disposed = false;
 
 		private Disc _disc;
@@ -25,7 +24,7 @@ namespace AlphaOmega.Debug
 		public Byte? DeviceId { get; }
 
 		/// <summary>Name of the device</summary>
-		public String Name { get { return this._deviceName; } }
+		public String DeviceName { get; }
 
 		/// <summary>Disc IO commands</summary>
 		public Disc Disc
@@ -112,21 +111,24 @@ namespace AlphaOmega.Debug
 			this.DeviceId = deviceId;
 
 			if(deviceId.HasValue)
-				this._deviceName = DeviceIoControl.GetDeviceName(deviceId.Value);
+				this.DeviceName = DeviceIoControl.GetDeviceName(deviceId.Value);
 			else if(!String.IsNullOrEmpty(deviceName))
 			{
-				Char deviceLetter = Array.Find(deviceName.ToCharArray(), delegate(Char ch) { return Char.IsLetter(ch); });
-				this._deviceName = String.Format(CultureInfo.CurrentUICulture, Constant.DriveWinNTArg1, deviceLetter);
+				Char deviceLetter = Array.Find(deviceName.ToCharArray(), delegate (Char ch) { return Char.IsLetter(ch); });
+				this.DeviceName = String.Format(CultureInfo.CurrentUICulture, Constant.DriveWinNTArg1, deviceLetter);
 			} else
-				throw new ArgumentException("Device id does not specified");
+				throw new ArgumentException("Device id does not specified", nameof(deviceId));
 
-			this.DeviceHandle = Methods.OpenDevice(this.Name, accessMode, shareMode);
+			this.DeviceHandle = Methods.OpenDevice(this.DeviceName, accessMode, shareMode);
 		}
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
-		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
-		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
+		/// <param name="dwIoControlCode">
+		/// The control code for the operation.
+		/// This value identifies the specific operation to be performed and the type of device on which to perform it
+		/// </param>
+		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
 		/// <returns>Return type</returns>
 		public T IoControl<T>(UInt32 dwIoControlCode, Object inParams) where T : struct
 		{
@@ -136,8 +138,10 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
-		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
-		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
+		/// <param name="dwIoControlCode">
+		/// The control code for the operation.
+		/// This value identifies the specific operation to be performed and the type of device on which to perform it</param>
+		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
 		/// <param name="bytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes.</param>
 		/// <returns>Return object</returns>
 		public T IoControl<T>(UInt32 dwIoControlCode, Object inParams, out UInt32 bytesReturned) where T : struct
@@ -150,7 +154,10 @@ namespace AlphaOmega.Debug
 		}
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
-		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
+		/// <param name="dwIoControlCode">
+		/// The control code for the operation.
+		/// This value identifies the specific operation to be performed and the type of device on which to perform it
+		/// </param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl(UInt32 dwIoControlCode)
 		{
@@ -158,8 +165,11 @@ namespace AlphaOmega.Debug
 		}
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
-		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
-		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
+		/// <param name="dwIoControlCode">
+		/// The control code for the operation.
+		/// This value identifies the specific operation to be performed and the type of device on which to perform it
+		/// </param>
+		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl(UInt32 dwIoControlCode, Object inParams)
 		{
@@ -169,8 +179,11 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
-		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
-		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
+		/// <param name="dwIoControlCode">
+		/// The control code for the operation.
+		/// This value identifies the specific operation to be performed and the type of device on which to perform it
+		/// </param>
+		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
 		/// <param name="outParams">Return object</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl<T>(UInt32 dwIoControlCode, Object inParams, out T outParams) where T : struct
@@ -181,9 +194,12 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
-		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
-		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
-		/// <param name="bytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes.</param>
+		/// <param name="dwIoControlCode">
+		/// The control code for the operation.
+		/// This value identifies the specific operation to be performed and the type of device on which to perform it
+		/// </param>
+		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
+		/// <param name="bytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes</param>
 		/// <param name="outParams">Return object</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl<T>(UInt32 dwIoControlCode, Object inParams, out UInt32 bytesReturned, out T outParams) where T : struct
