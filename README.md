@@ -1,5 +1,5 @@
 # DeviceIoControl assembly
-[![Auto build](https://github.com/DKorablin/DeviceIoControl/actions/workflows/release.yml/badge.svg)](https://github.com/DKorablin/DeviceIoControl/actions)
+[![Auto build](https://github.com/DKorablin/DeviceIoControl/actions/workflows/release.yml/badge.svg)](https://github.com/DKorablin/DeviceIoControl/releases/latest)
 [![Nuget](https://img.shields.io/nuget/v/AlphaOmega.DeviceIoControl)](https://www.nuget.org/packages/AlphaOmega.DeviceIoControl)
 
 Wrapper for DeviceIoControl function. Primary task of this assembly was to read SMART data from supported devices.
