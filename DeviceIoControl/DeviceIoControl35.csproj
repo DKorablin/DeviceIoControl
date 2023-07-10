@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <!--This to lines are added to separate build process between .NET & .NET Standart-->
+    <BaseOutputPath>$(MSBuildProjectDirectory)/obj/net20/$(MSBuildProjectName)/bin</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildProjectDirectory)/obj/net20/$(MSBuildProjectName)/obj</BaseIntermediateOutputPath>
+    <Version Condition="'$(Version)' == ''">1.0.0.0</Version>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -13,8 +17,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\AlphaOmega.pfx</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>..\..\..\..\AlphaOmega %28NoPwd%29.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -34,21 +37,25 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\DeviceIoControl.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PEReader\PEReader\PinnedBufferReader.cs">
+    <Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
       <Link>PinnedBufferReader.cs</Link>
     </Compile>
+    <Compile Include="Changer\Changer.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
-    <Compile Include="Native\AtaAPI.cs" />
-    <Compile Include="Native\DiscAPI.cs" />
-    <Compile Include="Native\FsctlAPI.cs" />
-    <Compile Include="Native\StorageAPI.cs" />
-    <Compile Include="Native\VolumeAPI.cs" />
+    <Compile Include="LogicalDrive.cs" />
+    <Compile Include="Native\AtaApi.cs" />
+    <Compile Include="Native\ChangerApi.cs" />
+    <Compile Include="Native\DiscApi.cs" />
+    <Compile Include="Native\FsctlApi.cs" />
+    <Compile Include="Native\StorageApi.cs" />
+    <Compile Include="Native\VolumeApi.cs" />
     <Compile Include="Storage\Properties.cs" />
     <Compile Include="Disc\Disc.cs" />
     <Compile Include="Disc\Smart\IdentifyDma.cs" />
@@ -56,24 +63,35 @@
     <Compile Include="Disc\Performance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeviceIoControl.cs" />
-    <Compile Include="Disc\Smart\AttributeTresholds.cs" />
-    <Compile Include="Disc\Smart\SmartInfo.cs" />
+    <Compile Include="Disc\Smart\AttributeThresholds.cs" />
+    <Compile Include="Disc\Smart\SmartInfoCollection.cs" />
     <Compile Include="Storage\Storage.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Volume\Volume.cs" />
-    <Compile Include="Native\WinAPI.cs" />
+    <Compile Include="Native\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\AlphaOmega.pfx">
-      <Link>AlphaOmega.pfx</Link>
+    <None Include="..\..\..\..\AlphaOmega %28NoPwd%29.snk">
+      <Link>AlphaOmega %28NoPwd%29.snk</Link>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
+    <ItemGroup>
+      <AssemblyAttributes Include="AssemblyVersion">
+        <_Parameter1>$(Version)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyFileVersion">
+        <_Parameter1>$(Version)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyInformationalVersion">
+        <_Parameter1>$(Version)</_Parameter1>
+      </AssemblyAttributes>
+    </ItemGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <WriteCodeFragment Language="C#" OutputFile="$(IntermediateOutputPath)Version.cs" AssemblyAttributes="@(AssemblyAttributes)" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)Version.cs" />
+    </ItemGroup>
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

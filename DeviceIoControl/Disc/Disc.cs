@@ -16,8 +16,8 @@ namespace AlphaOmega.Debug
 		/// <summary>Device</summary>
 		private DeviceIoControl Device { get; }
 
-		/// <summary>Returns version information, a capabilities mask, and a bitmask for the device.</summary>
-		/// <remarks>This IOCTL must be handled by drivers that support Self-Monitoring Analysis and Reporting Technology (SMART).</remarks>
+		/// <summary>Returns version information, a capabilities mask, and a bitmask for the device</summary>
+		/// <remarks>This IOCTL must be handled by drivers that support Self-Monitoring Analysis and Reporting Technology (SMART)</remarks>
 		public DiscApi.GETVERSIONINPARAMS? Version
 		{
 			get
@@ -25,16 +25,14 @@ namespace AlphaOmega.Debug
 				if(this._version == null)
 				{
 					DiscApi.GETVERSIONINPARAMS prms;
-					if(this.Device.IoControl<DiscApi.GETVERSIONINPARAMS>(Constant.IOCTL_DISC.SMART_GET_VERSION, null, out prms))
-						this._version = prms;
-					else
-						this._version = prms;
+					_ = this.Device.IoControl<DiscApi.GETVERSIONINPARAMS>(Constant.IOCTL_DISC.SMART_GET_VERSION, null, out prms);
+					this._version = prms;
 				}
 				return this._version.Value.Equals(default(DiscApi.GETVERSIONINPARAMS)) ? (DiscApi.GETVERSIONINPARAMS?)null : this._version.Value;
 			}
 		}
 
-		/// <summary>Returns information about the physical disk's geometry (media type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector).</summary>
+		/// <summary>Returns information about the physical disk's geometry (media type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector)</summary>
 		public DiscApi.DISK_GEOMETRY_EX DriveGeometryEx
 		{
 			get
@@ -59,7 +57,7 @@ namespace AlphaOmega.Debug
 			}
 		}
 
-		/// <summary>Determines whether the specified disk is writable.</summary>
+		/// <summary>Determines whether the specified disk is writable</summary>
 		/// <exception cref="Win32Exception">WinAPI operation fails.</exception>
 		public Boolean IsWritable
 		{

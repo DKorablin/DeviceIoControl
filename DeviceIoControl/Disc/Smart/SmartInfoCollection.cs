@@ -11,14 +11,13 @@ namespace AlphaOmega.Debug
 	/// <summary>Self-Monitoring Analysis and Reporting Technology information class</summary>
 	public class SmartInfoCollection : IEnumerable<AttributeThresholds>
 	{
-		private readonly DeviceIoControl _device;
 		private DiscApi.IDSECTOR? _info;
 		private DiscApi.SENDCMDOUTPARAMS? _enabledParams;
 		private DiscApi.SENDCMDOUTPARAMS? _statusParams;
 		private DiscApi.ATTRTHRESHOLD[] _thresholds;
 
 		/// <summary>Device</summary>
-		private DeviceIoControl Device { get { return this._device; } }
+		private DeviceIoControl Device { get; }
 
 		/// <summary>Native info structure</summary>
 		public DiscApi.IDSECTOR SystemParams
@@ -96,7 +95,7 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Device info</param>
 		internal SmartInfoCollection(DeviceIoControl device)
 		{
-			this._device = device;
+			this.Device = device;
 		}
 
 		/// <summary>Get SMART attributes with thresholds</summary>
@@ -119,7 +118,6 @@ namespace AlphaOmega.Debug
 		}
 		
 		/// <summary>S.M.A.R.T. attibutes</summary>
-		[EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
 		public DiscApi.DRIVEATTRIBUTE[] GetAttributes()
 		{
 			DiscApi.DRIVEATTRIBUTE[] result = new DiscApi.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];
@@ -195,6 +193,7 @@ namespace AlphaOmega.Debug
 
 			return outParams;
 		}
+
 		/// <summary>Send device IO control command</summary>
 		/// <param name="inParams">In command params</param>
 		/// <param name="dwIoControlCode">Control code</param>

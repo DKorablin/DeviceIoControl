@@ -190,20 +190,20 @@ namespace AlphaOmega.Debug.Native
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern Boolean CancelDeviceWakeupRequest(IntPtr hDevice);
 
-		/// <summary>Determines whether a disk drive is a removable, fixed, CD-ROM, RAM disk, or network drive.</summary>
-		/// <remarks>To determine whether a drive is a USB-type drive, call SetupDiGetDeviceRegistryProperty and specify the SPDRP_REMOVAL_POLICY property.</remarks>
+		/// <summary>Determines whether a disk drive is a removable, fixed, CD-ROM, RAM disk, or network drive</summary>
+		/// <remarks>To determine whether a drive is a USB-type drive, call SetupDiGetDeviceRegistryProperty and specify the SPDRP_REMOVAL_POLICY property</remarks>
 		/// <param name="lpRootPathName">
 		/// The root directory for the drive.
 		/// A trailing backslash is required. If this parameter is NULL, the function uses the root of the current directory.
 		/// </param>
-		/// <returns>The return value specifies the type of drive.</returns>
+		/// <returns>The return value specifies the type of drive</returns>
 		[SuppressUnmanagedCodeSecurity]
 		[SecuritySafeCritical]
 		[DllImport("kernel32.dll", EntryPoint = "GetDriveTypeA", SetLastError = true, ThrowOnUnmappableChar = true)]
 		public static extern WinApi.DRIVE GetDriveTypeA(
 			[In] String lpRootPathName);
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>
 		/// <param name="hDevice">A handle to the device on which the operation is to be performed. The device is typically a volume, directory, file, or stream.</param>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
@@ -248,7 +248,7 @@ namespace AlphaOmega.Debug.Native
 				throw new Win32Exception();
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>
 		/// <param name="hDevice">A handle to the device on which the operation is to be performed. The device is typically a volume, directory, file, or stream.</param>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
@@ -261,8 +261,7 @@ namespace AlphaOmega.Debug.Native
 		/// A pointer to the output buffer that is to receive the data returned by the operation. The format of this data depends on the value of the dwIoControlCode parameter.
 		/// This parameter can be NULL if dwIoControlCode specifies an operation that does not return data.
 		/// </param>
-		/// <returns>If the operation completes successfully, the return value is nonzero.</returns>
-		[EnvironmentPermission(SecurityAction.LinkDemand, Unrestricted = true)]
+		/// <returns>If the operation completes successfully, the return value is nonzero</returns>
 		public static Boolean DeviceIoControl<T>(
 			IntPtr hDevice,
 			UInt32 dwIoControlCode,

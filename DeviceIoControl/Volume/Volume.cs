@@ -16,21 +16,20 @@ namespace AlphaOmega.Debug
 		/// <summary>Device</summary>
 		private DeviceIoControl Device { get; }
 
-		/// <summary>Represents a physical location on a disk.</summary>
-		/// <remarks>Вызов не работает в Windows 7</remarks>
+		/// <summary>Represents a physical location on a disk</summary>
+		/// <remarks>The call does not work in Windows 7</remarks>
 		public VolumeApi.VOLUME_DISK_EXTENTS DiskExtents
 		{
 			get
 			{
-				if(this._diskExtents == null)
-					this._diskExtents = this.Device.IoControl<VolumeApi.VOLUME_DISK_EXTENTS>(
-						Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS, null);
-				return this._diskExtents.Value;
+				return this._diskExtents
+					?? (this._diskExtents = this.Device.IoControl<VolumeApi.VOLUME_DISK_EXTENTS>(
+						Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS, null)).Value;
 			}
 		}
 
-		/// <summary>Determines whether the specified volume is clustered.</summary>
-		/// <exception cref="Win32Exception">The volume is offline or Cluster service is not installed.</exception>
+		/// <summary>Determines whether the specified volume is clustered</summary>
+		/// <exception cref="Win32Exception">The volume is offline or Cluster service is not installed</exception>
 		public Boolean IsClustered
 		{
 			get

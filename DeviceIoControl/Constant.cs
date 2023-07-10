@@ -16,15 +16,15 @@ namespace AlphaOmega.Debug
 		/// <summary>WIN32 Error</summary>
 		public enum ERROR
 		{
-			/// <summary>The operation completed successfully.</summary>
+			/// <summary>The operation completed successfully</summary>
 			NO_ERROR = 0,
-			/// <summary>The media is write protected.</summary>
+			/// <summary>The media is write protected</summary>
 			WRITE_PROTECT = 0x13,
-			/// <summary>The device is not ready.</summary>
+			/// <summary>The device is not ready</summary>
 			NOT_READY = 0x15,
 			/// <summary>Insufficient buffer specified</summary>
 			INSUFFICIENT_BUFFER = 0x7A,
-			/// <summary>More data is available.</summary>
+			/// <summary>More data is available</summary>
 			MORE_DATA = 0xEA,
 			INVALID_FLAGS = 0x3EC,
 		}
@@ -32,10 +32,10 @@ namespace AlphaOmega.Debug
 		public struct IOCTL_VOLUME
 		{
 			public const UInt16 BASE = 0x00000056;
-			/// <summary>Retrieves the physical location of a specified volume on one or more disks.</summary>
+			/// <summary>Retrieves the physical location of a specified volume on one or more disks</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365194%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_VOLUME_DISK_EXTENTS = Constant.CTL_CODE(BASE, 0, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Determines whether the specified volume is clustered.</summary>
+			/// <summary>Determines whether the specified volume is clustered</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365195%28v=vs.85%29.aspx</remarks>
 			public static UInt32 IS_CLUSTERED = Constant.CTL_CODE(BASE, 12, WinApi.FILE_ACCESS.ANY_ACCESS);
 		}
@@ -44,27 +44,27 @@ namespace AlphaOmega.Debug
 		{
 			public const UInt16 BASE = 0x00000007;
 
-			/// <summary>Retrieves information about the physical disk's geometry: type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector.</summary>
+			/// <summary>Retrieves information about the physical disk's geometry: type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365169%28v=vs.85%29.aspx</remarks>
 			[Obsolete("IOCTL_DISK.GET_DRIVE_GEOMETRY has been superseded by IOCTL_DISK.GET_DRIVE_GEOMETRY_EX, which retrieves additional information.",false)]
 			public static UInt32 GET_DRIVE_GEOMETRY = Constant.CTL_CODE(BASE, 0x0000, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Retrieves information about the type, size, and nature of a disk partition.</summary>
+			/// <summary>Retrieves information about the type, size, and nature of a disk partition</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365179%28v=vs.85%29.aspx</remarks>
 			[Obsolete("IOCTL_DISK.GET_PARTITION_INFO is superseded by IOCTL_DISK.GET_PARTITION_INFO_EX, which retrieves partition information for AT and Extensible Firmware Interface (EFI) partitions.",false)]
 			public static UInt32 GET_PARTITION_INFO = Constant.CTL_CODE(BASE, 0x0001, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Sets partition information for the specified disk partition.</summary>
+			/// <summary>Sets partition information for the specified disk partition</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365190%28v=vs.85%29.aspx</remarks>
 			[Obsolete("IOCTL_DISK.SET_PARTITION_INFO has been superseded by IOCTL_DISK.SET_PARTITION_INFO_EX, which retrieves layout information for AT and EFI (Extensible Firmware Interface) partitions.",false)]
 			public static UInt32 SET_PARTITION_INFO = Constant.CTL_CODE(BASE, 0x0002, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
 			
-			/// <summary>Retrieves information for each entry in the partition tables for a disk.</summary>
+			/// <summary>Retrieves information for each entry in the partition tables for a disk</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365173%28v=vs.85%29.aspx</remarks>
 			[Obsolete("IOCTL_DISK.GET_DRIVE_LAYOUT has been superseded by IOCTL_DISK.GET_DRIVE_LAYOUT_EX, which retrieves layout information for AT and EFI (Extensible Firmware Interface) partitions.",false)]
 			public static UInt32 GET_DRIVE_LAYOUT = Constant.CTL_CODE(BASE, 0x0003, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Partitions a disk as specified by drive layout and partition information data.</summary>
+			/// <summary>Partitions a disk as specified by drive layout and partition information data</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365188%28v=vs.85%29.aspx</remarks>
 			[Obsolete("IOCTL_DISK.SET_DRIVE_LAYOUT has been superseded by IOCTL_DISK.SET_DRIVE_LAYOUT_EX, which retrieves layout information for AT and EFI (Extensible Firmware Interface) partitions.",false)]
 			public static UInt32 SET_DRIVE_LAYOUT = Constant.CTL_CODE(BASE, 0x0004, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
@@ -79,7 +79,7 @@ namespace AlphaOmega.Debug
 			/// </summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365183%28v=vs.85%29.aspx</remarks>
 			public static UInt32 PERFORMANCE = Constant.CTL_CODE(BASE, 0x0008, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Determines whether the specified disk is writable.</summary>
+			/// <summary>Determines whether the specified disk is writable</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365182%28v=vs.85%29.aspx</remarks>
 			public static UInt32 IS_WRITABLE = Constant.CTL_CODE(BASE, 0x0009, WinApi.FILE_ACCESS.ANY_ACCESS);
 			[Obsolete("This control code is obsolete", true)]
@@ -95,18 +95,18 @@ namespace AlphaOmega.Debug
 			public static UInt32 REQUEST_STRUCTURE = Constant.CTL_CODE(BASE, 0x000f, WinApi.FILE_ACCESS.ANY_ACCESS);
 			[Obsolete("This control code is obsolete", true)]
 			public static UInt32 REQUEST_DATA = Constant.CTL_CODE(BASE, 0x0010, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Disables the counters that were enabled by previous calls to IOCTL_DISK_PERFORMANCE. This request is available in Windows XP and later operating systems. Caller must be running at IRQL = PASSIVE_LEVEL.</summary>
+			/// <summary>Disables the counters that were enabled by previous calls to IOCTL_DISK_PERFORMANCE. This request is available in Windows XP and later operating systems. Caller must be running at IRQL = PASSIVE_LEVEL</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365184%28v=vs.85%29.aspx</remarks>
 			public static UInt32 PERFORMANCE_OFF = Constant.CTL_CODE(BASE, 0x0018, WinApi.FILE_ACCESS.ANY_ACCESS);
 
-			/// <summary>Returns version information, a capabilities mask, and a bitmask for the device.</summary>
+			/// <summary>Returns version information, a capabilities mask, and a bitmask for the device</summary>
 			public static UInt32 SMART_GET_VERSION = Constant.CTL_CODE(BASE, 0x0020, WinApi.FILE_ACCESS.READ_ACCESS);
-			/// <summary>Sends one of the following Self-Monitoring Analysis and Reporting Technology (SMART) commands to the device.</summary>
+			/// <summary>Sends one of the following Self-Monitoring Analysis and Reporting Technology (SMART) commands to the device</summary>
 			public static UInt32 SMART_SEND_DRIVE_COMMAND = Constant.CTL_CODE(BASE, 0x0021, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
-			/// <summary>Returns the ATA-2 identify data, the Self-Monitoring Analysis and Reporting Technology (SMART) thresholds, or the SMART attributes for the device.</summary>
+			/// <summary>Returns the ATA-2 identify data, the Self-Monitoring Analysis and Reporting Technology (SMART) thresholds, or the SMART attributes for the device</summary>
 			public static UInt32 SMART_RCV_DRIVE_DATA = Constant.CTL_CODE(BASE, 0x0022, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
 
-			/// <summary>Returns information about the physical disk's geometry (media type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector).</summary>
+			/// <summary>Returns information about the physical disk's geometry (media type, number of cylinders, tracks per cylinder, sectors per track, and bytes per sector)</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365171%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_DRIVE_GEOMETRY_EX = Constant.CTL_CODE(BASE, 0x0028, WinApi.FILE_ACCESS.ANY_ACCESS);
 		}
@@ -115,19 +115,19 @@ namespace AlphaOmega.Debug
 		{
 			public const UInt16 BASE = 0x0000002d;
 
-			/// <summary>Determines whether the media has changed on a removable-media device that the caller has opened for read or write access.</summary>
+			/// <summary>Determines whether the media has changed on a removable-media device that the caller has opened for read or write access</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560535%28v=vs.85%29.aspx</remarks>
 			public static UInt32 CHECK_VERIFY = Constant.CTL_CODE(BASE, 0x0200, WinApi.FILE_ACCESS.READ_ACCESS);
-			/// <summary>Determines whether the media has changed on a removable-media device - the caller has opened with FILE_READ_ATTRIBUTES.</summary>
+			/// <summary>Determines whether the media has changed on a removable-media device - the caller has opened with FILE_READ_ATTRIBUTES</summary>
 			/// <remarks>
 			/// Because no file system is mounted when a device is opened in this way, this request can be processed much more quickly than an IOCTL_STORAGE_CHECK_VERIFY request.
 			/// http://msdn.microsoft.com/en-us/library/windows/hardware/ff560538%28v=vs.85%29.aspx
 			/// </remarks>
 			public static UInt32 CHECK_VERIFY2 = Constant.CTL_CODE(BASE, 0x0200, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Enables or disables the mechanism that ejects media, for those devices possessing that locking capability.</summary>
+			/// <summary>Enables or disables the mechanism that ejects media, for those devices possessing that locking capability</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363416%28v=vs.85%29.aspx</remarks>
 			public static UInt32 MEDIA_REMOVAL = Constant.CTL_CODE(BASE, 0x0201, WinApi.FILE_ACCESS.READ_ACCESS);
-			/// <summary>Causes the device to eject the media if the device supports ejection capabilities.</summary>
+			/// <summary>Causes the device to eject the media if the device supports ejection capabilities</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560542%28v=vs.85%29.aspx</remarks>
 			public static UInt32 EJECT_MEDIA = Constant.CTL_CODE(BASE, 0x0202, WinApi.FILE_ACCESS.READ_ACCESS);
 			public static UInt32 LOAD_MEDIA = Constant.CTL_CODE(BASE, 0x0203, WinApi.FILE_ACCESS.READ_ACCESS);
@@ -140,13 +140,13 @@ namespace AlphaOmega.Debug
 			public static UInt32 MCN_CONTROL = Constant.CTL_CODE(BASE, 0x0251, WinApi.FILE_ACCESS.ANY_ACCESS);
 
 			public static UInt32 GET_MEDIA_TYPES = Constant.CTL_CODE(BASE, 0x0300, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Retrieves information about the types of media supported by a device.</summary>
+			/// <summary>Retrieves information about the types of media supported by a device</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560563(v=vs.85).aspx</remarks>
 			public static UInt32 GET_MEDIA_TYPES_EX = Constant.CTL_CODE(BASE, 0x0301, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Retrieves the serial number of a USB device.</summary>
+			/// <summary>Retrieves the serial number of a USB device</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560557%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_MEDIA_SERIAL_NUMBER = Constant.CTL_CODE(BASE, 0x0304, WinApi.FILE_ACCESS.ANY_ACCESS);
-			/// <summary>Retrieves the hotplug configuration of the specified device.</summary>
+			/// <summary>Retrieves the hotplug configuration of the specified device</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560554%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_HOTPLUG_INFO = Constant.CTL_CODE(BASE, 0x0305, WinApi.FILE_ACCESS.ANY_ACCESS);
 			public static UInt32 SET_HOTPLUG_INFO = Constant.CTL_CODE(BASE, 0x0306, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
@@ -157,11 +157,11 @@ namespace AlphaOmega.Debug
 			public static UInt32 PERSISTENT_RESERVE_IN = Constant.CTL_CODE(BASE, 0x0406, WinApi.FILE_ACCESS.READ_ACCESS);
 			public static UInt32 PERSISTENT_RESERVE_OUT = Constant.CTL_CODE(BASE, 0x0407, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
 
-			/// <summary>Retrieves the device type, device number, and, for a partitionable device, the partition number of a device.</summary>
+			/// <summary>Retrieves the device type, device number, and, for a partitionable device, the partition number of a device</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff560551%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_DEVICE_NUMBER = Constant.CTL_CODE(BASE, 0x0420, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Polls for a prediction of device failure.</summary>
+			/// <summary>Polls for a prediction of device failure</summary>
 			/// <remarks>
 			/// This request works with the IDE disk drives that support self-monitoring analysis and reporting technology (SMART).
 			/// If the drive is a SCSI drive, the class driver attempts to verify
@@ -170,11 +170,11 @@ namespace AlphaOmega.Debug
 			/// </remarks>
 			public static UInt32 PREDICT_FAILURE = Constant.CTL_CODE(BASE, 0x0440, WinApi.FILE_ACCESS.ANY_ACCESS);
 
-			/// <summary>Retrieves the geometry information for the device.</summary>
+			/// <summary>Retrieves the geometry information for the device</summary>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa363417%28v=vs.85%29.aspx</remarks>
 			public static UInt32 READ_CAPACITY = Constant.CTL_CODE(BASE, 0x0450, WinApi.FILE_ACCESS.READ_ACCESS);
 			
-			/// <summary>Returns properties of a storage device or adapter. The request indicates the kind of information to retrieve, such as inquiry data for a device or capabilities and limitations of an adapter.</summary>
+			/// <summary>Returns properties of a storage device or adapter. The request indicates the kind of information to retrieve, such as inquiry data for a device or capabilities and limitations of an adapter</summary>
 			/// <remarks>
 			/// <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> can also be used to determine whether the port driver supports a particular property or which fields in the property descriptor can be modified with a subsequent change-property request.
 			/// http://msdn.microsoft.com/en-us/library/windows/hardware/ff560590%28v=vs.85%29.aspx
@@ -244,29 +244,29 @@ namespace AlphaOmega.Debug
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364575%28v=vs.85%29.aspx</remarks>
 			public static UInt32 LOCK_VOLUME = Constant.CTL_CODE(BASE, 6, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Unlocks a volume.</summary>
+			/// <summary>Unlocks a volume</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364814%28v=vs.85%29.aspx</remarks>
 			public static UInt32 UNLOCK_VOLUME = Constant.CTL_CODE(BASE, 7, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Dismounts a volume regardless of whether or not the volume is currently in use.</summary>
+			/// <summary>Dismounts a volume regardless of whether or not the volume is currently in use</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364562%28v=vs.85%29.aspx</remarks>
 			public static UInt32 DISMOUNT_VOLUME = Constant.CTL_CODE(BASE, 8, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Determines whether the specified volume is mounted, or if the specified file or directory is on a mounted volume.</summary>
+			/// <summary>Determines whether the specified volume is mounted, or if the specified file or directory is on a mounted volume</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364574(v=vs.85).aspx</remarks>
 			public static UInt32 IS_VOLUME_MOUNTED = Constant.CTL_CODE(BASE, 10, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Retrieves the information from various file system performance counters.</summary>
+			/// <summary>Retrieves the information from various file system performance counters</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364565%28v=vs.85%29.aspx</remarks>
 			public static UInt32 FILESYSTEM_GET_STATISTICS = Constant.CTL_CODE(BASE, 24, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Retrieves information about the specified NTFS file system volume.</summary>
+			/// <summary>Retrieves information about the specified NTFS file system volume</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364569%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_NTFS_VOLUME_DATA = Constant.CTL_CODE(BASE, 25, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
 			public static UInt32 GET_NTFS_FILE_RECORD = Constant.CTL_CODE(BASE, 26, WinApi.FILE_ACCESS.ANY_ACCESS);
 			
-			/// <summary>Retrieves a bitmap of occupied and available clusters on a volume.</summary>
+			/// <summary>Retrieves a bitmap of occupied and available clusters on a volume</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa364573%28v=vs.85%29.aspx</remarks>
 			public static UInt32 GET_VOLUME_BITMAP = Constant.CTL_CODE(BASE, 27, WinApi.METHOD.NEITHER, WinApi.FILE_ACCESS.ANY_ACCESS);
 
@@ -275,7 +275,8 @@ namespace AlphaOmega.Debug
 			/// <summary>Retrieves the locations of boot sectors for a volume</summary>
 			public static UInt32 GET_BOOT_AREA_INFO = Constant.CTL_CODE(BASE, 140, WinApi.METHOD.BUFFERED, WinApi.FILE_ACCESS.ANY_ACCESS);
 		}
-		/// <summary>This macro is used to create a unique system I/O control code (IOCTL).</summary>
+
+		/// <summary>This macro is used to create a unique system I/O control code (IOCTL)</summary>
 		/// <param name="deviceType">
 		/// Defines the type of device for the given IOCTL.
 		/// This parameter can be no bigger then a WORD value.
@@ -296,7 +297,8 @@ namespace AlphaOmega.Debug
 		{
 			return CTL_CODE(deviceType, function, WinApi.METHOD.BUFFERED, access);
 		}
-		/// <summary>This macro is used to create a unique system I/O control code (IOCTL).</summary>
+
+		/// <summary>This macro is used to create a unique system I/O control code (IOCTL)</summary>
 		/// <param name="deviceType">
 		/// Defines the type of device for the given IOCTL.
 		/// This parameter can be no bigger then a WORD value.
@@ -318,7 +320,9 @@ namespace AlphaOmega.Debug
 		{
 			return (UInt32)((deviceType << 16) | ((UInt16)access << 14) | (function << 2) | (Byte)method);
 		}
+
 		private static Dictionary<Byte, String> _attributeNames;
+
 		/// <summary>S.M.A.R.T. attributes names</summary>
 		public static Dictionary<Byte, String> AttributeNames
 		{
@@ -328,13 +332,13 @@ namespace AlphaOmega.Debug
 				{
 					Dictionary<Byte, String> result = new Dictionary<Byte, String>();
 					result.Add(0x0, "<Unknown>");
-					// Частота ошибок при чтении данных с диска, происхождение которых обусловлено аппаратной частью диска.
+					// Frequency of errors when reading data from a disk, the origin of which is due to the disk hardware.
 					// Для всех дисков Seagate, Samsung (семейства F1 и более новые) и Fujitsu 2,5″ это — число внутренних коррекций данных, проведенных до выдачи в интерфейс, следовательно на пугающе огромные цифры можно реагировать спокойно.
 					result.Add(0x01, "Raw Read Error Rate");
-					// Общая производительность диска. Если значение атрибута уменьшается, то велика вероятность, что с диском есть проблемы.
+					// Overall disk performance. If the attribute value decreases, then there is a high probability that there is a problem with the disk.
 					result.Add(0x02, "Throughput Performance");
-					// Время раскрутки пакета дисков из состояния покоя до рабочей скорости.
-					// Растет при износе механики (повышенное трение в подшипнике и т. п.), также может свидетельствовать о некачественном питании (например, просадке напряжения при старте диска).
+					// Time to spin up a pack of discs from rest to operating speed.
+					// It grows with wear of the mechanics (increased friction in the bearing, etc.), and may also indicate poor-quality power (for example, a voltage drop when the disk starts).
 					result.Add(0x03, "Spin-Up Time");
 					// Полное число циклов запуск-остановка шпинделя.
 					// У дисков некоторых производителей (например, Seagate) — счётчик включения режима энергосбережения.

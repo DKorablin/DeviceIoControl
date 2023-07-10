@@ -14,16 +14,19 @@ namespace AlphaOmega.Debug
 			/// <summary>DMA</summary>
 			Dma = 1,
 		}
-		private readonly DmaType _type;
-		private readonly SmartInfoCollection _info;
-		/// <summary>Device info</summary>
-		private SmartInfoCollection Info { get { return this._info; } }
-		/// <summary>Type of DMA</summary>
-		private DmaType Type { get { return this._type; } }
+
 		/// <summary>DMA/UDMA structure indexes</summary>
 		private static Int32[] DmaIndex = new Int32[] { 88, 63, };
+
 		/// <summary>DMA/UDMA structure max bit pos</summary>
 		private static Int32[] DmaMaxPos = new Int32[] { 5, 2, };
+
+		/// <summary>Device info</summary>
+		private SmartInfoCollection Info { get; }
+
+		/// <summary>Type of DMA</summary>
+		private DmaType Type { get; }
+
 		/// <summary>Max DMA/UDMA mode supported</summary>
 		public Int64? Max
 		{
@@ -48,9 +51,10 @@ namespace AlphaOmega.Debug
 		/// <param name="type">DMA/UDMA</param>
 		public IdentifyDma(SmartInfoCollection info, DmaType type)
 		{
-			this._info = info;
-			this._type = type;
+			this.Info = info ?? throw new ArgumentNullException(nameof(info));
+			this.Type = type;
 		}
+
 		private Int64 GetHighBitPos(Boolean isSelected)
 		{
 			return 0;
@@ -60,6 +64,7 @@ namespace AlphaOmega.Debug
 				isSelected ? this.Info.SystemParams[index] >> 8 : this.Info.SystemParams[index],
 				maxPos);*/
 		}
+
 		/// <summary>DMA/UDMA values as string</summary>
 		/// <returns></returns>
 		public override String ToString()
@@ -68,16 +73,11 @@ namespace AlphaOmega.Debug
 			Int64? selected = this.Selected;
 
 			String result = String.Empty;
-			if(max.HasValue)
+			if(max != null)
 			{
-				result = String.Format(CultureInfo.CurrentUICulture, "Max {0} mode supported {1}{2}",
-					this.Type.ToString().ToUpperInvariant(),
-					max,
-					max > 0 ? " and below" : String.Empty);
-				if(selected.HasValue)
-					result += Environment.NewLine + String.Format(CultureInfo.CurrentUICulture, "{0} mode selected {1}",
-						this.Type.ToString().ToUpperInvariant(),
-						selected);
+				result = $"Max {this.Type.ToString().ToUpperInvariant()} mode supported {max}{(max > 0 ? " and below" : String.Empty)}";
+				if(selected != null)
+					result += Environment.NewLine + $"{this.Type.ToString().ToUpperInvariant()} mode selected {selected}";
 			}
 			return result;
 		}

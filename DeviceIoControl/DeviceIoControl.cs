@@ -9,8 +9,6 @@ namespace AlphaOmega.Debug
 	/// <summary>Device info</summary>
 	public class DeviceIoControl : IDisposable
 	{
-		private readonly IntPtr _deviceHandle;
-		private readonly Byte? _deviceId;
 		private readonly String _deviceName;
 		private Boolean _disposed = false;
 
@@ -21,10 +19,10 @@ namespace AlphaOmega.Debug
 		private Changer _changer;
 
 		/// <summary>Opened device handle</summary>
-		private IntPtr Handle { get { return this._deviceHandle; } }
+		private IntPtr DeviceHandle { get; }
 
 		/// <summary>Device ID</summary>
-		public Byte? Id { get { return this._deviceId; } }
+		public Byte? DeviceId { get; }
 
 		/// <summary>Name of the device</summary>
 		public String Name { get { return this._deviceName; } }
@@ -53,7 +51,7 @@ namespace AlphaOmega.Debug
 		{
 			get
 			{
-				return this._fs == null && this._deviceId == null
+				return this._fs == null && this.DeviceId == null
 					? this._fs = new FileSystem(this)
 					: this._fs;
 			}
@@ -72,7 +70,7 @@ namespace AlphaOmega.Debug
 			get
 			{
 				Boolean isOn = false;
-				if(Methods.GetDevicePowerState(this.Handle, out isOn))
+				if(Methods.GetDevicePowerState(this.DeviceHandle, out isOn))
 					return isOn;
 				else
 					throw new Win32Exception();
@@ -111,7 +109,7 @@ namespace AlphaOmega.Debug
 		/// <exception cref="ArgumentException">Device id does not specified</exception>
 		public DeviceIoControl(Byte? deviceId, String deviceName,WinApi.FILE_ACCESS_FLAGS accessMode, WinApi.FILE_SHARE shareMode)
 		{//DriveInfo.GetDrives()
-			this._deviceId = deviceId;
+			this.DeviceId = deviceId;
 
 			if(deviceId.HasValue)
 				this._deviceName = DeviceIoControl.GetDeviceName(deviceId.Value);
@@ -122,10 +120,10 @@ namespace AlphaOmega.Debug
 			} else
 				throw new ArgumentException("Device id does not specified");
 
-			this._deviceHandle = Methods.OpenDevice(this.Name, accessMode, shareMode);
+			this.DeviceHandle = Methods.OpenDevice(this.Name, accessMode, shareMode);
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
@@ -136,7 +134,7 @@ namespace AlphaOmega.Debug
 			return this.IoControl<T>(dwIoControlCode, inParams, out bytesReturned);
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
@@ -145,13 +143,13 @@ namespace AlphaOmega.Debug
 		public T IoControl<T>(UInt32 dwIoControlCode, Object inParams, out UInt32 bytesReturned) where T : struct
 		{
 			return Methods.DeviceIoControl<T>(
-				this.Handle,
+				this.DeviceHandle,
 				dwIoControlCode,
 				inParams,
 				out bytesReturned);
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl(UInt32 dwIoControlCode)
@@ -159,7 +157,7 @@ namespace AlphaOmega.Debug
 			return this.IoControl(dwIoControlCode, null);
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
 		/// <returns>Result of method execution</returns>
@@ -169,7 +167,7 @@ namespace AlphaOmega.Debug
 			return this.IoControl<IntPtr>(dwIoControlCode, inParams, out dummy);
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
@@ -181,7 +179,7 @@ namespace AlphaOmega.Debug
 			return this.IoControl<T>(dwIoControlCode, inParams, out bytesReturned, out outParams);
 		}
 
-		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.</summary>
+		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="dwIoControlCode">The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it.</param>
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation.</param>
@@ -191,7 +189,7 @@ namespace AlphaOmega.Debug
 		public Boolean IoControl<T>(UInt32 dwIoControlCode, Object inParams, out UInt32 bytesReturned, out T outParams) where T : struct
 		{
 			return Methods.DeviceIoControl<T>(
-				this.Handle,
+				this.DeviceHandle,
 				dwIoControlCode,
 				inParams,
 				out bytesReturned,
@@ -212,12 +210,13 @@ namespace AlphaOmega.Debug
 			this.Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+
 		private void Dispose(Boolean disposing)
 		{
 			if(!this._disposed
-				&& this.Handle != IntPtr.Zero && this.Handle != Constant.INVALID_HANDLE_VALUE)
+				&& this.DeviceHandle != IntPtr.Zero && this.DeviceHandle != Constant.INVALID_HANDLE_VALUE)
 			{
-				if(Methods.CloseHandle(this._deviceHandle))
+				if(Methods.CloseHandle(this.DeviceHandle))
 					this._disposed = true;
 				else throw new Win32Exception();
 			}

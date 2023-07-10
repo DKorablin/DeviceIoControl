@@ -1,23 +1,21 @@
-﻿using System;
-using AlphaOmega.Debug.Native;
+﻿using AlphaOmega.Debug.Native;
 
 namespace AlphaOmega.Debug
 {
 	/// <summary>S.M.A.R.T. attribute &amp; threshold value</summary>
 	public struct AttributeThresholds
 	{
-		private readonly DiscApi.DRIVEATTRIBUTE _attribute;
-		private readonly DiscApi.ATTRTHRESHOLD _threshold;
 		/// <summary>Attribute value</summary>
-		public DiscApi.DRIVEATTRIBUTE Attribute { get { return this._attribute; } }
+		public DiscApi.DRIVEATTRIBUTE Attribute { get; }
+
 		/// <summary>Threshold value</summary>
-		public DiscApi.ATTRTHRESHOLD Threshold { get { return this._threshold; } }
+		public DiscApi.ATTRTHRESHOLD Threshold { get ; }
 
 		internal AttributeThresholds(DiscApi.DRIVEATTRIBUTE attribute, DiscApi.ATTRTHRESHOLD threshold)
 			: this()
 		{
-			this._attribute = attribute;
-			this._threshold = threshold;
+			this.Attribute = attribute;
+			this.Threshold = threshold;
 		}
 	}
 }

@@ -16,38 +16,40 @@ namespace AlphaOmega.Debug.Native
 			{
 				/// <summary>Retrieve the device attributes</summary>
 				READ_ATTRIBUTES = 0xD0,
-				/// <summary>Retrieve threshold values that indicate when a drive is about to fail.</summary>
+				/// <summary>Retrieve threshold values that indicate when a drive is about to fail</summary>
 				READ_THRESHOLDS = 0xD1,
-				/// <summary>Enables the optional attribute autosave feature of the device when set to 1. Disables this feature when set to 0.</summary>
+				/// <summary>Enables the optional attribute autosave feature of the device when set to 1. Disables this feature when set to 0</summary>
 				ENABLE_DISABLE_AUTOSAVE = 0xD2,
-				/// <summary>Instructs the device to save its attribute values to the device's non-volatile memory.</summary>
+				/// <summary>Instructs the device to save its attribute values to the device's non-volatile memory</summary>
 				SAVE_ATTRIBUTE_VALUES = 0xD3,
-				/// <summary>Causes the device to begin collecting SMART data in off-line mode or execute a self-diagnostic test routine in either captive or off-line mode.</summary>
+				/// <summary>Causes the device to begin collecting SMART data in off-line mode or execute a self-diagnostic test routine in either captive or off-line mode</summary>
 				EXECUTE_OFFLINE_DIAGS = 0xD4,
-				/// <summary>Retrieves the indicated log.</summary>
+				/// <summary>Retrieves the indicated log</summary>
 				SMART_READ_LOG = 0xD5,
-				/// <summary>Writes the indicated number of 512-byte data sectors to the indicated log.</summary>
+				/// <summary>Writes the indicated number of 512-byte data sectors to the indicated log</summary>
 				SMART_WRITE_LOG = 0xD6,
-				/// <summary>Enables SMART functionality on the device.</summary>
+				/// <summary>Enables SMART functionality on the device</summary>
 				ENABLE_SMART = 0xD8,
-				/// <summary>Disables SMART functionality on the device.</summary>
+				/// <summary>Disables SMART functionality on the device</summary>
 				DISABLE_SMART = 0xD9,
-				/// <summary>Retrieves the reliability status of the device.</summary>
+				/// <summary>Retrieves the reliability status of the device</summary>
 				RETURN_SMART_STATUS = 0xDA,
-				/// <summary>Enables offline mode when set to 1. Disables offline mode when 0.</summary>
+				/// <summary>Enables offline mode when set to 1. Disables offline mode when 0</summary>
 				ENABLE_DISABLE_AUTO_OFFLINE = 0xDB,
 			}
-			/// <summary>Valid values for the bCommandReg member of <see cref="T:IDEREGS"/>.</summary>
+
+			/// <summary>Valid values for the bCommandReg member of <see cref="IDEREGS"/></summary>
 			public enum IDE : byte
 			{
-				/// <summary>Returns ID sector for ATAPI.</summary>
+				/// <summary>Returns ID sector for ATAPI</summary>
 				ATAPI_ID_CMD = 0xA1,
-				/// <summary>Returns ID sector for ATA.</summary>
+				/// <summary>Returns ID sector for ATA</summary>
 				ID_CMD = 0xEC,
-				/// <summary>Performs SMART cmd.</summary>
-				/// <remarks>Requires valid bFeaturesReg, bCylLowReg, and bCylHighReg.</remarks>
+				/// <summary>Performs SMART cmd</summary>
+				/// <remarks>Requires valid bFeaturesReg, bCylLowReg, and bCylHighReg</remarks>
 				SMART_CMD = 0xB0,
 			}
+
 			/// <summary>Cylinder register defines for SMART command</summary>
 			public enum SMART_CYL : byte
 			{
@@ -56,46 +58,44 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Hi cylinder register</summary>
 				HI = 0xC2,
 			}
-			/// <summary>
-			/// Holds the contents of the Features register.
-			/// This register is used to specify Self-Monitoring Analysis and Reporting Technology (SMART) commands.
-			/// </summary>
+
+			/// <summary>Holds the contents of the Features register</summary>
+			/// <remarks>This register is used to specify Self-Monitoring Analysis and Reporting Technology (SMART) commands</remarks>
 			public SMART bFeaturesReg;
-			/// <summary>Holds the contents of the sector count register. IDE sector count register.</summary>
+			/// <summary>Holds the contents of the sector count register. IDE sector count register</summary>
 			public Byte bSectorCountReg;
-			/// <summary>Holds the contents of the sector number register. </summary>
+			/// <summary>Holds the contents of the sector number register</summary>
 			public Byte bSectorNumberReg;
-			/// <summary>Holds the contents of the IDE low-order cylinder register.</summary>
+			/// <summary>Holds the contents of the IDE low-order cylinder register</summary>
 			public SMART_CYL bCylLowReg;
-			/// <summary>Holds the contents of the IDE high-order cylinder register.</summary>
+			/// <summary>Holds the contents of the IDE high-order cylinder register</summary>
 			public SMART_CYL bCylHighReg;
-			/// <summary>Holds the contents of the IDE drive/head register. </summary>
+			/// <summary>Holds the contents of the IDE drive/head register</summary>
 			public Byte bDriveHeadReg;
-			/// <summary>Holds the contents of the IDE command register.</summary>
+			/// <summary>Holds the contents of the IDE command register</summary>
 			public IDE bCommandReg;
-			/// <summary>Reserved for future use. Should always be zero.</summary>
+			/// <summary>Reserved for future use. Should always be zero</summary>
 			public Byte bReserved;
 		}
-		/// <summary>The SENDCMDINPARAMS structure contains the input parameters for the <see cref="T:Constant.IOCTL_DISC.SMART_SEND_DRIVE_COMMAND"/> request.</summary>
+
+		/// <summary>The SENDCMDINPARAMS structure contains the input parameters for the <see cref="Constant.IOCTL_DISC.SMART_SEND_DRIVE_COMMAND"/> request</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SENDCMDINPARAMS
 		{
-			/// <summary>Contains the buffer size, in bytes.</summary>
+			/// <summary>Contains the buffer size, in bytes</summary>
 			public UInt32 cBufferSize;
-			/// <summary>Contains a IDEREGS structure used to report the contents of the IDE controller registers.</summary>
+			/// <summary>Contains a IDEREGS structure used to report the contents of the IDE controller registers</summary>
 			public DiscApi.IDEREGS irDriveRegs;
-			/// <summary>
-			/// The bDriveNumber member is opaque. Do not use it.
-			/// The operating system ignores this member, because the physical drive that receives the request depends on the handle that the caller uses when making the request.
-			/// </summary>
+			/// <summary>The bDriveNumber member is opaque. Do not use it</summary>
+			/// <remarks>The operating system ignores this member, because the physical drive that receives the request depends on the handle that the caller uses when making the request</remarks>
 			public Byte bDriveNumber;
-			/// <summary>Reserved.</summary>
+			/// <summary>Reserved</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
 			public Byte[] bReserved;
-			/// <summary>Reserved.</summary>
+			/// <summary>Reserved</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 			public UInt32[] dwReserved;
-			/// <summary>Pointer to the input buffer.</summary>
+			/// <summary>Pointer to the input buffer</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
 			public Byte[] bBuffer;
 			/// <summary>Create in params structure</summary>
@@ -118,7 +118,8 @@ namespace AlphaOmega.Debug.Native
 				return result;
 			}
 		}
-		/// <summary>The DRIVERSTATUS structure is used in conjunction with the SENDCMDOUTPARAMS structure and the <see cref="T:Constant.IOCTL_STORAGE.SMART_SEND_DRIVE_COMMAND"/> request to retrieve data returned by a Self-Monitoring Analysis and Reporting Technology (SMART) command.</summary>
+
+		/// <summary>The DRIVERSTATUS structure is used in conjunction with the <see cref="SENDCMDOUTPARAMS"/> structure and the <see cref="Constant.IOCTL_STORAGE.SMART_SEND_DRIVE_COMMAND"/> request to retrieve data returned by a Self-Monitoring Analysis and Reporting Technology (SMART) command</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DRIVERSTATUS
 		{
@@ -149,29 +150,32 @@ namespace AlphaOmega.Debug.Native
 				NO_IDE_DEVICE = 10,
 			}
 
-			/// <summary>Error code from driver, or 0 if no error.</summary>
+			/// <summary>Error code from driver, or 0 if no error</summary>
 			public SMART_ERROR bDriverError;
-			/// <summary>Contents of IDE Error register. Only valid when bDriverError is SMART_IDE_ERROR.</summary>
+			/// <summary>Contents of IDE Error register</summary>
+			/// <remarks>Only valid when bDriverError is SMART_IDE_ERROR</remarks>
 			public Byte bIDEError;
-			/// <summary>Reserved.</summary>
+			/// <summary>Reserved</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 			public Byte[] bReserved;
-			/// <summary>Reserved.</summary>
+			/// <summary>Reserved</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 			public UInt32[] dwReserved;
 		}
-		/// <summary>The SENDCMDOUTPARAMS structure is used in conjunction with the <see cref="T:Constant.IOCTL_DISC.SMART_SEND_DRIVE_COMMAND"/> request to retrieve data returned by a Self-Monitoring Analysis and Reporting Technology (SMART) command.</summary>
+
+		/// <summary>The SENDCMDOUTPARAMS structure is used in conjunction with the <see cref="Constant.IOCTL_DISC.SMART_SEND_DRIVE_COMMAND"/> request to retrieve data returned by a Self-Monitoring Analysis and Reporting Technology (SMART) command</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SENDCMDOUTPARAMS
 		{
-			/// <summary>Contains the size in bytes of the buffer pointed to by bBuffer.</summary>
+			/// <summary>Contains the size in bytes of the buffer pointed to by bBuffer</summary>
 			public UInt32 cBufferSize;
-			/// <summary>Contains a DRIVERSTATUS structure that indicates the driver status.</summary>
+			/// <summary>Contains a DRIVERSTATUS structure that indicates the driver status</summary>
 			public DiscApi.DRIVERSTATUS DriverStatus;
-			/// <summary>Pointer to a buffer in which to store the data read from the drive.</summary>
+			/// <summary>Pointer to a buffer in which to store the data read from the drive</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] bBuffer;
 		}
+
 		/// <summary>Sector identity</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct IDSECTOR
@@ -343,22 +347,22 @@ namespace AlphaOmega.Debug.Native
 				}
 			}
 		}
-		/// <summary>The GETVERSIONINPARAMS structure is used in conjunction with the SMART_GET_VERSION request to retrieve version information, a capabilities mask, and a bitmask for the indicated device.</summary>
+		/// <summary>The GETVERSIONINPARAMS structure is used in conjunction with the SMART_GET_VERSION request to retrieve version information, a capabilities mask, and a bitmask for the indicated device</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff554977%28v=vs.85%29.aspx</remarks>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct GETVERSIONINPARAMS
 		{
-			/// <summary>Binary driver version.</summary>
+			/// <summary>Binary driver version</summary>
 			public Byte bVersion;
-			/// <summary>Binary driver revision.</summary>
+			/// <summary>Binary driver revision</summary>
 			public Byte bRevision;
-			/// <summary>Not used.</summary>
+			/// <summary>Not used</summary>
 			public Byte bReserved;
-			/// <summary>Bit map of IDE devices.</summary>
+			/// <summary>Bit map of IDE devices</summary>
 			public Byte bIDEDeviceMap;
-			/// <summary>Bit mask of driver capabilities.</summary>
+			/// <summary>Bit mask of driver capabilities</summary>
 			public CAP fCapabilities;
-			/// <summary>For future use.</summary>
+			/// <summary>For future use</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 			public UInt32[] dwReserved;
 			/// <summary>The device is an IDE drive</summary>
@@ -379,7 +383,7 @@ namespace AlphaOmega.Debug.Native
 					return arr[4] || arr[5] || arr[6] || arr[7];
 				}
 			}
-			/// <summary>The device is on primary channel. If False than on secondary channel.</summary>
+			/// <summary>The device is on primary channel. If False than on secondary channel</summary>
 			public Boolean IsPrimaryChannel
 			{
 				get
@@ -388,7 +392,7 @@ namespace AlphaOmega.Debug.Native
 					return arr[0] || arr[1] || arr[4] || arr[5];
 				}
 			}
-			/// <summary>The device is master on channel. If False than subordinate.</summary>
+			/// <summary>The device is master on channel. If False than subordinate</summary>
 			public Boolean IsMaster
 			{
 				get
@@ -415,32 +419,32 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>SMART commannds supported</summary>
 			SMART_CMD = 4,
 		}
-		/// <summary>DISK_GEOMETRY is used in conjunction with the <see cref="T:Constant.IOCTL_DISK.GET_DRIVE_GEOMETRY"/> and the <see cref="T:Constant.IOCTL_DISK.GET_MEDIA_TYPES"/> requests, in order to retrieve information about the geometry of a physical disk.</summary>
+		/// <summary>DISK_GEOMETRY is used in conjunction with the <see cref="Constant.IOCTL_DISK.GET_DRIVE_GEOMETRY"/> and the <see cref="Constant.IOCTL_DISK.GET_MEDIA_TYPES"/> requests, in order to retrieve information about the geometry of a physical disk</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_GEOMETRY
 		{
-			/// <summary>Indicates the number of cylinders on the disk device.</summary>
+			/// <summary>Indicates the number of cylinders on the disk device</summary>
 			public UInt64 Cylinders;
-			/// <summary>Indicates the type of disk.</summary>
+			/// <summary>Indicates the type of disk</summary>
 			public WinApi.MEDIA_TYPE MediaType;
-			/// <summary>Indicates the number of tracks in a cylinder.</summary>
+			/// <summary>Indicates the number of tracks in a cylinder</summary>
 			public UInt32 TracksPerCylinder;
-			/// <summary>Indicates the number of sectors in each track.</summary>
+			/// <summary>Indicates the number of sectors in each track</summary>
 			public UInt32 SectorsPerTrack;
-			/// <summary>Indicates the number of bytes in a disk sector.</summary>
+			/// <summary>Indicates the number of bytes in a disk sector</summary>
 			public UInt32 BytesPerSector;
 		}
-		/// <summary>The DISK_GEOMETRY_EX structure is a variable-length structure composed of a DISK_GEOMETRY structure followed by a DISK_PARTITION_INFO structure followed, in turn, by a DISK_DETECTION_INFO structure.</summary>
+		/// <summary>The DISK_GEOMETRY_EX structure is a variable-length structure composed of a <see cref="DISK_GEOMETRY"/> structure followed by a <see cref="DISK_PARTITION_INFO"/> structure followed, in turn, by a <see cref="DISK_DETECTION_INFO"/> structure</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_GEOMETRY_EX
 		{
-			/// <summary>information about the geometry of a physical disk.</summary>
+			/// <summary>information about the geometry of a physical disk</summary>
 			public DISK_GEOMETRY Geometry;
 			
-			/// <summary>Contains the size in bytes of the disk.</summary>
+			/// <summary>Contains the size in bytes of the disk</summary>
 			public UInt64 DiskSize;
-			
-			/// <summary>Pointer to a variable length area containing a DISK_PARTITION_INFO structure followed by a DISK_DETECTION_INFO structure.</summary>
+
+			/// <summary>Pointer to a variable length area containing a <see cref="DISK_PARTITION_INFO"/> structure followed by a <see cref="DISK_DETECTION_INFO"/> structure</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] Data;
 
@@ -451,7 +455,7 @@ namespace AlphaOmega.Debug.Native
 				get { return Utils.FileSizeToString(this.DiskSize); }
 			}
 
-			/// <summary>Information about the disk's partition table.</summary>
+			/// <summary>Information about the disk's partition table</summary>
 			/// <returns>Partition table info</returns>
 			public DISK_PARTITION_INFO GetDiscPartitionInfo()
 			{
@@ -459,7 +463,7 @@ namespace AlphaOmega.Debug.Native
 					return reader.BytesToStructure<DISK_PARTITION_INFO>(0);
 			}
 			
-			/// <summary>Detected drive parameters that are supplied by an x86 PC BIOS on boot.</summary>
+			/// <summary>Detected drive parameters that are supplied by an x86 PC BIOS on boot</summary>
 			/// <returns>Detected drive parameters</returns>
 			public DISK_DETECTION_INFO GetDiscDetectionInfo()
 			{
@@ -467,41 +471,40 @@ namespace AlphaOmega.Debug.Native
 					return reader.BytesToStructure<DISK_DETECTION_INFO>(this.GetDiscPartitionInfo().SizeOfPartitionInfo);
 			}
 		}
-		/// <summary>The DISK_DETECTION_INFO structure contains the detected drive parameters that are supplied by an x86 PC BIOS on boot.</summary>
+
+		/// <summary>The DISK_DETECTION_INFO structure contains the detected drive parameters that are supplied by an x86 PC BIOS on boot</summary>
 		[StructLayout(LayoutKind.Explicit)]
 		public struct DISK_DETECTION_INFO
 		{
-			/// <summary>Contains the quantity, in bytes, of retrieved detect information.</summary>
+			/// <summary>Contains the quantity, in bytes, of retrieved detect information</summary>
 			[FieldOffset(0)]
 			public UInt32 SizeOfDetectInfo;
 			/// <summary>Indicates one of three possible detection types</summary>
 			[FieldOffset(4)]
 			public DETECTION_TYPE DetectionType;
-			/// <summary>
-			/// Contains DISK_INT13_INFO structure with the disk parameters for INT 13 type partitions.
-			/// This member is used if DetectionType == DetectInt13.
-			/// </summary>
+			/// <summary>Contains <see cref="DISK_INT13_INFO"/> structure with the disk parameters for INT 13 type partitions</summary>
+			/// <remarks>This member is used if DetectionType == DetectInt13</remarks>
 			[FieldOffset(8)]
 			public DISK_INT13_INFO Int13;
-			/// <summary>
-			/// Contains a DISK_EX_INT13_INFO structure with the disk parameters for extended INT 13 type partitions.
-			/// This member is used if DetectionType == DetectExInt13.
-			/// </summary>
+			/// <summary>Contains a <see cref="DISK_EX_INT13_INFO"/> structure with the disk parameters for extended INT 13 type partitions</summary>
+			/// <remarks>This member is used if DetectionType == DetectExInt13</remarks>
 			[FieldOffset(8)]
 			public DISK_EX_INT13_INFO ExInt13;
 		}
-		/// <summary>The DETECTION_TYPE enumeration type is used in conjunction with the IOCTL_DISK_GET_DRIVE_GEOMETRY_EX request and the DISK_GEOMETRY_EX structure to determine the type of formatting used by the BIOS to record the disk geometry.</summary>
-		/// <remarks>Possible formatting types are the standard INT 13h partition format or the extended INT 13h partition format.</remarks>
+
+		/// <summary>The DETECTION_TYPE enumeration type is used in conjunction with the <see cref="Constant.IOCTL_DISC.GET_DRIVE_GEOMETRY_EX"/> request and the <see cref="DISK_GEOMETRY_EX"/> structure to determine the type of formatting used by the BIOS to record the disk geometry</summary>
+		/// <remarks>Possible formatting types are the standard INT 13h partition format or the extended INT 13h partition format</remarks>
 		public enum DETECTION_TYPE
 		{
-			/// <summary>Indicates that the disk contains neither an INT 13h partition nor an extended INT 13h partition.</summary>
+			/// <summary>Indicates that the disk contains neither an INT 13h partition nor an extended INT 13h partition</summary>
 			DetectNone = 0,
-			/// <summary>Indicates that the disk has a standard INT 13h partition.</summary>
+			/// <summary>Indicates that the disk has a standard INT 13h partition</summary>
 			DetectInt13 = 1,
 			/// <summary>Indicates that the disk contains an extended INT 13h partition. </summary>
 			DetectExInt13 = 2,
 		}
-		/// <summary>The DISK_INT13_INFO structure is used by the BIOS to report disk detection data for a partition with an INT13 format.</summary>
+
+		/// <summary>The DISK_INT13_INFO structure is used by the BIOS to report disk detection data for a partition with an INT13 format</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_INT13_INFO
 		{
@@ -514,16 +517,17 @@ namespace AlphaOmega.Debug.Native
 			/// For more information about the values that the Device/Head register can hold, see the ATA specification.
 			/// </summary>
 			public UInt16 DriveSelect;
-			/// <summary>Indicates the maximum number of cylinders on the disk.</summary>
+			/// <summary>Indicates the maximum number of cylinders on the disk</summary>
 			public UInt32 MaxCylinders;
-			/// <summary>Indicates the number of sectors per track.</summary>
+			/// <summary>Indicates the number of sectors per track</summary>
 			public UInt16 SectorsPerTrack;
-			/// <summary>Indicates the maximum number of disk heads.</summary>
+			/// <summary>Indicates the maximum number of disk heads</summary>
 			public UInt16 MaxHeads;
-			/// <summary>Indicates the number of drives.</summary>
+			/// <summary>Indicates the number of drives</summary>
 			public UInt16 NumberDrives;
 		}
-		/// <summary>The DISK_EX_INT13_INFO structure is used by the BIOS to report disk detection data for a partition with an extended INT13 format.</summary>
+
+		/// <summary>The DISK_EX_INT13_INFO structure is used by the BIOS to report disk detection data for a partition with an extended INT13 format</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff552610%28v=vs.85%29.aspx</remarks>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_EX_INT13_INFO
@@ -542,37 +546,38 @@ namespace AlphaOmega.Debug.Native
 			/// A value of zero in the indicated bit means that the feature is not available with this drive.
 			/// </summary>
 			public UInt16 ExFlags;
-			/// <summary>Indicates the number of physical cylinders. This is one greater than the maximum cylinder number.</summary>
+			/// <summary>Indicates the number of physical cylinders. This is one greater than the maximum cylinder number</summary>
 			public UInt32 ExCylinders;
-			/// <summary>Indicates the number of physical heads. This is one greater than the maximum head number.</summary>
+			/// <summary>Indicates the number of physical heads. This is one greater than the maximum head number</summary>
 			public UInt32 ExHeads;
-			/// <summary>Indicates the number of physical sectors per track. This number is the same as the maximum sector number.</summary>
+			/// <summary>Indicates the number of physical sectors per track. This number is the same as the maximum sector number</summary>
 			public UInt32 ExSectorsPerTrack;
-			/// <summary>Indicates the total count of sectors on the disk. This is one greater than the maximum logical block address.</summary>
+			/// <summary>Indicates the total count of sectors on the disk. This is one greater than the maximum logical block address</summary>
 			public UInt64 ExSectorsPerDrive;
-			/// <summary>Indicates the sector size in bytes.</summary>
+			/// <summary>Indicates the sector size in bytes</summary>
 			public UInt16 ExSectorSize;
 			/// <summary>Reserved</summary>
 			public UInt16 ExReserved;
 		}
-		/// <summary>The DISK_PARTITION_INFO structure is used to report information about the disk's partition table.</summary>
+
+		/// <summary>The DISK_PARTITION_INFO structure is used to report information about the disk's partition table</summary>
 		[StructLayout(LayoutKind.Explicit, Size = 32)]//MBR- 24, GPT - 32
 		public struct DISK_PARTITION_INFO
 		{
-			/// <summary>The PARTITION_STYLE enumeration type indicates the type of partition table for a disk.</summary>
+			/// <summary>The PARTITION_STYLE enumeration type indicates the type of partition table for a disk</summary>
 			public enum PARTITION_STYLE
 			{
-				/// <summary>Specifies the traditional, AT-style Master Boot Record, type of partition table.</summary>
+				/// <summary>Specifies the traditional, AT-style Master Boot Record, type of partition table</summary>
 				MBR = 0,
-				/// <summary>Specifies the GUID Partition Table type of partition table.</summary>
+				/// <summary>Specifies the GUID Partition Table type of partition table</summary>
 				GPT = 1,
 				/// <summary></summary>
 				RAW = 2,
 			}
-			/// <summary>Size of this structure in bytes. Set to sizeof(DISK_PARTITION_INFO).</summary>
+			/// <summary>Size of this structure in bytes. Set to sizeof(DISK_PARTITION_INFO)</summary>
 			[FieldOffset(0)]
 			public UInt32 SizeOfPartitionInfo;
-			/// <summary>Takes a PARTITION_STYLE enumerated value that specifies the type of partition table the disk contains.</summary>
+			/// <summary>Takes a PARTITION_STYLE enumerated value that specifies the type of partition table the disk contains</summary>
 			[FieldOffset(4)]
 			public PARTITION_STYLE PartitionStyle;
 			/// <summary>MBR</summary>
@@ -582,6 +587,7 @@ namespace AlphaOmega.Debug.Native
 			[FieldOffset(8)]
 			public GptType Gpt;
 		}
+
 		/// <summary>Mbr</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct MbrType
@@ -591,15 +597,16 @@ namespace AlphaOmega.Debug.Native
 			/// The Mbr member of the union is used to specify the disk signature data for a disk formatted with a Master Boot Record (MBR) format partition table.
 			/// Any other value indicates that the partition is not a boot partition.
 			/// </summary>
-			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE.MBR.</remarks>
+			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE.MBR</remarks>
 			public UInt32 Signature;
 			/// <summary>
 			/// Specifies the checksum for the master boot record.
 			/// The Mbr member of the union is used to specify the disk signature data for a disk formatted with a Master Boot Record (MBR) format partition table.
 			/// </summary>
-			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE.MBR.</remarks>
+			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE.MBR</remarks>
 			public UInt32 CheckSum;
 		}
+
 		/// <summary>Gpt</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct GptType
@@ -608,41 +615,43 @@ namespace AlphaOmega.Debug.Native
 			/// Specifies the GUID that uniquely identifies the disk.
 			/// The Gpt member of the union is used to specify the disk signature data for a disk that is formatted with a GUID Partition Table (GPT) format partition table.
 			/// </summary>
-			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE_GPT.</remarks>
+			/// <remarks>This member is valid when PartitionStyle is PARTITION_STYLE_GPT</remarks>
 			public Guid DiskId;
 		}
-		/// <summary>Contains information used to verify a disk extent.</summary>
-		/// <remarks>It is the output buffer for the IOCTL_DISK_VERIFY control code.</remarks>
+
+		/// <summary>Contains information used to verify a disk extent</summary>
+		/// <remarks>It is the output buffer for the <see cref="Constant.IOCTL_DISC.VERIFY"/> control code</remarks>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct VERIFY_INFORMATION
 		{
-			/// <summary>The starting offset of the disk extent.</summary>
+			/// <summary>The starting offset of the disk extent</summary>
 			public UInt64 StartingOffset;
-			/// <summary>The length of the disk extent, in bytes.</summary>
+			/// <summary>The length of the disk extent, in bytes</summary>
 			public UInt32 Length;
 		}
-		/// <summary>The DISK_PERFORMANCE structure is used in conjunction with the IOCTL_DISK_PERFORMANCE request to collect summary disk statistics for purposes of measuring disk performance.</summary>
-		/// <remarks>Counting halts whenever the performance counters are disabled, but the counters are not reset, so the cumulative values assigned to the structure members might potentially reflect disk activity across several enablings and disablings of the counters.</remarks>
+
+		/// <summary>The DISK_PERFORMANCE structure is used in conjunction with the <see cref="Constant.IOCTL_DISC.PERFORMANCE"/> request to collect summary disk statistics for purposes of measuring disk performance</summary>
+		/// <remarks>Counting halts whenever the performance counters are disabled, but the counters are not reset, so the cumulative values assigned to the structure members might potentially reflect disk activity across several enablings and disablings of the counters</remarks>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		public struct DISK_PERFORMANCE
 		{
-			/// <summary>Contains a cumulative count of bytes read from the disk since the performance counters were enabled.</summary>
+			/// <summary>Contains a cumulative count of bytes read from the disk since the performance counters were enabled</summary>
 			public UInt64 BytesRead;
-			/// <summary>Contains a cumulative count of bytes written to the disk since the performance counters were enabled.</summary>
+			/// <summary>Contains a cumulative count of bytes written to the disk since the performance counters were enabled</summary>
 			public UInt64 BytesWritten;
-			/// <summary>Contains a cumulative time, expressed in increments of 100 nanoseconds, spent on disk reads since the performance counters were enabled.</summary>
+			/// <summary>Contains a cumulative time, expressed in increments of 100 nanoseconds, spent on disk reads since the performance counters were enabled</summary>
 			public UInt64 ReadTime;
-			/// <summary>Contains a cumulative time, expressed in increments of 100 nanoseconds, spent on disk reads since the performance counters were enabled.</summary>
+			/// <summary>Contains a cumulative time, expressed in increments of 100 nanoseconds, spent on disk reads since the performance counters were enabled</summary>
 			public UInt64 WriteTime;
-			/// <summary>Contains a cumulative time, expressed in increments of 100 nanoseconds, since the performance counters were enabled in which there was no disk activity.</summary>
+			/// <summary>Contains a cumulative time, expressed in increments of 100 nanoseconds, since the performance counters were enabled in which there was no disk activity</summary>
 			public UInt64 IdleTime;
-			/// <summary>Contains the number of disk accesses for reads since the performance counters were enabled.</summary>
+			/// <summary>Contains the number of disk accesses for reads since the performance counters were enabled</summary>
 			public UInt32 ReadCount;
-			/// <summary>Contains the number of disk accesses for writes since the performance counters were enabled.</summary>
+			/// <summary>Contains the number of disk accesses for writes since the performance counters were enabled</summary>
 			public UInt32 WriteCount;
-			/// <summary>Contains a snapshot of the number of queued disk I/O requests at the time that the query for performance statistics was performed.</summary>
+			/// <summary>Contains a snapshot of the number of queued disk I/O requests at the time that the query for performance statistics was performed</summary>
 			public Int32 QueueDepth;
-			/// <summary>Contains the number of disk accesses by means of an associated IRP since the performance counters were enabled.</summary>
+			/// <summary>Contains the number of disk accesses by means of an associated IRP since the performance counters were enabled</summary>
 			public UInt32 SplitCount;
 			/// <summary>
 			/// Contains a timestamp indicating the system time at the moment that the query took place.
@@ -650,7 +659,7 @@ namespace AlphaOmega.Debug.Native
 			/// System time is typically updated approximately every ten milliseconds.
 			/// </summary>
 			public UInt64 QueryTime;
-			/// <summary>Contains a unique number assigned to every disk or volume across a particular storage type. The storage types are disk.sys, ftdisk.sys, and dmio.sys.</summary>
+			/// <summary>Contains a unique number assigned to every disk or volume across a particular storage type. The storage types are disk.sys, ftdisk.sys, and dmio.sys</summary>
 			public UInt32 StorageDeviceNumber;
 			/// <summary>
 			/// Contains an 8-character string that indicates which device driver provided the performance statistics.

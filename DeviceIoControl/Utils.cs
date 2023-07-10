@@ -20,9 +20,9 @@ namespace AlphaOmega.Debug
 		public static String SwapBytes(UInt16[] buffer, UInt64 start, UInt64 count)
 		{
 			if(buffer == null)
-				throw new ArgumentNullException("buffer");
+				throw new ArgumentNullException(nameof(buffer));
 			if((UInt64)buffer.LongLength < start)
-				throw new ArgumentException("Start index less than buffer length.");
+				throw new ArgumentException("Start index less than buffer length", nameof(buffer));
 
 			StringBuilder result = new StringBuilder();
 			for(UInt64 loop = start; loop < start + count; loop++)
@@ -42,7 +42,7 @@ namespace AlphaOmega.Debug
 		public static String SwapChars(Char[] buffer)
 		{
 			if(buffer == null)
-				throw new ArgumentNullException("buffer");
+				throw new ArgumentNullException(nameof(buffer));
 
 			StringBuilder result = new StringBuilder();
 			for(Int32 loop = 0; loop < buffer.Length; loop += 2)
@@ -85,7 +85,7 @@ namespace AlphaOmega.Debug
 				constSize *= Utils.FileSize;
 				sizePosition++;
 			}
-			return String.Format(CultureInfo.CurrentUICulture, "{0:n0} {1}", length / constSize, Utils.FileSizeType[sizePosition]);
+			return $"{(length / constSize):n0} {Utils.FileSizeType[sizePosition]}";
 		}
 	}
 }

@@ -14,15 +14,14 @@ namespace AlphaOmega.Debug
 		/// <summary>Device</summary>
 		private DeviceIoControl Device { get; }
 		
-		/// <summary>Represents volume data.</summary>
+		/// <summary>Represents volume data</summary>
 		public FsctlApi.NTFS_VOLUME_DATA_BUFFER VolumeData
 		{
 			get
 			{
-				return (this._volumeData == null
-					? this._volumeData = this.Device.IoControl<FsctlApi.NTFS_VOLUME_DATA_BUFFER>(
-						Constant.FSCTL.GET_NTFS_VOLUME_DATA, null)
-					: this._volumeData).Value;
+				return (this._volumeData
+					?? (this._volumeData = this.Device.IoControl<FsctlApi.NTFS_VOLUME_DATA_BUFFER>(Constant.FSCTL.GET_NTFS_VOLUME_DATA, null)))
+					.Value;
 			}
 		}
 		
@@ -36,11 +35,11 @@ namespace AlphaOmega.Debug
 		/// <param name="device">Device</param>
 		public FileSystem(DeviceIoControl device)
 		{
-			this.Device = device;
+			this.Device = device ?? throw new ArgumentNullException(nameof(device));
 		}
 		
-		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume.</summary>
-		/// <returns>Represents the occupied and available clusters on a disk.</returns>
+		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume</summary>
+		/// <returns>Represents the occupied and available clusters on a disk</returns>
 		public IEnumerable<FsctlApi.VOLUME_BITMAP_BUFFER> GetVolumeBitmap()
 		{
 			UInt64 startingLcn = 0;
@@ -58,11 +57,13 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Метод не работает и вываливается по: 0x00000057 - The parameter is incorrect</summary>
 		/// <param name="accountName"></param>
+		/// <exception cref="ArgumentNullException"><c>accountName</c> is null or empty string</exception>
+		/// <exception cref="Win32Exception">Win32 Exception occured. See winerror.h for details</exception>
 		/// <returns></returns>
 		public FsctlApi.FIND_BY_SID_OUTPUT FindFilesBySid(String accountName)
 		{
 			if(String.IsNullOrEmpty(accountName))
-				throw new ArgumentNullException("accountName");
+				throw new ArgumentNullException(nameof(accountName));
 
 			FsctlApi.FIND_BY_SID_DATA fsInParams = new FsctlApi.FIND_BY_SID_DATA();
 			fsInParams.Restart = 1;
@@ -88,7 +89,7 @@ namespace AlphaOmega.Debug
 			}
 		}
 		
-		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume.</summary>
+		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume</summary>
 		/// <param name="startingLcn">
 		/// The LCN from which the operation should start when describing a bitmap.
 		/// This member will be rounded down to a file-system-dependent rounding boundary, and that value will be returned.
@@ -97,7 +98,7 @@ namespace AlphaOmega.Debug
 		/// <param name="bytesReturned">Returned length of bytes</param>
 		/// <param name="moreDataAvailable">Not all data readed</param>
 		/// <exception cref="Win32Exception">Win32 Exception occured. See winerror.h for details</exception>
-		/// <returns>Represents the occupied and available clusters on a disk.</returns>
+		/// <returns>Represents the occupied and available clusters on a disk</returns>
 		public FsctlApi.VOLUME_BITMAP_BUFFER GetVolumeBitmap(UInt64 startingLcn,out UInt32 bytesReturned, out Boolean moreDataAvailable)
 		{
 			FsctlApi.STARTING_LCN_INPUT_BUFFER fsInParams = new FsctlApi.STARTING_LCN_INPUT_BUFFER();
@@ -123,8 +124,8 @@ namespace AlphaOmega.Debug
 			return result;
 		}
 		
-		/// <summary>Retrieves the information from various file system performance counters.</summary>
-		/// <returns>Contains statistical information from the file system.</returns>
+		/// <summary>Retrieves the information from various file system performance counters</summary>
+		/// <returns>Contains statistical information from the file system</returns>
 		public FsctlApi.FILESYSTEM_STATISTICS GetStatistics()
 		{
 			UInt32 bytesReturned;
@@ -179,11 +180,9 @@ namespace AlphaOmega.Debug
 
 			return result;
 		}
-		
-		/// <summary>
-		/// Locks a volume if it is not in use.
-		/// A locked volume can be accessed only through handles to the file object (*hDevice) that locks the volume.
-		/// </summary>
+
+		/// <summary>Locks a volume if it is not in use</summary>
+		/// <remarks>A locked volume can be accessed only through handles to the file object (*hDevice) that locks the volume</remarks>
 		/// <exception cref="Win32Exception">Device exception</exception>
 		/// <returns>Lock action status</returns>
 		public void LockVolume()
@@ -191,7 +190,7 @@ namespace AlphaOmega.Debug
 			this.Device.IoControl<IntPtr>(Constant.FSCTL.LOCK_VOLUME, null);
 		}
 		
-		/// <summary>Unlocks a volume.</summary>
+		/// <summary>Unlocks a volume</summary>
 		/// <exception cref="Win32Exception">Device exception</exception>
 		/// <returns>Unlock action status</returns>
 		public void UnlockVolume()
@@ -199,7 +198,7 @@ namespace AlphaOmega.Debug
 			this.Device.IoControl<IntPtr>(Constant.FSCTL.UNLOCK_VOLUME, null);
 		}
 		
-		/// <summary>Dismounts a volume regardless of whether or not the volume is currently in use.</summary>
+		/// <summary>Dismounts a volume regardless of whether or not the volume is currently in use</summary>
 		/// <exception cref="Win32Exception">Device exception</exception>
 		/// <returns>Dismount action status</returns>
 		public void DismountVolume()

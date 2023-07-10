@@ -36,7 +36,8 @@ namespace AlphaOmega.Debug
 					: this._device;
 			}
 		}
-		/// <summary>Storage adapter descriptor data for a device.</summary>
+
+		/// <summary>Storage adapter descriptor data for a device</summary>
 		public StorageApi.STORAGE_ADAPTER_DESCRIPTOR? Adapter
 		{
 			get
@@ -49,7 +50,8 @@ namespace AlphaOmega.Debug
 					: this._adapter;
 			}
 		}
-		/// <summary>Device ID descriptor data for a device.</summary>
+
+		/// <summary>Device ID descriptor data for a device</summary>
 		public StorageApi.STORAGE_DEVICE_ID_DESCRIPTOR? Id
 		{
 			get
@@ -62,6 +64,7 @@ namespace AlphaOmega.Debug
 					: this._id;
 			}
 		}
+
 		/// <summary>Device write cache property</summary>
 		public StorageApi.STORAGE_WRITE_CACHE_PROPERTY? WriteCache
 		{
@@ -75,6 +78,7 @@ namespace AlphaOmega.Debug
 					: this._writeCache;
 			}
 		}
+
 		/// <summary>Storage adapter miniport driver descriptor data for a device</summary>
 		public StorageApi.STORAGE_MINIPORT_DESCRIPTOR? Miniport
 		{
@@ -88,6 +92,7 @@ namespace AlphaOmega.Debug
 					: this._miniport;
 			}
 		}
+
 		/// <summary>Storage access alignment descriptor data for a device</summary>
 		public StorageApi.STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR? AccessAlignment
 		{
@@ -101,6 +106,7 @@ namespace AlphaOmega.Debug
 					: this._accessAlignment;
 			}
 		}
+
 		/// <summary>Seek penalty descriptor data for a device</summary>
 		public StorageApi.DEVICE_SEEK_PENALTY_DESCRIPTOR? SeekPenalty
 		{
@@ -114,6 +120,7 @@ namespace AlphaOmega.Debug
 					: this._seekPenalty;
 			}
 		}
+
 		/// <summary>Trim descriptor data for a device</summary>
 		public StorageApi.DEVICE_TRIM_DESCRIPTOR? Trim
 		{
@@ -127,6 +134,7 @@ namespace AlphaOmega.Debug
 					: this._trim;
 			}
 		}
+
 		/// <summary>Write aggregation data for a device</summary>
 		public StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR? WriteAggregation
 		{
@@ -140,6 +148,7 @@ namespace AlphaOmega.Debug
 					: this._writeAggregation;
 			}
 		}
+
 		/// <summary>Describes the power capabilities of a storage device</summary>
 		public StorageApi.DEVICE_POWER_DESCRIPTOR? Power
 		{
@@ -153,7 +162,8 @@ namespace AlphaOmega.Debug
 					: this._power;
 			}
 		}
-		/// <summary>Copy offload capabilities for a storage device.</summary>
+
+		/// <summary>Copy offload capabilities for a storage device</summary>
 		public StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR? CopyOffload
 		{
 			get
@@ -167,7 +177,7 @@ namespace AlphaOmega.Debug
 			}
 		}
 		
-		/// <summary>Resiliency capabilities for a storage device.</summary>
+		/// <summary>Resiliency capabilities for a storage device</summary>
 		public StorageApi.STORAGE_DEVICE_RESILIENCY_DESCRIPTOR? Resiliency
 		{
 			get
@@ -201,18 +211,18 @@ namespace AlphaOmega.Debug
 		{
 			this.Info = device;
 		}
-		
-		/// <summary>Проверка на существование свойства перед запросом</summary>
-		/// <param name="type">Тип возвращаемого обйекта</param>
-		/// <returns>Свойство существует</returns>
+
+		/// <summary>Checking for property existence before request</summary>
+		/// <param name="type">Return type</param>
+		/// <returns>Property exists</returns>
 		private Boolean IsPropertyExists(Type type)
 		{
 			return this.IsPropertyExists(Properties.GetPropertyId(type));
 		}
 
-		/// <summary>Проверка на существование свойства перед запросом</summary>
-		/// <param name="propertyId">Идентификатор свойства перед запросом</param>
-		/// <returns>Такое свойство существует</returns>
+		/// <summary>Checking for property existence before request</summary>
+		/// <param name="propertyId">Property id before request</param>
+		/// <returns>Such a property exists</returns>
 		private Boolean IsPropertyExists(StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID propertyId)
 		{
 			StorageApi.STORAGE_PROPERTY_QUERY query = new StorageApi.STORAGE_PROPERTY_QUERY();
@@ -259,7 +269,7 @@ namespace AlphaOmega.Debug
 			else if(type == typeof(StorageApi.DEVICE_WRITE_AGGREGATION_DESCRIPTOR))
 				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceWriteAggregationProperty;
 			/*else if(type == typeof(WinNT.DEVICE_LB_PROVISIONING_DESCRIPTOR))
-				return  StorageWinAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceLBProvisioningProperty;*/
+				return StorageWinAPI.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceLBProvisioningProperty;*/
 			else if(type == typeof(StorageApi.DEVICE_POWER_DESCRIPTOR))
 				return StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID.StorageDeviceZeroPowerProperty;
 			else if(type == typeof(StorageApi.DEVICE_COPY_OFFLOAD_DESCRIPTOR))

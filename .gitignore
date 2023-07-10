@@ -13,6 +13,7 @@ Thumbs.db
 *.obj
 *.exe
 *.pdb
+*.suo
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -400,4 +401,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-/DeviceIoControl.dll.nuspec

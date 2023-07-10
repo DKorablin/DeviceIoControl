@@ -1,120 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7088A0A6-BA67-47EE-9081-82438486BA80}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AlphaOmega.Debug</RootNamespace>
-    <AssemblyName>DeviceIoControl</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\..\AlphaOmega %28NoPwd%29.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Release\DeviceIoControl.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
-      <Link>PinnedBufferReader.cs</Link>
-    </Compile>
-    <Compile Include="Changer\Changer.cs" />
-    <Compile Include="Constant.cs" />
-    <Compile Include="FileSystem\FileSystem.cs" />
-    <Compile Include="LogicalDrive.cs" />
-    <Compile Include="Native\AtaApi.cs" />
-    <Compile Include="Native\ChangerApi.cs" />
-    <Compile Include="Native\DiscApi.cs" />
-    <Compile Include="Native\FsctlApi.cs" />
-    <Compile Include="Native\StorageApi.cs" />
-    <Compile Include="Native\VolumeApi.cs" />
-    <Compile Include="Storage\Properties.cs" />
-    <Compile Include="Disc\Disc.cs" />
-    <Compile Include="Disc\Smart\IdentifyDma.cs" />
-    <Compile Include="Native\Methods.cs" />
-    <Compile Include="Disc\Performance.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DeviceIoControl.cs" />
-    <Compile Include="Disc\Smart\AttributeThresholds.cs" />
-    <Compile Include="Disc\Smart\SmartInfoCollection.cs" />
-    <Compile Include="Storage\Storage.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Volume\Volume.cs" />
-    <Compile Include="Native\WinApi.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\AlphaOmega %28NoPwd%29.snk">
-      <Link>AlphaOmega %28NoPwd%29.snk</Link>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<RootNamespace>AlphaOmega.Debug</RootNamespace>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<AssemblyTitle>DeviceIoControl</AssemblyTitle>
+		<Company>Danila Korablin</Company>
+		<Product>Native DeviceIoControl wrapper assembly</Product>
+		<Copyright>Copyright © Danila Korablin 2013-2020</Copyright>
+		<Configuration>Debug</Configuration>
+		<AssemblyVersion>1.0.*</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<Deterministic>false</Deterministic>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<OutputPath>bin\Release\</OutputPath>
+		<DocumentationFile>bin\Release\DeviceIoControl.xml</DocumentationFile>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
+			<Link>PinnedBufferReader.cs</Link>
+		</Compile>
+	</ItemGroup>
 </Project>
