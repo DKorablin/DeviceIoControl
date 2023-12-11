@@ -81,7 +81,7 @@ jobs:
         path: ${{github.workspace}}/bin/*
         if-no-files-found: error
 
-  build_net_standard20:
+  build_net:
     name: Building .NET assembly
     needs: [version]
     runs-on: ubuntu-latest
