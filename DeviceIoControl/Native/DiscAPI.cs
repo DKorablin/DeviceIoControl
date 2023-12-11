@@ -12,7 +12,7 @@ namespace AlphaOmega.Debug.Native
 		public struct IDEREGS
 		{
 			/// <summary>Feature register defines for SMART "sub commands"</summary>
-			public enum SMART : byte
+			public enum SMART : Byte
 			{
 				/// <summary>Retrieve the device attributes</summary>
 				READ_ATTRIBUTES = 0xD0,
@@ -39,7 +39,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Valid values for the bCommandReg member of <see cref="IDEREGS"/></summary>
-			public enum IDE : byte
+			public enum IDE : Byte
 			{
 				/// <summary>Returns ID sector for ATAPI</summary>
 				ATAPI_ID_CMD = 0xA1,
@@ -51,7 +51,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Cylinder register defines for SMART command</summary>
-			public enum SMART_CYL : byte
+			public enum SMART_CYL : Byte
 			{
 				/// <summary>Low culinder register</summary>
 				LOW = 0x4F,
@@ -124,7 +124,7 @@ namespace AlphaOmega.Debug.Native
 		public struct DRIVERSTATUS
 		{
 			/// <summary>SMART error codes</summary>
-			public enum SMART_ERROR : byte
+			public enum SMART_ERROR : Byte
 			{
 				/// <summary>Command executed successfully</summary>
 				NO_ERROR = 0,
@@ -259,11 +259,11 @@ namespace AlphaOmega.Debug.Native
 			public Byte[] bReserved;
 
 			/// <summary>Serial number</summary>
-			public String SerialNumber { get { return Utils.SwapChars(this.sSerialNumber); } }
+			public String SerialNumber => Utils.SwapChars(this.sSerialNumber);
 			/// <summary>Firmware version</summary>
-			public String FirmwareRev { get { return Utils.SwapChars(this.sFirmwareRev); } }
+			public String FirmwareRev => Utils.SwapChars(this.sFirmwareRev);
 			/// <summary>Model number</summary>
-			public String ModelNumber { get { return Utils.SwapChars(this.sModelNumber); } }
+			public String ModelNumber => Utils.SwapChars(this.sModelNumber);
 			/// <summary>Device type</summary>
 			public DeviceType Type
 			{
@@ -287,6 +287,7 @@ namespace AlphaOmega.Debug.Native
 				}
 			}
 		}
+
 		/// <summary>The following structure defines the structure of a Drive Attribute</summary>
 		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
 		public struct DRIVEATTRIBUTE
@@ -306,14 +307,8 @@ namespace AlphaOmega.Debug.Native
 			public Byte bReserved;
 			/// <summary>Attribute name</summary>
 			public String AttributeName
-			{
-				get
-				{
+				=> Resources.GetAttributeName(this.bAttrID);
 
-					String value;
-					return Constant.AttributeNames.TryGetValue(this.bAttrID, out value) ? value : Constant.AttributeNames[0];
-				}
-			}
 			/// <summary>Преобразованное значение</summary>
 			public Int64 RawValue
 			{
@@ -339,14 +334,9 @@ namespace AlphaOmega.Debug.Native
 			public Byte[] bReserved;
 			/// <summary>Attribute name</summary>
 			public String AttributeName
-			{
-				get
-				{
-					String value;
-					return Constant.AttributeNames.TryGetValue(this.bAttrID, out value) ? value : Constant.AttributeNames[0];
-				}
-			}
+				=> Resources.GetAttributeName(this.bAttrID);
 		}
+
 		/// <summary>The GETVERSIONINPARAMS structure is used in conjunction with the SMART_GET_VERSION request to retrieve version information, a capabilities mask, and a bitmask for the indicated device</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff554977%28v=vs.85%29.aspx</remarks>
 		[StructLayout(LayoutKind.Sequential)]
@@ -402,15 +392,16 @@ namespace AlphaOmega.Debug.Native
 				}
 			}
 			/// <summary>ATA commands supported</summary>
-			public Boolean IsAtaSupported { get { return (this.fCapabilities & CAP.ATA_ID_CMD) == CAP.ATA_ID_CMD; } }
+			public Boolean IsAtaSupported => (this.fCapabilities & CAP.ATA_ID_CMD) == CAP.ATA_ID_CMD;
 			/// <summary>ATAPI commands supported</summary>
-			public Boolean IsAtapiSupported { get { return (this.fCapabilities & CAP.ATAPI_ID_CMD) == CAP.ATAPI_ID_CMD; } }
+			public Boolean IsAtapiSupported => (this.fCapabilities & CAP.ATAPI_ID_CMD) == CAP.ATAPI_ID_CMD;
 			/// <summary>SMART commands supported</summary>
-			public Boolean IsSmartSupported { get { return (this.fCapabilities & CAP.SMART_CMD) == CAP.SMART_CMD; } }
+			public Boolean IsSmartSupported => (this.fCapabilities & CAP.SMART_CMD) == CAP.SMART_CMD;
 		}
+
 		/// <summary>Bits returned in the fCapabilities member of GETVERSIONINPARAMS</summary>
 		[Flags]
-		public enum CAP : uint
+		public enum CAP : UInt32
 		{
 			/// <summary>ATA ID command supported</summary>
 			ATA_ID_CMD = 1,
@@ -419,6 +410,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>SMART commannds supported</summary>
 			SMART_CMD = 4,
 		}
+
 		/// <summary>DISK_GEOMETRY is used in conjunction with the <see cref="Constant.IOCTL_DISC.GET_DRIVE_GEOMETRY"/> and the <see cref="Constant.IOCTL_STORAGE.GET_MEDIA_TYPES"/> requests, in order to retrieve information about the geometry of a physical disk</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_GEOMETRY
@@ -434,6 +426,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Indicates the number of bytes in a disk sector</summary>
 			public UInt32 BytesPerSector;
 		}
+
 		/// <summary>The DISK_GEOMETRY_EX structure is a variable-length structure composed of a <see cref="DISK_GEOMETRY"/> structure followed by a <see cref="DISK_PARTITION_INFO"/> structure followed, in turn, by a <see cref="DISK_DETECTION_INFO"/> structure</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DISK_GEOMETRY_EX
@@ -451,9 +444,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Contains string representation of disc size</summary>
 			/// <returns>Size with dimention</returns>
 			public String DiskSizeString
-			{
-				get { return Utils.FileSizeToString(this.DiskSize); }
-			}
+				=> Utils.FileSizeToString(this.DiskSize);
 
 			/// <summary>Information about the disk's partition table</summary>
 			/// <returns>Partition table info</returns>
@@ -464,7 +455,7 @@ namespace AlphaOmega.Debug.Native
 			}
 			
 			/// <summary>Detected drive parameters that are supplied by an x86 PC BIOS on boot</summary>
-			/// <returns>Detected drive parameters</returns>
+			/// <returns>Detected drive parameters</returns>v
 			public DISK_DETECTION_INFO GetDiscDetectionInfo()
 			{
 				using(PinnedBufferReader reader = new PinnedBufferReader(this.Data))

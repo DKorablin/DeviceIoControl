@@ -114,7 +114,7 @@ namespace AlphaOmega.Debug.Native
 		public struct FILESYSTEM_STATISTICS
 		{
 			/// <summary>The type of file system</summary>
-			public enum FILESYSTEM_STATISTICS_TYPE : ushort
+			public enum FILESYSTEM_STATISTICS_TYPE : UInt16
 			{
 				/// <summary>
 				/// The file system is the NTFS file system.
@@ -323,6 +323,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			private Byte[] Data;
 		}
+
 		/// <summary>Contains statistical information from the exFAT file system</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct EXFAT_STATISTICS
@@ -348,6 +349,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			private Byte[] Data;
 		}
+
 		/// <summary>Contains statistical information from the NTFS file system</summary>
 		/// <remarks>
 		/// The MFT, MFT mirror, root index, user index, bitmap, and MFT bitmap are counted as metadata files.
@@ -387,6 +389,7 @@ namespace AlphaOmega.Debug.Native
 				/// </summary>
 				public UInt16 Flush;
 			}
+
 			/// <summary>The number of bitmap writes</summary>
 			[StructLayout(LayoutKind.Sequential)]
 			public struct BitmapWrites
@@ -398,6 +401,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>The number of bitmap writes due to setting file information</summary>
 				public UInt16 SetInfo;
 			}
+
 			/// <summary>Allocate clusters</summary>
 			[StructLayout(LayoutKind.Sequential)]
 			public struct AllocateStruct
@@ -423,6 +427,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>The number of clusters allocated without the cache</summary>
 				public UInt32 CacheMissClusters;
 			}
+
 			/// <summary>The number of exceptions generated due to the log file being full</summary>
 			public UInt32 LogFileFullExceptions;
 			/// <summary>The number of other exceptions generated</summary>
@@ -557,6 +562,7 @@ namespace AlphaOmega.Debug.Native
 				/// </summary>
 				public UInt32 Flush;
 			}
+
 			/// <summary>The number of bitmap writes</summary>
 			[StructLayout(LayoutKind.Sequential)]
 			public struct BitmapWrites
@@ -568,6 +574,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>The number of bitmap writes due to setting file information</summary>
 				public UInt32 SetInfo;
 			}
+
 			/// <summary>Allocate clusters</summary>
 			[StructLayout(LayoutKind.Sequential)]
 			public struct AllocateStruct
@@ -593,6 +600,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>The number of clusters allocated without the cache</summary>
 				public UInt64 CacheMissClusters;
 			}
+
 			/// <summary>The number of exceptions generated due to the log file being full</summary>
 			public UInt32 LogFileFullExceptions;
 			/// <summary>The number of other exceptions generated</summary>

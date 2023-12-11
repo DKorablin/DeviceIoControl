@@ -9,51 +9,23 @@ namespace AlphaOmega.Debug
 	/// <summary>File system control commands</summary>
 	public class FileSystem
 	{
+		/// <summary>The device</summary>
+		private readonly DeviceIoControl _device;
 		private FsctlApi.NTFS_VOLUME_DATA_BUFFER? _volumeData;
-
-		/// <summary>Device</summary>
-		private DeviceIoControl Device { get; }
 		
 		/// <summary>Represents volume data</summary>
 		public FsctlApi.NTFS_VOLUME_DATA_BUFFER VolumeData
-		{
-			get
-			{
-				return (this._volumeData
-					?? (this._volumeData = this.Device.IoControl<FsctlApi.NTFS_VOLUME_DATA_BUFFER>(Constant.FSCTL.GET_NTFS_VOLUME_DATA, null)))
-					.Value;
-			}
-		}
+			=> (this._volumeData
+				?? (this._volumeData = this._device.IoControl<FsctlApi.NTFS_VOLUME_DATA_BUFFER>(Constant.FSCTL.GET_NTFS_VOLUME_DATA, null)))
+				.Value;
 		
 		/// <summary>Determines whether the specified volume is mounted</summary>
-		public Boolean IsVolumeMounted
-		{
-			get { return this.Device.IoControl(Constant.FSCTL.IS_VOLUME_MOUNTED); }
-		}
+		public Boolean IsVolumeMounted => this._device.IoControl(Constant.FSCTL.IS_VOLUME_MOUNTED);
 		
 		/// <summary>Create instance of file system IO commands class</summary>
 		/// <param name="device">Device</param>
 		public FileSystem(DeviceIoControl device)
-		{
-			this.Device = device ?? throw new ArgumentNullException(nameof(device));
-		}
-		
-		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume</summary>
-		/// <returns>Represents the occupied and available clusters on a disk</returns>
-		public IEnumerable<FsctlApi.VOLUME_BITMAP_BUFFER> GetVolumeBitmap()
-		{
-			UInt64 startingLcn = 0;
-			UInt32 bytesReturned;
-			Boolean moreDataAvailable = false;
-
-			do
-			{
-				FsctlApi.VOLUME_BITMAP_BUFFER part = this.GetVolumeBitmap(startingLcn, out bytesReturned, out moreDataAvailable);
-				if(moreDataAvailable)
-					startingLcn = bytesReturned;
-				yield return part;
-			} while(moreDataAvailable);
-		}
+			=> this._device = device ?? throw new ArgumentNullException(nameof(device));
 
 		/// <summary>Метод не работает и вываливается по: 0x00000057 - The parameter is incorrect</summary>
 		/// <param name="accountName"></param>
@@ -65,20 +37,20 @@ namespace AlphaOmega.Debug
 			if(String.IsNullOrEmpty(accountName))
 				throw new ArgumentNullException(nameof(accountName));
 
-			FsctlApi.FIND_BY_SID_DATA fsInParams = new FsctlApi.FIND_BY_SID_DATA();
-			fsInParams.Restart = 1;
-			fsInParams.Sid = Methods.LookupAccountName(accountName);
+			FsctlApi.FIND_BY_SID_DATA fsInParams = new FsctlApi.FIND_BY_SID_DATA()
+			{
+				Restart = 1,
+				Sid = Methods.LookupAccountName(accountName),
+			};
 
 			//var currentIdentity = System.Security.Principal.WindowsIdentity.GetCurrent();
 			//System.Security.Principal.SecurityIdentifier managedSid = new System.Security.Principal.SecurityIdentifier(fsInParams.Sid, 0);
 
-			UInt32 bytesReturned;
-			FsctlApi.FIND_BY_SID_OUTPUT result;
-			Boolean resultCode = this.Device.IoControl<FsctlApi.FIND_BY_SID_OUTPUT>(
+			Boolean resultCode = this._device.IoControl<FsctlApi.FIND_BY_SID_OUTPUT>(
 				Constant.FSCTL.FIND_FILES_BY_SID,
 				fsInParams,
-				out bytesReturned,
-				out result);
+				out UInt32 bytesReturned,
+				out FsctlApi.FIND_BY_SID_OUTPUT result);
 
 			if(resultCode)
 				return result;
@@ -88,7 +60,23 @@ namespace AlphaOmega.Debug
 				throw new Win32Exception(error);
 			}
 		}
-		
+
+		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume</summary>
+		/// <returns>Represents the occupied and available clusters on a disk</returns>
+		public IEnumerable<FsctlApi.VOLUME_BITMAP_BUFFER> GetVolumeBitmap()
+		{
+			UInt64 startingLcn = 0;
+			Boolean moreDataAvailable;
+
+			do
+			{
+				FsctlApi.VOLUME_BITMAP_BUFFER part = this.GetVolumeBitmap(startingLcn, out UInt32 bytesReturned, out moreDataAvailable);
+				if(moreDataAvailable)
+					startingLcn = bytesReturned;
+				yield return part;
+			} while(moreDataAvailable);
+		}
+
 		/// <summary>Retrieves a bitmap of occupied and available clusters on a volume</summary>
 		/// <param name="startingLcn">
 		/// The LCN from which the operation should start when describing a bitmap.
@@ -101,25 +89,25 @@ namespace AlphaOmega.Debug
 		/// <returns>Represents the occupied and available clusters on a disk</returns>
 		public FsctlApi.VOLUME_BITMAP_BUFFER GetVolumeBitmap(UInt64 startingLcn,out UInt32 bytesReturned, out Boolean moreDataAvailable)
 		{
-			FsctlApi.STARTING_LCN_INPUT_BUFFER fsInParams = new FsctlApi.STARTING_LCN_INPUT_BUFFER();
-			fsInParams.StartingLcn = startingLcn;//0xA000;
+			FsctlApi.STARTING_LCN_INPUT_BUFFER fsInParams = new FsctlApi.STARTING_LCN_INPUT_BUFFER()
+			{
+				StartingLcn = startingLcn,//0xA000
+			};
 
-			FsctlApi.VOLUME_BITMAP_BUFFER result;
-			Boolean resultCode = this.Device.IoControl<FsctlApi.VOLUME_BITMAP_BUFFER>(
+			Boolean resultCode = this._device.IoControl<FsctlApi.VOLUME_BITMAP_BUFFER>(
 				Constant.FSCTL.GET_VOLUME_BITMAP,
 				fsInParams,
 				out bytesReturned,
-				out result);
+				out FsctlApi.VOLUME_BITMAP_BUFFER result);
 
 			if(resultCode)
 				moreDataAvailable = false;
 			else
 			{
 				Int32 error = Marshal.GetLastWin32Error();
-				if(error == (Int32)Constant.ERROR.MORE_DATA)
-					moreDataAvailable = true;
-				else
-					throw new Win32Exception(error);
+				moreDataAvailable = error == (Int32)Constant.ERROR.MORE_DATA
+					? true
+					: throw new Win32Exception(error);
 			}
 			return result;
 		}
@@ -128,11 +116,10 @@ namespace AlphaOmega.Debug
 		/// <returns>Contains statistical information from the file system</returns>
 		public FsctlApi.FILESYSTEM_STATISTICS GetStatistics()
 		{
-			UInt32 bytesReturned;
-			FsctlApi.FILESYSTEM_STATISTICS result = this.Device.IoControl<FsctlApi.FILESYSTEM_STATISTICS>(
+			FsctlApi.FILESYSTEM_STATISTICS result = this._device.IoControl<FsctlApi.FILESYSTEM_STATISTICS>(
 				Constant.FSCTL.FILESYSTEM_GET_STATISTICS,
 				null,
-				out bytesReturned);
+				out UInt32 bytesReturned);
 
 			/*const UInt32 SizeOfFileSystemStat = 56;
 			using(BytesReader reader = new BytesReader(result.Data))
@@ -159,23 +146,20 @@ namespace AlphaOmega.Debug
 		/// <returns>Contains statistical information from the file system</returns>
 		public FsctlApi.FILESYSTEM_STATISTICS_EX GetStatisticsEx(out Boolean moreDataAvailable)
 		{
-			UInt32 bytesReturned;
-			FsctlApi.FILESYSTEM_STATISTICS_EX result;
-			Boolean resultCode = this.Device.IoControl<FsctlApi.FILESYSTEM_STATISTICS_EX>(
+			Boolean resultCode = this._device.IoControl<FsctlApi.FILESYSTEM_STATISTICS_EX>(
 				Constant.FSCTL.FILESYSTEM_GET_STATISTICS,
 				null,
-				out bytesReturned,
-				out result);
+				out _,
+				out FsctlApi.FILESYSTEM_STATISTICS_EX result);
 
 			if(resultCode)
 				moreDataAvailable = false;
 			else
 			{
 				Int32 error = Marshal.GetLastWin32Error();
-				if(error == (Int32)Constant.ERROR.MORE_DATA)
-					moreDataAvailable = true;
-				else
-					throw new Win32Exception(error);
+				moreDataAvailable= error == (Int32)Constant.ERROR.MORE_DATA
+					? true
+					: throw new Win32Exception(error);
 			}
 
 			return result;
@@ -186,24 +170,18 @@ namespace AlphaOmega.Debug
 		/// <exception cref="Win32Exception">Device exception</exception>
 		/// <returns>Lock action status</returns>
 		public void LockVolume()
-		{
-			this.Device.IoControl<IntPtr>(Constant.FSCTL.LOCK_VOLUME, null);
-		}
+			=> this._device.IoControl<IntPtr>(Constant.FSCTL.LOCK_VOLUME, null);
 		
 		/// <summary>Unlocks a volume</summary>
 		/// <exception cref="Win32Exception">Device exception</exception>
 		/// <returns>Unlock action status</returns>
 		public void UnlockVolume()
-		{
-			this.Device.IoControl<IntPtr>(Constant.FSCTL.UNLOCK_VOLUME, null);
-		}
+			=> this._device.IoControl<IntPtr>(Constant.FSCTL.UNLOCK_VOLUME, null);
 		
 		/// <summary>Dismounts a volume regardless of whether or not the volume is currently in use</summary>
 		/// <exception cref="Win32Exception">Device exception</exception>
 		/// <returns>Dismount action status</returns>
 		public void DismountVolume()
-		{
-			this.Device.IoControl<IntPtr>(Constant.FSCTL.DISMOUNT_VOLUME, null);
-		}
+			=> this._device.IoControl<IntPtr>(Constant.FSCTL.DISMOUNT_VOLUME, null);
 	}
 }

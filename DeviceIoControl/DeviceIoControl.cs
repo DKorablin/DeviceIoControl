@@ -28,66 +28,44 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Disc IO commands</summary>
 		public Disc Disc
-		{
-			get { return this._disc ?? (this._disc = new Disc(this)); }
-		}
+			=> this._disc ?? (this._disc = new Disc(this));
 
 		/// <summary>Storage IO commands</summary>
 		public Storage Storage
-		{
-			get { return this._storage ?? (this._storage = new Storage(this)); }
-		}
+			=> this._storage ?? (this._storage = new Storage(this));
 
 		/// <summary>Volume IO commands</summary>
 		public Volume Volume
-		{
-			get { return this._volume ?? (this._volume = new Volume(this)); }
-		}
+			=> this._volume ?? (this._volume = new Volume(this));
 
 		/// <summary>File system IO commands</summary>
 		/// <remarks>FSCTL will be can be null if device opened by ID</remarks>
 		public FileSystem FileSystem
-		{
-			get
-			{
-				return this._fs == null && this.DeviceId == null
-					? this._fs = new FileSystem(this)
-					: this._fs;
-			}
-		}
+			=> this._fs == null && this.DeviceId == null
+				? this._fs = new FileSystem(this)
+				: this._fs;
 
 		/// <summary>Changer IO control commands</summary>
 		public Changer Changer
-		{
-			get { return this._changer ?? (this._changer = new Changer(this)); }
-		}
+			=> this._changer ?? (this._changer = new Changer(this));
 
 		/// <summary>Get device power state</summary>
 		/// <exception cref="Win32Exception">Can't gen device power state</exception>
 		public Boolean IsDeviceOn
-		{
-			get
-			{
-				Boolean isOn = false;
-				if(Methods.GetDevicePowerState(this.DeviceHandle, out isOn))
-					return isOn;
-				else
-					throw new Win32Exception();
-			}
-		}
+			=> Methods.GetDevicePowerState(this.DeviceHandle, out Boolean isOn)
+				? isOn
+				: throw new Win32Exception();
 
 		/// <summary>Create instance of device info class by drive letter</summary>
 		public DeviceIoControl(String deviceName)
 			: this(null, deviceName)
-		{
-		}
+		{ }
 
 		/// <summary>Create instance of device info class by device ID</summary>
 		/// <param name="deviceId">Device ID</param>
 		public DeviceIoControl(Byte deviceId)
 			: this(deviceId, null)
-		{
-		}
+		{ }
 
 		/// <summary>Create instance of device info class by device ID or drive letter</summary>
 		/// <param name="deviceId">ID of device</param>
@@ -97,8 +75,7 @@ namespace AlphaOmega.Debug
 			: this(deviceId, deviceName,
 			WinApi.FILE_ACCESS_FLAGS.GENERIC_READ | WinApi.FILE_ACCESS_FLAGS.GENERIC_WRITE,
 			WinApi.FILE_SHARE.READ | WinApi.FILE_SHARE.WRITE)
-		{
-		}
+		{ }
 
 		/// <summary>Create instance of device info class by device ID or drive letter</summary>
 		/// <param name="deviceId">ID of device</param>
@@ -131,10 +108,7 @@ namespace AlphaOmega.Debug
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
 		/// <returns>Return type</returns>
 		public T IoControl<T>(UInt32 dwIoControlCode, Object inParams) where T : struct
-		{
-			UInt32 bytesReturned;
-			return this.IoControl<T>(dwIoControlCode, inParams, out bytesReturned);
-		}
+			=> this.IoControl<T>(dwIoControlCode, inParams, out UInt32 _);
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
@@ -145,13 +119,11 @@ namespace AlphaOmega.Debug
 		/// <param name="bytesReturned">A pointer to a variable that receives the size of the data stored in the output buffer, in bytes.</param>
 		/// <returns>Return object</returns>
 		public T IoControl<T>(UInt32 dwIoControlCode, Object inParams, out UInt32 bytesReturned) where T : struct
-		{
-			return Methods.DeviceIoControl<T>(
+			=> Methods.DeviceIoControl<T>(
 				this.DeviceHandle,
 				dwIoControlCode,
 				inParams,
 				out bytesReturned);
-		}
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <param name="dwIoControlCode">
@@ -160,9 +132,7 @@ namespace AlphaOmega.Debug
 		/// </param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl(UInt32 dwIoControlCode)
-		{
-			return this.IoControl(dwIoControlCode, null);
-		}
+			=> this.IoControl(dwIoControlCode, null);
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <param name="dwIoControlCode">
@@ -172,10 +142,7 @@ namespace AlphaOmega.Debug
 		/// <param name="inParams">A pointer to the input buffer that contains the data required to perform the operation</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl(UInt32 dwIoControlCode, Object inParams)
-		{
-			IntPtr dummy;
-			return this.IoControl<IntPtr>(dwIoControlCode, inParams, out dummy);
-		}
+			=> this.IoControl<IntPtr>(dwIoControlCode, inParams, out IntPtr _);
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
@@ -187,10 +154,7 @@ namespace AlphaOmega.Debug
 		/// <param name="outParams">Return object</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl<T>(UInt32 dwIoControlCode, Object inParams, out T outParams) where T : struct
-		{
-			UInt32 bytesReturned;
-			return this.IoControl<T>(dwIoControlCode, inParams, out bytesReturned, out outParams);
-		}
+			=> this.IoControl<T>(dwIoControlCode, inParams, out UInt32 _, out outParams);
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <typeparam name="T">Return type</typeparam>
@@ -203,14 +167,12 @@ namespace AlphaOmega.Debug
 		/// <param name="outParams">Return object</param>
 		/// <returns>Result of method execution</returns>
 		public Boolean IoControl<T>(UInt32 dwIoControlCode, Object inParams, out UInt32 bytesReturned, out T outParams) where T : struct
-		{
-			return Methods.DeviceIoControl<T>(
+			=> Methods.DeviceIoControl<T>(
 				this.DeviceHandle,
 				dwIoControlCode,
 				inParams,
 				out bytesReturned,
 				out outParams);
-		}
 
 		/// <summary>Get all logical devices</summary>
 		/// <returns>Drive name and type</returns>
@@ -240,9 +202,7 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Destructor to close native handle</summary>
 		~DeviceIoControl()
-		{
-			this.Dispose(false);
-		}
+			=> this.Dispose(false);
 
 		/// <summary>Get system device name</summary>
 		/// <param name="deviceId">ID of device</param>

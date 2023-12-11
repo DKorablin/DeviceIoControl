@@ -3,7 +3,7 @@
 namespace AlphaOmega.Debug
 {
 	/// <summary>S.M.A.R.T. attribute &amp; threshold value</summary>
-	public struct AttributeThresholds
+	public readonly struct AttributeThresholds
 	{
 		/// <summary>Attribute value</summary>
 		public DiscApi.DRIVEATTRIBUTE Attribute { get; }

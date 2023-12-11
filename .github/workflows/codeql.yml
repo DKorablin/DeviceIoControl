@@ -10,7 +10,7 @@ on:
     - cron: '36 23 * * 3'
     
 env:
-  SolutionName: DeviceIoControl
+  SolutionName: ${{github.event.repository.name}}
 
 jobs:
   analyze:
@@ -53,7 +53,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ${{env.SolutionName}}.sln
     - name: Build .NET Standard v2.0
-      run: dotnet build ${{env.SolutionName}}.sln --configuration Release --no-restore
+      run: dotnet build "${{github.workspace}}\${{env.SolutionName}}\${{env.SolutionName}}.csproj" --configuration Release --no-restore
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2

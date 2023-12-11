@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="0x01" xml:space="preserve">
+    <value>Raw Read Error Rate</value>
+    <comment>Frequency of errors when reading data from a disk, the origin of which is due to the disk hardware.
+Для всех дисков Seagate, Samsung (семейства F1 и более новые) и Fujitsu 2,5″ это — число внутренних коррекций данных, проведенных до выдачи в интерфейс, следовательно на пугающе огромные цифры можно реагировать спокойно.</comment>
+  </data>
+  <data name="0x02" xml:space="preserve">
+    <value>Throughput Performance</value>
+    <comment>Overall disk performance. If the attribute value decreases, then there is a high probability that there is a problem with the disk.</comment>
+  </data>
+  <data name="0x03" xml:space="preserve">
+    <value>Spin-Up Time</value>
+    <comment>Time to spin up a pack of discs from rest to operating speed.
+It grows with wear of the mechanics (increased friction in the bearing, etc.), and may also indicate poor-quality power (for example, a voltage drop when the disk starts).</comment>
+  </data>
+  <data name="0x04" xml:space="preserve">
+    <value>Start/Stop Count</value>
+    <comment>Полное число циклов запуск-остановка шпинделя.
+У дисков некоторых производителей (например, Seagate) — счётчик включения режима энергосбережения.
+В поле raw value хранится общее количество запусков/остановок диска.</comment>
+  </data>
+  <data name="0x05" xml:space="preserve">
+    <value>Reallocated Sectors Count</value>
+    <comment>Число операций переназначения секторов.
+Когда диск обнаруживает ошибку чтения/записи, он помечает сектор «переназначенным» и переносит данные в специально отведённую резервную область.
+Вот почему на современных жёстких дисках нельзя увидеть bad-блоки — все они спрятаны в переназначенных секторах.
+Этот процесс называют remapping, а переназначенный сектор — remap.
+Чем больше значение, тем хуже состояние поверхности дисков.
+Поле raw value содержит общее количество переназначенных секторов.
+Рост значения этого атрибута может свидетельствовать об ухудшении состояния поверхности блинов диска.</comment>
+  </data>
+  <data name="0x06" xml:space="preserve">
+    <value>Read Channel Margin</value>
+    <comment>Запас канала чтения. Назначение этого атрибута не документировано. В современных накопителях не используется.</comment>
+  </data>
+  <data name="0x07" xml:space="preserve">
+    <value>Seek Error Rate</value>
+    <comment>Частота ошибок при позиционировании блока магнитных головок.
+Чем их больше, тем хуже состояние механики и/или поверхности жёсткого диска.
+Также на значение параметра может повлиять перегрев и внешние вибрации (например, от соседних дисков в корзине).</comment>
+  </data>
+  <data name="0x08" xml:space="preserve">
+    <value>Seek Time Performance</value>
+    <comment>Средняя производительность операции позиционирования магнитными головками.
+Если значение атрибута уменьшается (замедление позиционирования), то велика вероятность проблем с механической частью привода головок.</comment>
+  </data>
+  <data name="0x09" xml:space="preserve">
+    <value>Power-On Hours (POH)</value>
+    <comment>Число часов (минут, секунд — в зависимости от производителя), проведённых во включенном состоянии.
+В качестве порогового значения для него выбирается паспортное время наработки на отказ (MTBF — mean time between failure).</comment>
+  </data>
+  <data name="0x0A" xml:space="preserve">
+    <value>Spin-Up Retry Count</value>
+    <comment>Число повторных попыток раскрутки дисков до рабочей скорости в случае, если первая попытка была неудачной.
+Если значение атрибута увеличивается, то велика вероятность неполадок с механической частью.</comment>
+  </data>
+  <data name="0x0B" xml:space="preserve">
+    <value>Recalibration Retries</value>
+    <comment>Количество повторов запросов рекалибровки в случае, если первая попытка была неудачной.
+Если значение атрибута увеличивается, то велика вероятность проблем с механической частью.</comment>
+  </data>
+  <data name="0x0C" xml:space="preserve">
+    <value>Device Power Cycle Count</value>
+  </data>
+  <data name="0x0D" xml:space="preserve">
+    <value>Soft Read Error Rate</value>
+    <comment>Количество полных циклов включения-выключения диска.
+Число ошибок при чтении, по вине программного обеспечения, которые не поддались исправлению.
+Все ошибки имеют не механическую природу и указывают лишь на неправильную размётку/взаимодействие с диском программ или операционной системы.</comment>
+  </data>
+  <data name="0xB4" xml:space="preserve">
+    <value>Unused Reserved Block Count Total</value>
+    <comment>"Pre-Fail" Attribute used at least in HP devices.</comment>
+  </data>
+  <data name="0xB7" xml:space="preserve">
+    <value>SATA Downshift Error Count</value>
+    <comment>Western Digital and Samsung attribute.</comment>
+  </data>
+  <data name="0xB8" xml:space="preserve">
+    <value>End-to-End error</value>
+  </data>
+  <data name="0xB9" xml:space="preserve">
+    <value>Head Stability</value>
+    <comment>Данный атрибут — часть технологии HP SMART IV, это означает, что после передачи через кэш памяти буфера данных паритет данных между хостом и жестким диском не совпадают.
+Western Digital attribute.</comment>
+  </data>
+  <data name="0xBA" xml:space="preserve">
+    <value>Induced Op-Vibration Detection</value>
+    <comment>Western Digital attribute.</comment>
+  </data>
+  <data name="0xBB" xml:space="preserve">
+    <value>Reported Uncorrectable Errors</value>
+    <comment>The count of errors that could not be recovered using hardware ECC (see attribute 0xC3).</comment>
+  </data>
+  <data name="0xBC" xml:space="preserve">
+    <value>Command Timeout</value>
+    <comment>The count of aborted operations due to HDD timeout.
+Normally this attribute value should be equal to zero and if the value is far above zero, then most likely there will be some serious problems with power supply or an oxidized data cable.</comment>
+  </data>
+  <data name="0xBD" xml:space="preserve">
+    <value>High Fly Writes</value>
+    <comment>HDD producers implement a Fly Height Monitor that attempts to provide additional protections for write operations by detecting when a recording head is flying outside its normal operating range.
+If an unsafe fly height condition is encountered, the write process is stopped, and the information is rewritten or reallocated to a safe region of the hard drive.
+This attribute indicates the count of these errors detected over the lifetime of the drive.
+This feature is implemented in most modern Seagate drives and some of Western Digital’s drives, beginning with the WD Enterprise WDE18300 and WDE9180 Ultra2 SCSI hard drives, and will be included on all future WD Enterprise products.</comment>
+  </data>
+  <data name="0xBE" xml:space="preserve">
+    <value>Temperature Difference from 100</value>
+    <comment>Value is equal to (100−temp. °C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature.</comment>
+  </data>
+  <data name="0xBF" xml:space="preserve">
+    <value>G-sense error rate</value>
+    <comment>The count of errors resulting from externally induced shock &amp; vibration.</comment>
+  </data>
+  <data name="0xC0" xml:space="preserve">
+    <value>Power-off retract count / Emergency Retract Cycle Count (Fujitsu)</value>
+    <comment>Count of times the heads are loaded off the media.
+Heads can be unloaded without actually powering off.</comment>
+  </data>
+  <data name="0xC1" xml:space="preserve">
+    <value>Load Cycle Count / Load/Unload Cycle Count (Fujitsu)</value>
+    <comment>Count of load/unload cycles into head landing zone position.
+The typical lifetime rating for laptop (2.5-in) hard drives is 300,000 to 600,000 load cycles.
+Some laptop drives are programmed to unload the heads whenever there has not been any activity for about five seconds.
+Many Linux installations write to the file system a few times a minute in the background.
+As a result, there may be 100 or more load cycles per hour, and the load cycle rating may be exceeded in less than a year.</comment>
+  </data>
+  <data name="0xC2" xml:space="preserve">
+    <value>HDA temperature</value>
+    <comment>Current internal temperature.
+Здесь хранятся показания встроенного термодатчика для механической части диска — банки (HDA — Hard Disk Assembly).
+Информация снимается со встроенного термодатчика, которым служит одна из магнитных головок, обычно нижняя в банке.
+В битовых полях атрибута фиксируются текущая, минимальная и максимальная температура.
+Не все программы, работающие со SMART, правильно разбирают эти поля, так что к их показаниям стоит относиться критически.</comment>
+  </data>
+  <data name="0xC3" xml:space="preserve">
+    <value>Hardware ECC Recovered</value>
+    <comment>(Vendor specific raw value.) The raw value has different structure for different vendors and is often not meaningful as a decimal number.
+Число коррекции ошибок аппаратной частью диска (чтение, позиционирование, передача по внешнему интерфейсу).
+На дисках с SATA-интерфейсом значение нередко ухудшается при повышении частоты системной шины — SATA очень чувствителен к разгону.</comment>
+  </data>
+  <data name="0xC4" xml:space="preserve">
+    <value>Reallocation Event Count</value>
+    <comment>Count of remap operations. The raw value of this attribute shows the total count of attempts to transfer data from reallocated sectors to a spare area. Both successful &amp; unsuccessful attempts are counted.</comment>
+  </data>
+  <data name="0xC5" xml:space="preserve">
+    <value>Current Pending Sector Count</value>
+    <comment>Число секторов, являющихся кандидатами на замену.
+Они не были ещё определены как плохие, но считывание с них отличается от чтения стабильного сектора, это так называемые подозрительные или нестабильные сектора.
+В случае успешного последующего прочтения сектора он исключается из числа кандидатов.
+В случае повторных ошибочных чтений накопитель пытается восстановить его и выполняет операцию переназначения (remaping).
+Рост значения этого атрибута может свидетельствовать о физической деградации жёсткого диска.</comment>
+  </data>
+  <data name="0xC6" xml:space="preserve">
+    <value>Uncorrectable Sector Count</value>
+    <comment>Число неисправимых ошибок при обращении к сектору.
+{Возможно, имелось в виду «число некорректируемых (средствами диска) секторов», но никак не число самих ошибок!}
+В случае увеличения числа ошибок велика вероятность критических дефектов поверхности и/или механики накопителя.</comment>
+  </data>
+  <data name="0xC7" xml:space="preserve">
+    <value>UltraDMA CRC Error Count</value>
+    <comment>Число ошибок, возникающих при передаче данных по внешнему интерфейсу в режиме UltraDMA (нарушения целостности пакетов и т. п.).
+Рост этого атрибута свидетельствует о плохом (мятом, перекрученном) кабеле и плохих контактах.
+Также подобные ошибки появляются при разгоне шины PCI, сбоях питания, сильных электромагнитных наводках, а иногда и по вине драйвера.
+Возможно причина в некачественном шлейфе. Для исправления попробуйте использовать SATA шлейф без защёлок, имеющий плотное соединение с контактами диска.</comment>
+  </data>
+  <data name="0xC8" xml:space="preserve">
+    <value>Write Error Rate / Multi-Zone Error Rate</value>
+    <comment>Показывает общее количество ошибок, происходящих при записи сектора.
+Показывает общее число ошибок записи на диск. Может служить показателем качества поверхности и механики накопителя.</comment>
+  </data>
+  <data name="0xC9" xml:space="preserve">
+    <value>Soft read error rate</value>
+    <comment>Частота появления «программных» ошибок при чтении данных с диска.
+Данный параметр показывает частоту появления ошибок при операциях чтения с поверхности диска по вине программного обеспечения, а не аппаратной части накопителя.</comment>
+  </data>
+  <data name="0xCA" xml:space="preserve">
+    <value>Data Address Mark errors</value>
+    <comment>Number of Data Address Mark (DAM) errors (or) vendor-specific.</comment>
+  </data>
+  <data name="0xCB" xml:space="preserve">
+    <value>Run out cancel</value>
+    <comment>Количество ошибок ECC.</comment>
+  </data>
+  <data name="0xCC" xml:space="preserve">
+    <value>Soft ECC correction</value>
+    <comment>Количество ошибок ECC, скорректированных программным способом.</comment>
+  </data>
+  <data name="0xCD" xml:space="preserve">
+    <value>Thermal asperity rate (TAR)</value>
+    <comment>Number of thermal asperity errors.</comment>
+  </data>
+  <data name="0xCE" xml:space="preserve">
+    <value>Flying height</value>
+    <comment>Высота между головкой и поверхностью диска.</comment>
+  </data>
+  <data name="0xCF" xml:space="preserve">
+    <value>Spin high current</value>
+    <comment>Величина силы тока при раскрутке диска.</comment>
+  </data>
+  <data name="0xD0" xml:space="preserve">
+    <value>Spin buzz</value>
+    <comment>Number of buzz routines to spin up the drive.</comment>
+  </data>
+  <data name="0xD1" xml:space="preserve">
+    <value>Offline seek performance</value>
+    <comment>Производительность поиска во время офлайновых операций (Drive’s seek performance during offline operations.)
+(found in a Maxtor 6B200M0 200GB and Maxtor 2R015H1 15GB disks)</comment>
+  </data>
+  <data name="0xD2" xml:space="preserve">
+    <value>Vibration During Write</value>
+  </data>
+  <data name="0xD3" xml:space="preserve">
+    <value>Vibration During Write</value>
+  </data>
+  <data name="0xD4" xml:space="preserve">
+    <value>Shock During Write</value>
+  </data>
+  <data name="0xDC" xml:space="preserve">
+    <value>Disk Shift</value>
+    <comment>Distance the disk has shifted relative to the spindle (usually due to shock or temperature). Unit of measure is unknown.
+Дистанция смещения блока дисков относительно шпинделя. В основном возникает из-за удара или падения. Единица измерения неизвестна. При увеличении атрибута диск быстро становится неработоспособным.</comment>
+  </data>
+  <data name="0xDD" xml:space="preserve">
+    <value>G-Sense Error Rate</value>
+    <comment>Число ошибок, возникших из-за внешних нагрузок и ударов. Атрибут хранит показания встроенного датчика удара.</comment>
+  </data>
+  <data name="0xDE" xml:space="preserve">
+    <value>Loaded Hours</value>
+    <comment>Время, проведённое блоком магнитных головок между выгрузкой из парковочной области в рабочую область диска и загрузкой блока обратно в парковочную область.</comment>
+  </data>
+  <data name="0xDF" xml:space="preserve">
+    <value>Load/Unload Retry Count</value>
+    <comment>Количество новых попыток выгрузок/загрузок блока магнитных головок в/из парковочной области после неудачной попытки.</comment>
+  </data>
+  <data name="0xE0" xml:space="preserve">
+    <value>Load Friction</value>
+    <comment>Величина силы трения блока магнитных головок при его выгрузке из парковочной области.</comment>
+  </data>
+  <data name="0xE1" xml:space="preserve">
+    <value>Load Cycle Count</value>
+    <comment>Количество циклов перемещения блока магнитных головок в парковочную область.</comment>
+  </data>
+  <data name="0xE2" xml:space="preserve">
+    <value>Load 'In'-time</value>
+    <comment>Время, за которое привод выгружает магнитные головки из парковочной области на рабочую поверхность диска.</comment>
+  </data>
+  <data name="0xE3" xml:space="preserve">
+    <value>Torque Amplification Count</value>
+    <comment>Количество попыток скомпенсировать вращающий момент.</comment>
+  </data>
+  <data name="0xE4" xml:space="preserve">
+    <value>Power-Off Retract Cycle</value>
+    <comment>Количество повторов автоматической парковки блока магнитных головок в результате выключения питания.</comment>
+  </data>
+  <data name="0xE6" xml:space="preserve">
+    <value>Drive Life Protection Status</value>
+    <comment>Current state of drive operation based upon the Life Curve</comment>
+  </data>
+  <data name="0xE7" xml:space="preserve">
+    <value>Temperature</value>
+    <comment>Drive Temperature</comment>
+  </data>
+  <data name="0xE8" xml:space="preserve">
+    <value>Endurance Remaining / Available Reserved Space</value>
+    <comment>Number of physical erase cycles completed on the drive as a percentage of the maximum physical erase cycles the drive is designed to endure
+Intel SSD reports the number of available reserved space as a percentage of reserved space in a brand new SSD.</comment>
+  </data>
+  <data name="0xE9" xml:space="preserve">
+    <value>Power-On Hours / Media Wearout Indicator</value>
+    <comment>Number of hours elapsed in the power-on state.
+Intel SSD reports a normalized value of 100 (when the SSD is new) and declines to a minimum value of 1. It decreases while the NAND erase cycles increase from 0 to the maximum-rated cycles.</comment>
+  </data>
+  <data name="0xEA" xml:space="preserve">
+    <value>Average erase count AND Maximum Erase Count</value>
+    <comment>Decoded as: byte 0-1-2 = average erase count (big endian) and byte 3-4-5 = max erase count (big endian)</comment>
+  </data>
+  <data name="0xEB" xml:space="preserve">
+    <value>Good Block Count AND System(Free) Block Count</value>
+    <comment>decoded as: byte 0-1-2 = good block count (big endian) and byte 3-4 = system(free) block count.</comment>
+  </data>
+  <data name="0xF0" xml:space="preserve">
+    <value>Head flying hours / Transfer Error Rate (Fujitsu)</value>
+    <comment>Time while head is positioning
+Count of times the link is reset during a data transfer.</comment>
+  </data>
+  <data name="0xF1" xml:space="preserve">
+    <value>Total LBAs Written</value>
+    <comment>Total count of LBAs written</comment>
+  </data>
+  <data name="0xF2" xml:space="preserve">
+    <value>Total LBAs Read</value>
+    <comment>Total count of LBAs read.
+Some S.M.A.R.T. utilities will report a negative number for the raw value since in reality it has 48 bits rather than 32.</comment>
+  </data>
+  <data name="0xFA" xml:space="preserve">
+    <value>Read Error Retry Rate</value>
+    <comment>Count of errors while reading from a disk</comment>
+  </data>
+  <data name="0xFE" xml:space="preserve">
+    <value>Free Fall Protection</value>
+    <comment>Count of "Free Fall Events" detected</comment>
+  </data>
+</root>

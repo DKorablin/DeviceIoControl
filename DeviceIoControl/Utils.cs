@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Globalization;
 
 namespace AlphaOmega.Debug
 {
@@ -19,8 +18,7 @@ namespace AlphaOmega.Debug
 		/// <returns>String</returns>
 		public static String SwapBytes(UInt16[] buffer, UInt64 start, UInt64 count)
 		{
-			if(buffer == null)
-				throw new ArgumentNullException(nameof(buffer));
+			_ = buffer ?? throw new ArgumentNullException(nameof(buffer));
 			if((UInt64)buffer.LongLength < start)
 				throw new ArgumentException("Start index less than buffer length", nameof(buffer));
 
@@ -41,8 +39,7 @@ namespace AlphaOmega.Debug
 		/// <returns>Swapped string</returns>
 		public static String SwapChars(Char[] buffer)
 		{
-			if(buffer == null)
-				throw new ArgumentNullException(nameof(buffer));
+			_ = buffer ?? throw new ArgumentNullException(nameof(buffer));
 
 			StringBuilder result = new StringBuilder();
 			for(Int32 loop = 0; loop < buffer.Length; loop += 2)
@@ -69,9 +66,7 @@ namespace AlphaOmega.Debug
 		/// <param name="high">The high order value.</param>
 		/// <returns></returns>
 		public static Int32 MakeDword(UInt16 low, UInt16 high)
-		{
-			return (low + (high << 16));
-		}
+			=> (low + (high << 16));
 
 		/// <summary>Convert file size in bytes to string with dimention</summary>
 		/// <param name="length">size in bytes</param>

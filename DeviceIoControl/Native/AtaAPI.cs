@@ -12,7 +12,7 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>Indicates the direction of data transfer and specifies the kind of operation to be performed</summary>
 			[Flags]
-			public enum AtaPassThroughFlags : ushort
+			public enum AtaPassThroughFlags : UInt16
 			{
 				/// <summary>Wait for DRDY status from the device before sending the command to the device</summary>
 				DRDY_REQUIRED = 1 << 0,

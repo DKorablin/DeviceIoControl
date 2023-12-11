@@ -13,16 +13,34 @@
 		<FileVersion>1.0.0.0</FileVersion>
 		<Deterministic>false</Deterministic>
 	</PropertyGroup>
-
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<OutputPath>bin\Release\</OutputPath>
 		<DocumentationFile>bin\Release\DeviceIoControl.xml</DocumentationFile>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
 			<Link>PinnedBufferReader.cs</Link>
 		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="AttributeNames.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>AttributeNames.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="AttributeNames.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>AttributeNames.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>

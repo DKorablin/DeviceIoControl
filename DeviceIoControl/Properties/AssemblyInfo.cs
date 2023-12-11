@@ -6,12 +6,14 @@ using System.Runtime.InteropServices;
 
 [assembly: System.CLSCompliant(false)]
 
-#if !NETSTANDARD
+#if NETSTANDARD
+[assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/DKorablin/DeviceIoControl")]
+#else
 [assembly: AssemblyProduct("DeviceIoControl")]
 [assembly: AssemblyTitle("DeviceIoControl")]
 [assembly: AssemblyDescription("Native DeviceIoControl wrapper assembly")]
 [assembly: AssemblyCompany("Danila Korablin")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2013-2020")]
+[assembly: AssemblyCopyright("Copyright © Danila Korablin 2013-2023")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else

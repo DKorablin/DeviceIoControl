@@ -3,7 +3,7 @@
 namespace AlphaOmega.Debug
 {
 	/// <summary>Represents logical drive name and type</summary>
-	public struct LogicalDrive
+	public readonly struct LogicalDrive
 	{
 		/// <summary>Name of a logical drive</summary>
 		/// <remarks>For example, if the computer's hard drive is the first logical drive, the first element returned is "C:\"</remarks>

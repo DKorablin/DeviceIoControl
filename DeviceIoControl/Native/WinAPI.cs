@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using System.Collections;
 
 namespace AlphaOmega.Debug
 {
@@ -66,7 +64,7 @@ namespace AlphaOmega.Debug
 		}
 
 		/// <summary>Define the method codes for how buffers are passed for I/O and FS controls</summary>
-		public enum METHOD : byte
+		public enum METHOD : Byte
 		{
 			/// <summary>Specifies the buffered I/O method, which is typically used for transferring small amounts of data per request</summary>
 			BUFFERED = 0,
@@ -109,7 +107,7 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Access flags</summary>
 		[Flags]
-		public enum FILE_ACCESS_FLAGS : uint
+		public enum FILE_ACCESS_FLAGS : UInt32
 		{
 			/// <summary>Read</summary>
 			GENERIC_READ = 0x80000000,
@@ -123,7 +121,7 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Share</summary>
 		[Flags]
-		public enum FILE_SHARE : uint
+		public enum FILE_SHARE : UInt32
 		{
 			/// <summary>
 			/// Enables subsequent open operations on a file or device to request read access.
@@ -145,7 +143,7 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Defines the access check value for any access</summary>
 		[Flags]
-		public enum FILE_ACCESS : ushort
+		public enum FILE_ACCESS : UInt16
 		{
 			/// <summary>Request all access</summary>
 			ANY_ACCESS = 0,
@@ -158,7 +156,7 @@ namespace AlphaOmega.Debug
 		}
 
 		/// <summary>Disposition</summary>
-		public enum CreateDisposition : uint
+		public enum CreateDisposition : UInt32
 		{
 			/// <summary>Create new</summary>
 			CREATE_NEW = 1,
@@ -173,7 +171,7 @@ namespace AlphaOmega.Debug
 		}
 
 		/// <summary>Drive types</summary>
-		public enum DRIVE : uint
+		public enum DRIVE : UInt32
 		{
 			/// <summary>The drive type cannot be determined</summary>
 			UNKNOWN = 0,

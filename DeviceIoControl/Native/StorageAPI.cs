@@ -11,7 +11,7 @@ namespace AlphaOmega.Debug.Native
 		public struct STORAGE_PROPERTY_QUERY
 		{
 			/// <summary>Enumerates the possible values of the PropertyId member of the <see cref="STORAGE_PROPERTY_QUERY"/> structure passed as input to the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> request to retrieve the properties of a storage device or adapter</summary>
-			public enum STORAGE_PROPERTY_ID : int
+			public enum STORAGE_PROPERTY_ID
 			{
 				/// <summary>Indicates that the caller is querying for the device descriptor</summary>
 				StorageDeviceProperty = 0,
@@ -46,8 +46,9 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Indicates that the caller is querying for the medium product type</summary>
 				StorageDeviceMediumProductType = 0xF,
 			}
+
 			/// <summary>Types of queries</summary>
-			public enum STORAGE_QUERY_TYPE : int
+			public enum STORAGE_QUERY_TYPE
 			{
 				/// <summary>Retrieves the descriptor</summary>
 				PropertyStandardQuery = 0,
@@ -88,9 +89,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Contains string representation of disc size</summary>
 			/// <returns>Size with dimention</returns>
 			public String DiskLengthString
-			{
-				get { return Utils.FileSizeToString(this.DiskLength); }
-			}
+				=> Utils.FileSizeToString(this.DiskLength);
 		}
 
 		/// <summary>The STORAGE_HOTPLUG_INFO structure provides hotplug information for a device</summary>
@@ -120,6 +119,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Do not use; set the value to NULL</summary>
 			public Byte WriteCacheEnableOverride;
 		}
+
 		/// <summary>Device property descriptor - this is really just a rehash of the inquiry data retrieved from a scsi device</summary>
 		/// <remarks>This may only be retrieved from a target device. Sending this to the bus will result in an error</remarks>
 		[StructLayout(LayoutKind.Sequential)]
@@ -161,6 +161,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = Constant.BUFFER_SIZE)]
 			public Byte[] RawDeviceProperties;
 		}
+
 		/// <summary>The STORAGE_PREDICT_FAILURE structure is used in conjunction with <see cref="Constant.IOCTL_STORAGE.PREDICT_FAILURE"/> to report whether a device is currently predicting a failure</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STORAGE_PREDICT_FAILURE
@@ -171,11 +172,12 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray,SizeConst=Constant.BUFFER_SIZE)]
 			public Byte[] VendorSpecific;
 			/// <summary>Device does not predict any failures at this time</summary>
-			public Boolean IsDeviceHealthy { get { return this.PredictFailure == 0; } }
+			public Boolean IsDeviceHealthy => this.PredictFailure == 0;
 		}
+
 		/// <summary>Provides a symbolic means of representing storage bus types</summary>
 		/// <remarks>Bus types below 128 (0x80) are reserved for Microsoft use</remarks>
-		public enum STORAGE_BUS_TYPE : int
+		public enum STORAGE_BUS_TYPE
 		{
 			/// <summary>Indicates an unknown bus type</summary>
 			BusTypeUnknown = 0x00,
@@ -214,6 +216,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>The maximum value of the storage bus type range</summary>
 			BusTypeMaxReserved = 0x7F,
 		}
+
 		/// <summary>
 		/// The STORAGE_DEVICE_RESILIENCY_DESCRIPTOR structure is one of the query result structures returned from an <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> request.
 		/// This structure contains the resiliency capabilities for a storage device.
@@ -250,24 +253,24 @@ namespace AlphaOmega.Debug.Native
 		public struct STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR
 		{
 			/// <summary>Specifies the product type of the storage device</summary>
-			public enum ProductType : uint
+			public enum ProductType : UInt32
 			{
 				/// <summary>Not indicated</summary>
-				NotIndicated=0,
+				NotIndicated = 0,
 				/// <summary>CFast</summary>
-				CFast=1,
+				CFast = 1,
 				/// <summary>CompactFlash</summary>
-				CompactFlash=2,
+				CompactFlash = 2,
 				/// <summary>Memory Stick</summary>
-				MemoryStick=3,
+				MemoryStick = 3,
 				/// <summary>MultiMediaCard</summary>
-				MultiMediaCard=4,
+				MultiMediaCard = 4,
 				/// <summary>Secure Digital Card (SD Card)</summary>
-				SDCard=5,
+				SDCard = 5,
 				/// <summary>QXD</summary>
-				QXD=6,
+				QXD = 6,
 				/// <summary>Universal Flash Storage</summary>
-				UniversalFlashStorage=7,
+				UniversalFlashStorage = 7,
 			}
 			/// <summary>Contains the size of this structure, in bytes, as defined by Sizeof(STORAGE_MEDIUM_PRODUCT_TYPE_DESCRIPTOR)</summary>
 			/// <remarks>The value of this member will change as members are added to the structure</remarks>
@@ -312,6 +315,7 @@ namespace AlphaOmega.Debug.Native
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 			public Byte[] Reserved;
 		}
+
 		/// <summary>Used in conjunction with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> control code to retrieve the write aggregation data for a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DEVICE_WRITE_AGGREGATION_DESCRIPTOR
@@ -323,6 +327,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>TRUE if the device benefits from write aggregation</summary>
 			public Byte BenefitsFromWriteAggregation;
 		}
+
 		/// <summary>Used in conjunction with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> request to retrieve the trim descriptor data for a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DEVICE_TRIM_DESCRIPTOR
@@ -334,6 +339,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Specifies whether trim is enabled for the device</summary>
 			public Byte TrimEnabled;
 		}
+
 		/// <summary>Used in conjunction with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> request to retrieve the seek penalty descriptor data for a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DEVICE_SEEK_PENALTY_DESCRIPTOR
@@ -345,6 +351,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Specifies whether the device incurs a seek penalty</summary>
 			public Byte IncursSeekPenalty;
 		}
+
 		/// <summary>Used in conjunction with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> control code to retrieve the storage access alignment descriptor data for a device</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ff800831%28v=vs.85%29.aspx</remarks>
 		[StructLayout(LayoutKind.Sequential)]
@@ -365,6 +372,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>The logical sector offset within the first physical sector where the first logical sector is placed, in bytes</summary>
 			public UInt32 BytesOffsetForSectorAlignment;
 		}
+
 		/// <summary>Used in conjunction with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> request to retrieve the storage adapter miniport driver descriptor data for a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STORAGE_MINIPORT_DESCRIPTOR
@@ -392,6 +400,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Indicates whether a target reset is supported</summary>
 			public Byte TargetResetSupported;
 		}
+
 		/// <summary>The DEVICE_POWER_DESCRIPTOR structure describes the power capabilities of a storage device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DEVICE_POWER_DESCRIPTOR
@@ -418,6 +427,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>The idle timeout value in milliseconds. This member is ignored unless IdlePowerManagementEnabled is true</summary>
 			public UInt32 IdleTimeoutInMS;
 		}
+
 		/// <summary>Used with the <see cref="Constant.IOCTL_STORAGE.QUERY_PROPERTY"/> control code to retrieve information about a device's write cache property</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STORAGE_WRITE_CACHE_PROPERTY
@@ -434,6 +444,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>The device has a write-through cache</summary>
 				WriteCacheTypeWriteThrough = 3,
 			}
+
 			/// <summary>Indicates whether the write cache is enabled or disabled</summary>
 			public enum WRITE_CACHE_ENABLE
 			{
@@ -444,6 +455,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>The device's write cache is enabled</summary>
 				WriteCacheEnabled = 2,
 			}
+
 			/// <summary>Indicates whether the write cache features of a device are changeable</summary>
 			public enum WRITE_CACHE_CHANGE
 			{
@@ -454,6 +466,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Host software can change the characteristics of the device's write cache</summary>
 				WriteCacheChangeable = 2,
 			}
+
 			/// <summary>Specifies whether a storage device supports write-through caching</summary>
 			public enum WRITE_THROUGH
 			{
@@ -464,6 +477,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Indicates that the device supports write-through caching</summary>
 				WriteThroughSupported = 2,
 			}
+
 			/// <summary>Contains the size of this structure, in bytes</summary>
 			/// <remarks>The value of this member will change as members are added to the structure</remarks>
 			public UInt32 Version;
@@ -551,9 +565,9 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Specifies the minor version number, if any, of the storage adapter</summary>
 			public UInt16 BusMinorVersion;
 			/// <summary>Specifies the version number, if any, of the storage adapter</summary>
-			public Version BusVersion { get { return new Version(this.BusMajorVersion, this.BusMinorVersion); } }
+			public Version BusVersion => new Version(this.BusMajorVersion, this.BusMinorVersion);
 			/// <summary>С большого перепугу, тут структура типа Byte, а в STORAGE_DEVICE_DESCRIPTOR - Int32..</summary>
-			public STORAGE_BUS_TYPE BusTypeReal { get { return (STORAGE_BUS_TYPE)this.BusType; } }
+			public STORAGE_BUS_TYPE BusTypeReal => (STORAGE_BUS_TYPE)this.BusType;
 		}
 
 		/// <summary>Contains the serial number of a USB device</summary>
@@ -583,7 +597,7 @@ namespace AlphaOmega.Debug.Native
 			{
 				/// <summary>The characteristics of the media</summary>
 				[Flags]
-				public enum MEDIA : uint
+				public enum MEDIA : UInt32
 				{
 					/// <summary>Media currently mounted</summary>
 					CURRENTLY_MOUNTED = 0x80000000,
@@ -598,6 +612,7 @@ namespace AlphaOmega.Debug.Native
 					/// <summary>Write protected</summary>
 					WRITE_PROTECTED = 0x00000100,
 				}
+
 				/// <summary>Disc info</summary>
 				[StructLayout(LayoutKind.Sequential, Pack = 1)]
 				public struct DiskInfoStruct
@@ -618,6 +633,7 @@ namespace AlphaOmega.Debug.Native
 					/// <summary>The characteristics of the media</summary>
 					public MEDIA MediaCharacteristics;
 				}
+
 				/// <summary>Removable disc info</summary>
 				[StructLayout(LayoutKind.Sequential, Pack = 1)]
 				public struct RemovableDiskInfoStruct
@@ -638,6 +654,7 @@ namespace AlphaOmega.Debug.Native
 					/// <summary>The characteristics of the media</summary>
 					public MEDIA MediaCharacteristics;
 				}
+
 				/// <summary>Tape info</summary>
 				[StructLayout(LayoutKind.Sequential, Pack = 1)]
 				public struct TapeInfoStruct
@@ -655,6 +672,7 @@ namespace AlphaOmega.Debug.Native
 					/// <summary>The SCSI-specific current operating density for read/write operations</summary>
 					public Byte DensityCode;
 				}
+
 				/// <summary>A disc info structure</summary>
 				[FieldOffset(0)]
 				public DiskInfoStruct DiskInfo;
@@ -693,13 +711,14 @@ namespace AlphaOmega.Debug.Native
 				}
 			}
 		}
+
 		/// <summary>Contains information about a device</summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STORAGE_DEVICE_NUMBER
 		{
 			/// <summary>Known device types</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/hardware/ff563821%28v=vs.85%29.aspx</remarks>
-			public enum FileDevice : uint
+			public enum FileDevice : UInt32
 			{
 				/// <summary></summary>
 				BEEP = 0x00000001,

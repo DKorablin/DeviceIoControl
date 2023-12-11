@@ -42,11 +42,9 @@ namespace AlphaOmega.Debug.Native
 		/// <param name="lpFileName">Device path</param>
 		/// <returns>Handle to the opened device</returns>
 		public static IntPtr OpenDevice(String lpFileName)
-		{
-			return Methods.OpenDevice(lpFileName,
+			=> Methods.OpenDevice(lpFileName,
 				WinApi.FILE_ACCESS_FLAGS.GENERIC_READ | WinApi.FILE_ACCESS_FLAGS.GENERIC_WRITE,
 				WinApi.FILE_SHARE.READ | WinApi.FILE_SHARE.WRITE);
-		}
 
 		/// <summary>Opens specified device</summary>
 		/// <param name="lpFileName">Device path</param>
@@ -68,9 +66,9 @@ namespace AlphaOmega.Debug.Native
 				0,
 				IntPtr.Zero);
 
-			if(result == Constant.INVALID_HANDLE_VALUE)
-				throw new Win32Exception();
-			return result;
+			return result == Constant.INVALID_HANDLE_VALUE
+				? throw new Win32Exception()
+				: result;
 		}
 
 		/// <summary>
@@ -147,7 +145,6 @@ namespace AlphaOmega.Debug.Native
 			UInt32 cbSid = (UInt32)capacity;
 			StringBuilder referencedDomainName = new StringBuilder(capacity);
 			UInt32 cchReferencedDomainName = (UInt32)referencedDomainName.Capacity;
-			WinApi.SID_NAME_USE sidUse;
 
 			Boolean isSuccess = Methods.LookupAccountName(null,
 				accountName,
@@ -155,7 +152,7 @@ namespace AlphaOmega.Debug.Native
 				ref cbSid,
 				referencedDomainName,
 				ref cchReferencedDomainName,
-				out sidUse);
+				out _);
 
 			if(isSuccess)
 				return result;
@@ -200,8 +197,7 @@ namespace AlphaOmega.Debug.Native
 		[SuppressUnmanagedCodeSecurity]
 		[SecuritySafeCritical]
 		[DllImport("kernel32.dll", EntryPoint = "GetDriveTypeA", SetLastError = true, ThrowOnUnmappableChar = true)]
-		public static extern WinApi.DRIVE GetDriveTypeA(
-			[In] String lpRootPathName);
+		public static extern WinApi.DRIVE GetDriveTypeA([In] String lpRootPathName);
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>
@@ -240,13 +236,9 @@ namespace AlphaOmega.Debug.Native
 			UInt32 dwIoControlCode,
 			Object inParams,
 			out UInt32 lpBytesReturned) where T : struct
-		{
-			T result;
-			if(Methods.DeviceIoControl<T>(hDevice, dwIoControlCode, inParams, out lpBytesReturned, out result))
-				return result;
-			else
-				throw new Win32Exception();
-		}
+			=> Methods.DeviceIoControl<T>(hDevice, dwIoControlCode, inParams, out lpBytesReturned, out T result)
+				? result
+				: throw new Win32Exception();
 
 		/// <summary>Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation</summary>
 		/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa363216%28v=vs.85%29.aspx</remarks>

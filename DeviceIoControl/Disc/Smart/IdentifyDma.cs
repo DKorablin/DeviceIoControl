@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Globalization;
 
 namespace AlphaOmega.Debug
 {
 	/// <summary>Device DMA/UDMA modes</summary>
-	public struct IdentifyDma
+	public readonly struct IdentifyDma
 	{
 		/// <summary>DMA type</summary>
 		public enum DmaType
@@ -16,16 +15,16 @@ namespace AlphaOmega.Debug
 		}
 
 		/// <summary>DMA/UDMA structure indexes</summary>
-		private static Int32[] DmaIndex = new Int32[] { 88, 63, };
+		private static readonly Int32[] DmaIndex = new Int32[] { 88, 63, };
 
 		/// <summary>DMA/UDMA structure max bit pos</summary>
-		private static Int32[] DmaMaxPos = new Int32[] { 5, 2, };
+		private static readonly Int32[] DmaMaxPos = new Int32[] { 5, 2, };
 
 		/// <summary>Device info</summary>
-		private SmartInfoCollection Info { get; }
+		private readonly SmartInfoCollection _info;
 
 		/// <summary>Type of DMA</summary>
-		private DmaType Type { get; }
+		private readonly DmaType _type;
 
 		/// <summary>Max DMA/UDMA mode supported</summary>
 		public Int64? Max
@@ -51,8 +50,8 @@ namespace AlphaOmega.Debug
 		/// <param name="type">DMA/UDMA</param>
 		public IdentifyDma(SmartInfoCollection info, DmaType type)
 		{
-			this.Info = info ?? throw new ArgumentNullException(nameof(info));
-			this.Type = type;
+			this._info = info ?? throw new ArgumentNullException(nameof(info));
+			this._type = type;
 		}
 
 		private Int64 GetHighBitPos(Boolean isSelected)
@@ -75,9 +74,9 @@ namespace AlphaOmega.Debug
 			String result = String.Empty;
 			if(max != null)
 			{
-				result = $"Max {this.Type.ToString().ToUpperInvariant()} mode supported {max}{(max > 0 ? " and below" : String.Empty)}";
+				result = $"Max {this._type.ToString().ToUpperInvariant()} mode supported {max}{(max > 0 ? " and below" : String.Empty)}";
 				if(selected != null)
-					result += Environment.NewLine + $"{this.Type.ToString().ToUpperInvariant()} mode selected {selected}";
+					result += Environment.NewLine + $"{this._type.ToString().ToUpperInvariant()} mode selected {selected}";
 			}
 			return result;
 		}

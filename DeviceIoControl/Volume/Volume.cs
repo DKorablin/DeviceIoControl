@@ -8,25 +8,17 @@ namespace AlphaOmega.Debug
 	/// <summary>Volume IO control commands</summary>
 	public class Volume
 	{
-		#region Fields
+		/// <summary>The device</summary>
+		private readonly DeviceIoControl _device;
 		private Boolean? _isClustered;
 		private VolumeApi.VOLUME_DISK_EXTENTS? _diskExtents;
-		#endregion Fields
-
-		/// <summary>Device</summary>
-		private DeviceIoControl Device { get; }
 
 		/// <summary>Represents a physical location on a disk</summary>
 		/// <remarks>The call does not work in Windows 7</remarks>
 		public VolumeApi.VOLUME_DISK_EXTENTS DiskExtents
-		{
-			get
-			{
-				return this._diskExtents
-					?? (this._diskExtents = this.Device.IoControl<VolumeApi.VOLUME_DISK_EXTENTS>(
-						Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS, null)).Value;
-			}
-		}
+			=> this._diskExtents
+				?? (this._diskExtents = this._device.IoControl<VolumeApi.VOLUME_DISK_EXTENTS>(
+					Constant.IOCTL_VOLUME.GET_VOLUME_DISK_EXTENTS, null)).Value;
 
 		/// <summary>Determines whether the specified volume is clustered</summary>
 		/// <exception cref="Win32Exception">The volume is offline or Cluster service is not installed</exception>
@@ -35,14 +27,13 @@ namespace AlphaOmega.Debug
 			get
 			{
 				if(this._isClustered == null)
-					if(this.Device.IoControl(Constant.IOCTL_VOLUME.IS_CLUSTERED)) this._isClustered = true;
+					if(this._device.IoControl(Constant.IOCTL_VOLUME.IS_CLUSTERED)) this._isClustered = true;
 					else
 					{
 						Int32 error = Marshal.GetLastWin32Error();
-						if(error == (Int32)Constant.ERROR.NO_ERROR)
-							this._isClustered = false;
-						else
-							throw new Win32Exception(error);
+						this._isClustered = error == (Int32)Constant.ERROR.NO_ERROR
+							? false
+							: throw new Win32Exception(error);
 					}
 				return this._isClustered.Value;
 			}
@@ -51,8 +42,6 @@ namespace AlphaOmega.Debug
 		/// <summary>Create instance of Volume IO control commands</summary>
 		/// <param name="device">Device</param>
 		internal Volume(DeviceIoControl device)
-		{
-			this.Device = device;
-		}
+			=> this._device = device;
 	}
 }

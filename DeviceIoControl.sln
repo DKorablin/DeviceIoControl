@@ -5,6 +5,7 @@ VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4A4BAB9C-487C-4B91-8872-711DBAE32A46}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		README.md = README.md
 		Resources.txt = Resources.txt
 	EndProjectSection
@@ -21,6 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo35", "Demo\Demo35.csproj", "{FEB3CCEF-4C57-4815-B306-368E48DFA07C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceIoControl35", "DeviceIoControl\DeviceIoControl35.csproj", "{6DADABCD-090F-4A04-BC48-B8B8F86237BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +39,14 @@ Global
 		{D73CE772-333C-4972-8AC1-5514980077F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D73CE772-333C-4972-8AC1-5514980077F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D73CE772-333C-4972-8AC1-5514980077F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB3CCEF-4C57-4815-B306-368E48DFA07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB3CCEF-4C57-4815-B306-368E48DFA07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB3CCEF-4C57-4815-B306-368E48DFA07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB3CCEF-4C57-4815-B306-368E48DFA07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DADABCD-090F-4A04-BC48-B8B8F86237BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DADABCD-090F-4A04-BC48-B8B8F86237BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DADABCD-090F-4A04-BC48-B8B8F86237BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DADABCD-090F-4A04-BC48-B8B8F86237BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
