@@ -7,7 +7,7 @@
 		<AssemblyTitle>DeviceIoControl</AssemblyTitle>
 		<Company>Danila Korablin</Company>
 		<Product>Native DeviceIoControl wrapper assembly</Product>
-		<Copyright>Copyright © Danila Korablin 2013-2020</Copyright>
+		<Copyright>Copyright © Danila Korablin 2013-2023</Copyright>
 		<Configuration>Debug</Configuration>
 		<AssemblyVersion>1.0.*</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
@@ -20,15 +20,15 @@
 		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
 		<Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
 			<Link>PinnedBufferReader.cs</Link>
 		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="AttributeNames.Designer.cs">
