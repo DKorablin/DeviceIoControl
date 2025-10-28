@@ -87,7 +87,7 @@ namespace AlphaOmega.Debug.Native
 			public UInt64 DiskLength;
 			
 			/// <summary>Contains string representation of disc size</summary>
-			/// <returns>Size with dimention</returns>
+			/// <returns>Size with dimension</returns>
 			public String DiskLengthString
 				=> Utils.FileSizeToString(this.DiskLength);
 		}
@@ -566,7 +566,7 @@ namespace AlphaOmega.Debug.Native
 			public UInt16 BusMinorVersion;
 			/// <summary>Specifies the version number, if any, of the storage adapter</summary>
 			public Version BusVersion => new Version(this.BusMajorVersion, this.BusMinorVersion);
-			/// <summary>С большого перепугу, тут структура типа Byte, а в STORAGE_DEVICE_DESCRIPTOR - Int32..</summary>
+			/// <summary>Unfortunately, this structure is of type Byte, but in STORAGE_DEVICE_DESCRIPTOR it is Int32.</summary>
 			public STORAGE_BUS_TYPE BusTypeReal => (STORAGE_BUS_TYPE)this.BusType;
 		}
 
@@ -601,7 +601,7 @@ namespace AlphaOmega.Debug.Native
 				{
 					/// <summary>Media currently mounted</summary>
 					CURRENTLY_MOUNTED = 0x80000000,
-					/// <summary>Eraseable media</summary>
+					/// <summary>Erasable media</summary>
 					ERASEABLE = 0x00000001,
 					/// <summary>Read only media</summary>
 					READ_ONLY = 0x00000004,
@@ -872,7 +872,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Reserved for future use</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
 			public Byte[] Reserved;
-			/// <summary>The alignment of the image payload, in number of bytes. The maximum is PAGE_SIZE. The transfer size is a mutliple of this size</summary>
+			/// <summary>The alignment of the image payload, in number of bytes. The maximum is PAGE_SIZE. The transfer size is a multiple of this size</summary>
 			/// <remarks>Some protocols require at least sector size. When this value is set to 0, this means that this value is invalid</remarks>
 			public UInt32 ImagePayloadAlignment;
 			/// <summary>The image payload maximum size, this is used for a single command</summary>

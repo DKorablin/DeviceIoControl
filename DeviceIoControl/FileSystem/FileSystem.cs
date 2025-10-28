@@ -27,10 +27,10 @@ namespace AlphaOmega.Debug
 		public FileSystem(DeviceIoControl device)
 			=> this._device = device ?? throw new ArgumentNullException(nameof(device));
 
-		/// <summary>Метод не работает и вываливается по: 0x00000057 - The parameter is incorrect</summary>
+		/// <summary>The method does not work and fails with: 0x00000057 - The parameter is incorrect</summary>
 		/// <param name="accountName"></param>
 		/// <exception cref="ArgumentNullException"><c>accountName</c> is null or empty string</exception>
-		/// <exception cref="Win32Exception">Win32 Exception occured. See winerror.h for details</exception>
+		/// <exception cref="Win32Exception">Win32 Exception occurred. See winerror.h for details</exception>
 		/// <returns></returns>
 		public FsctlApi.FIND_BY_SID_OUTPUT FindFilesBySid(String accountName)
 		{
@@ -49,7 +49,7 @@ namespace AlphaOmega.Debug
 			Boolean resultCode = this._device.IoControl<FsctlApi.FIND_BY_SID_OUTPUT>(
 				Constant.FSCTL.FIND_FILES_BY_SID,
 				fsInParams,
-				out UInt32 bytesReturned,
+				out UInt32 _,
 				out FsctlApi.FIND_BY_SID_OUTPUT result);
 
 			if(resultCode)
@@ -84,8 +84,8 @@ namespace AlphaOmega.Debug
 		/// Its value should be an integral multiple of eight.
 		/// </param>
 		/// <param name="bytesReturned">Returned length of bytes</param>
-		/// <param name="moreDataAvailable">Not all data readed</param>
-		/// <exception cref="Win32Exception">Win32 Exception occured. See winerror.h for details</exception>
+		/// <param name="moreDataAvailable">Not all data was read.</param>
+		/// <exception cref="Win32Exception">Win32 Exception occurred. See winerror.h for details</exception>
 		/// <returns>Represents the occupied and available clusters on a disk</returns>
 		public FsctlApi.VOLUME_BITMAP_BUFFER GetVolumeBitmap(UInt64 startingLcn,out UInt32 bytesReturned, out Boolean moreDataAvailable)
 		{
@@ -119,7 +119,7 @@ namespace AlphaOmega.Debug
 			FsctlApi.FILESYSTEM_STATISTICS result = this._device.IoControl<FsctlApi.FILESYSTEM_STATISTICS>(
 				Constant.FSCTL.FILESYSTEM_GET_STATISTICS,
 				null,
-				out UInt32 bytesReturned);
+				out UInt32 _);
 
 			/*const UInt32 SizeOfFileSystemStat = 56;
 			using(BytesReader reader = new BytesReader(result.Data))

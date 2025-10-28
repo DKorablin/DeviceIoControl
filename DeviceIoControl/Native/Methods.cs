@@ -48,7 +48,7 @@ namespace AlphaOmega.Debug.Native
 
 		/// <summary>Opens specified device</summary>
 		/// <param name="lpFileName">Device path</param>
-		/// <param name="dwDesiredAccess">Desired access flage</param>
+		/// <param name="dwDesiredAccess">Desired access flags</param>
 		/// <param name="dwShareMode">Share mode</param>
 		/// <exception cref="ArgumentNullException">lpFileName is null or empty</exception>
 		/// <exception cref="Win32Exception">Device does not opened</exception>
@@ -292,7 +292,7 @@ namespace AlphaOmega.Debug.Native
 					(UInt32)nOutBufferSize,
 					ref lpBytesReturned,
 					ref lpOverlapped);
-				//if(result) В некоторых случаях даже при отрицательном значении необходимо читать исходящий буфер
+				//if(result) In some cases, even with a negative value, it is necessary to read the output buffer
 				outBuffer = (T)Marshal.PtrToStructure(lpOutBuffer, typeof(T));
 
 				return result;

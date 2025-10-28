@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup Condition="'$(Version)' == ''">
+		<Version>1.0.0.0</Version>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ArtifactsDir Condition="'$(ArtifactsDir)' == ''">$(SolutionDir)..\bin\$(SolutionName)</ArtifactsDir>
+		<OutputPath>$(ArtifactsDir)</OutputPath>
+		<AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+		<BaseIntermediateOutputPath>$(MSBuildProjectDirectory)\..\..\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+	</PropertyGroup>
+</Project>

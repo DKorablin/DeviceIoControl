@@ -88,7 +88,7 @@ namespace AlphaOmega.Debug.Native
 			/// </summary>
 			public UInt32 Restart;
 			/// <summary>A SID structure that specifies the desired creator owner</summary>
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]//TODO: Пока не понял как передать точно фиксированный массив...
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]//TODO: I haven't figured out yet how to pass a fixed array exactly...
 			public Byte[] Sid;
 		}
 

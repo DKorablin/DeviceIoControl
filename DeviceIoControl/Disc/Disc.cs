@@ -24,8 +24,8 @@ namespace AlphaOmega.Debug
 			{
 				if(this._version == null)
 				{
-					_ = this._device.IoControl<DiscApi.GETVERSIONINPARAMS>(Constant.IOCTL_DISC.SMART_GET_VERSION, null, out DiscApi.GETVERSIONINPARAMS prms);
-					this._version = prms;
+					_ = this._device.IoControl<DiscApi.GETVERSIONINPARAMS>(Constant.IOCTL_DISC.SMART_GET_VERSION, null, out DiscApi.GETVERSIONINPARAMS versionParams);
+					this._version = versionParams;
 				}
 				return this._version.Value.Equals(default(DiscApi.GETVERSIONINPARAMS)) ? (DiscApi.GETVERSIONINPARAMS?)null : this._version.Value;
 			}
@@ -83,7 +83,7 @@ namespace AlphaOmega.Debug
 			=> this._device = device;
 
 		/// <summary>Get disc performance managed</summary>
-		/// <returns>Perfomance manager</returns>
+		/// <returns>Performance manager</returns>
 		public Performance GetDiscPerformance()
 			=> new Performance(this._device);
 	}

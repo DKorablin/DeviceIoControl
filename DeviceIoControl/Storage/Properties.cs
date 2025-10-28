@@ -221,20 +221,24 @@ namespace AlphaOmega.Debug
 		/// <returns>Such a property exists</returns>
 		private Boolean IsPropertyExists(StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_PROPERTY_ID propertyId)
 		{
-			StorageApi.STORAGE_PROPERTY_QUERY query = new StorageApi.STORAGE_PROPERTY_QUERY();
-			query.QueryType = StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyExistsQuery;
-			query.PropertyId = propertyId;
+			StorageApi.STORAGE_PROPERTY_QUERY query = new StorageApi.STORAGE_PROPERTY_QUERY()
+			{
+				QueryType = StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyExistsQuery,
+				PropertyId = propertyId,
+			};
 
 			return this._info.IoControl(Constant.IOCTL_STORAGE.QUERY_PROPERTY, query);
 		}
 
 		private T IoControl<T>() where T : struct
 		{
-			StorageApi.STORAGE_PROPERTY_QUERY inParams = new StorageApi.STORAGE_PROPERTY_QUERY();
-			inParams.QueryType = StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyStandardQuery;
-			inParams.PropertyId = Properties.GetPropertyId(typeof(T));
+			StorageApi.STORAGE_PROPERTY_QUERY inParams = new StorageApi.STORAGE_PROPERTY_QUERY()
+			{
+				QueryType = StorageApi.STORAGE_PROPERTY_QUERY.STORAGE_QUERY_TYPE.PropertyStandardQuery,
+				PropertyId = Properties.GetPropertyId(typeof(T)),
+			};
 
-			return this.IsPropertyExists(inParams.PropertyId)//Перед запросом проверяю поддержку этого свойства устройством
+			return this.IsPropertyExists(inParams.PropertyId)//Before making a request, I check if the device supports this property.
 				&& this._info.IoControl<T>(Constant.IOCTL_STORAGE.QUERY_PROPERTY, inParams, out T outParams)
 				? outParams
 				: default;

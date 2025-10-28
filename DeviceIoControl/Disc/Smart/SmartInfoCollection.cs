@@ -23,8 +23,8 @@ namespace AlphaOmega.Debug
 			{
 				if(this._info == null)
 				{
-					DiscApi.SENDCMDOUTPARAMS prms = this.GetDeviceInfo(out _);
-					using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
+					DiscApi.SENDCMDOUTPARAMS sendParams = this.GetDeviceInfo(out _);
+					using(PinnedBufferReader reader = new PinnedBufferReader(sendParams.bBuffer))
 						this._info = reader.BytesToStructure<DiscApi.IDSECTOR>(0);
 				}
 				return this._info.Value;
@@ -58,7 +58,7 @@ namespace AlphaOmega.Debug
 				?? (this._statusParams = this.SendCommand(DiscApi.IDEREGS.SMART.RETURN_SMART_STATUS))).Value;
 
 		/// <summary>SMART thresholds</summary>
-		/// <remarks>Threshols are cached because they are unchanged</remarks>
+		/// <remarks>Thresholds are cached because they are unchanged</remarks>
 		public DiscApi.ATTRTHRESHOLD[] Thresholds
 		{
 			get
@@ -66,8 +66,8 @@ namespace AlphaOmega.Debug
 				if(this._thresholds == null)
 				{
 					UInt32 padding = 2;
-					DiscApi.SENDCMDOUTPARAMS prms = this.GetThresholdParamsNative();
-					using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
+					DiscApi.SENDCMDOUTPARAMS sendParams = this.GetThresholdParamsNative();
+					using(PinnedBufferReader reader = new PinnedBufferReader(sendParams.bBuffer))
 					{
 						this._thresholds = new DiscApi.ATTRTHRESHOLD[Constant.NUM_ATTRIBUTE_STRUCTS];
 						for(Int32 loop = 0;loop < this._thresholds.Length;loop++)
@@ -99,12 +99,12 @@ namespace AlphaOmega.Debug
 		IEnumerator IEnumerable.GetEnumerator()
 			=> this.GetEnumerator();
 		
-		/// <summary>S.M.A.R.T. attibutes</summary>
+		/// <summary>S.M.A.R.T. attributes</summary>
 		public DiscApi.DRIVEATTRIBUTE[] GetAttributes()
 		{
 			DiscApi.DRIVEATTRIBUTE[] result;
-			DiscApi.SENDCMDOUTPARAMS prms = this.GetAttributeParamsNative();
-			using(PinnedBufferReader reader = new PinnedBufferReader(prms.bBuffer))
+			DiscApi.SENDCMDOUTPARAMS sendParams = this.GetAttributeParamsNative();
+			using(PinnedBufferReader reader = new PinnedBufferReader(sendParams.bBuffer))
 			{
 				UInt32 padding = 2; 
 				result = new DiscApi.DRIVEATTRIBUTE[Constant.NUM_ATTRIBUTE_STRUCTS];

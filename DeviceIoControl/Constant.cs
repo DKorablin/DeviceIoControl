@@ -9,7 +9,7 @@ namespace AlphaOmega.Debug
 		public const String DeviceWinNTArg1 = "\\\\.\\PhysicalDrive{0}";
 		public const String DriveWinNTArg1 = "\\\\.\\{0}:";
 		public const String DeviceScsiArg1 = "\\\\.\\Scsi{0}:";//TODO: http://read.pudn.com/downloads47/sourcecode/crypt/159311/DiskSerialNumber.cpp__.htm
-		public const Int32 BUFFER_SIZE = 1024;//512 - На моей новой машине объект не влезает в 512 байт
+		public const Int32 BUFFER_SIZE = 1024;//512 - On my new machine, the object doesn't fit in 512 bytes.
 		public const UInt32 NUM_ATTRIBUTE_STRUCTS = 30;
 		public static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
 
@@ -28,6 +28,7 @@ namespace AlphaOmega.Debug
 			MORE_DATA = 0xEA,
 			INVALID_FLAGS = 0x3EC,
 		}
+
 		/// <summary>Volume</summary>
 		public struct IOCTL_VOLUME
 		{
@@ -79,30 +80,41 @@ namespace AlphaOmega.Debug
 			/// </summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365183%28v=vs.85%29.aspx</remarks>
 			public static readonly UInt32 PERFORMANCE = Constant.CTL_CODE(BASE, 0x0008, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			/// <summary>Determines whether the specified disk is writable</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365182%28v=vs.85%29.aspx</remarks>
 			public static readonly UInt32 IS_WRITABLE = Constant.CTL_CODE(BASE, 0x0009, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			[Obsolete("This control code is obsolete", true)]
 			public static readonly UInt32 LOGGING = Constant.CTL_CODE(BASE, 0x000a, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			public static readonly UInt32 FORMAT_TRACKS_EX = Constant.CTL_CODE(BASE, 0x000b, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
+
 			[Obsolete("This control code is obsolete", true)]
 			public static readonly UInt32 HISTOGRAM_STRUCTURE = Constant.CTL_CODE(BASE, 0x000c, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			[Obsolete("This control code is obsolete", true)]
 			public static readonly UInt32 HISTOGRAM_DATA = Constant.CTL_CODE(BASE, 0x000d, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			[Obsolete("This control code is obsolete", true)]
 			public static readonly UInt32 HISTOGRAM_RESET = Constant.CTL_CODE(BASE, 0x000e, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			[Obsolete("This control code is obsolete", true)]
 			public static readonly UInt32 REQUEST_STRUCTURE = Constant.CTL_CODE(BASE, 0x000f, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			[Obsolete("This control code is obsolete", true)]
 			public static readonly UInt32 REQUEST_DATA = Constant.CTL_CODE(BASE, 0x0010, WinApi.FILE_ACCESS.ANY_ACCESS);
+
 			/// <summary>Disables the counters that were enabled by previous calls to IOCTL_DISK_PERFORMANCE. This request is available in Windows XP and later operating systems. Caller must be running at IRQL = PASSIVE_LEVEL</summary>
 			/// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa365184%28v=vs.85%29.aspx</remarks>
 			public static readonly UInt32 PERFORMANCE_OFF = Constant.CTL_CODE(BASE, 0x0018, WinApi.FILE_ACCESS.ANY_ACCESS);
 
 			/// <summary>Returns version information, a capabilities mask, and a bitmask for the device</summary>
 			public static readonly UInt32 SMART_GET_VERSION = Constant.CTL_CODE(BASE, 0x0020, WinApi.FILE_ACCESS.READ_ACCESS);
+
 			/// <summary>Sends one of the following Self-Monitoring Analysis and Reporting Technology (SMART) commands to the device</summary>
 			public static readonly UInt32 SMART_SEND_DRIVE_COMMAND = Constant.CTL_CODE(BASE, 0x0021, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
+
 			/// <summary>Returns the ATA-2 identify data, the Self-Monitoring Analysis and Reporting Technology (SMART) thresholds, or the SMART attributes for the device</summary>
 			public static readonly UInt32 SMART_RCV_DRIVE_DATA = Constant.CTL_CODE(BASE, 0x0022, WinApi.FILE_ACCESS.READ_ACCESS | WinApi.FILE_ACCESS.WRITE_ACCESS);
 

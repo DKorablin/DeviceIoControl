@@ -53,7 +53,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Cylinder register defines for SMART command</summary>
 			public enum SMART_CYL : Byte
 			{
-				/// <summary>Low culinder register</summary>
+				/// <summary>Low cylinder register</summary>
 				LOW = 0x4F,
 				/// <summary>Hi cylinder register</summary>
 				HI = 0xC2,
@@ -134,7 +134,7 @@ namespace AlphaOmega.Debug.Native
 				INVALID_FLAG = 2,
 				/// <summary>Invalid command byte</summary>
 				INVALID_COMMAND = 3,
-				/// <summary>Bad buffer (null, invalid addr..)</summary>
+				/// <summary>Bad buffer (null, invalid address..)</summary>
 				INVALID_BUFFER = 4,
 				/// <summary>Drive number not valid</summary>
 				INVALID_DRIVE = 5,
@@ -275,7 +275,7 @@ namespace AlphaOmega.Debug.Native
 					else if((this.wGenConfig & 0x40) == 0x40)
 						result = DeviceType.Fixed;
 					/*if((this.wGenConfig & 0x80C0) > 0)
-					{//TODO: Тип устройства определяется неправильно
+					{//TODO: The device type is not detected correctly.
 						if((this.wGenConfig & 0x8000) > 0)
 							result = DeviceType.NonMagnetic;
 						if((this.wGenConfig & 0x80) > 0)
@@ -309,7 +309,7 @@ namespace AlphaOmega.Debug.Native
 			public String AttributeName
 				=> Resources.GetAttributeName(this.bAttrID);
 
-			/// <summary>Преобразованное значение</summary>
+			/// <summary>Transformed value</summary>
 			public Int64 RawValue
 			{
 				get
@@ -407,7 +407,7 @@ namespace AlphaOmega.Debug.Native
 			ATA_ID_CMD = 1,
 			/// <summary>ATAPI ID command supported</summary>
 			ATAPI_ID_CMD = 2,
-			/// <summary>SMART commannds supported</summary>
+			/// <summary>SMART commands supported</summary>
 			SMART_CMD = 4,
 		}
 
@@ -442,7 +442,7 @@ namespace AlphaOmega.Debug.Native
 			public Byte[] Data;
 
 			/// <summary>Contains string representation of disc size</summary>
-			/// <returns>Size with dimention</returns>
+			/// <returns>Size with dimension</returns>
 			public String DiskSizeString
 				=> Utils.FileSizeToString(this.DiskSize);
 
@@ -622,7 +622,7 @@ namespace AlphaOmega.Debug.Native
 		}
 
 		/// <summary>The DISK_PERFORMANCE structure is used in conjunction with the <see cref="Constant.IOCTL_DISC.PERFORMANCE"/> request to collect summary disk statistics for purposes of measuring disk performance</summary>
-		/// <remarks>Counting halts whenever the performance counters are disabled, but the counters are not reset, so the cumulative values assigned to the structure members might potentially reflect disk activity across several enablings and disablings of the counters</remarks>
+		/// <remarks>Counting halts whenever the performance counters are disabled, but the counters are not reset, so the cumulative values assigned to the structure members might potentially reflect disk activity across several enabling and disabling of the counters</remarks>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		public struct DISK_PERFORMANCE
 		{

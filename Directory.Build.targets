@@ -1,0 +1,35 @@
+<Project>
+	<Target Name="BeforeBuild">
+		<ItemGroup>
+			<AssemblyAttributes Include="AssemblyVersion">
+				<_Parameter1>$(Version)</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyFileVersion">
+				<_Parameter1>$(Version)</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyInformationalVersion">
+				<_Parameter1>$(Version)</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyConfiguration">
+				<_Parameter1>$(Configuration)</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyCompany">
+				<_Parameter1>Danila Korablin</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyProduct">
+				<_Parameter1>$(SolutionName)</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyTitle">
+				<_Parameter1>$(SolutionName)</_Parameter1>
+			</AssemblyAttributes>
+			<AssemblyAttributes Include="AssemblyCopyright">
+				<_Parameter1>Copyright © Danila Korablin 2013-2025</_Parameter1>
+			</AssemblyAttributes>
+		</ItemGroup>
+		<MakeDir Directories="$(IntermediateOutputPath)" />
+		<WriteCodeFragment Language="C#" OutputFile="$(IntermediateOutputPath)Version.cs" AssemblyAttributes="@(AssemblyAttributes)" />
+		<ItemGroup>
+			<Compile Include="$(IntermediateOutputPath)Version.cs" />
+		</ItemGroup>
+	</Target>
+</Project>

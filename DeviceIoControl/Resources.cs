@@ -3,7 +3,7 @@ using System.Resources;
 
 namespace AlphaOmega.Debug
 {
-	/// <summary>Constant string rescriptions</summary>
+	/// <summary>Constant string descriptions</summary>
 	public static class Resources
 	{
 		private static ResourceManager _attributeNames;

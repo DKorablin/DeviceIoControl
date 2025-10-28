@@ -162,7 +162,7 @@ namespace AlphaOmega.Debug
 			CREATE_NEW = 1,
 			/// <summary>Create always</summary>
 			CREATE_ALWAYS = 2,
-			/// <summary>Open exising</summary>
+			/// <summary>Open existing</summary>
 			OPEN_EXISTING = 3,
 			/// <summary>Open always</summary>
 			OPEN_ALWAYS = 4,

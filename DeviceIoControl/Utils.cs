@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug
 	internal struct Utils
 	{
 		private const Int64 FileSize = 1024;
-		private static String[] FileSizeType = new String[] { "bytes", "Kb", "Mb", "Gb", };
+		private static readonly String[] FileSizeType = new String[] { "bytes", "Kb", "Mb", "Gb", };
 
 		/// <summary>Swap odd/even bytes in array of USHORTS</summary>
 		/// <param name="buffer">Buffer</param>
@@ -68,9 +68,9 @@ namespace AlphaOmega.Debug
 		public static Int32 MakeDword(UInt16 low, UInt16 high)
 			=> (low + (high << 16));
 
-		/// <summary>Convert file size in bytes to string with dimention</summary>
+		/// <summary>Convert file size in bytes to string with dimension</summary>
 		/// <param name="length">size in bytes</param>
-		/// <returns>Size with dimention</returns>
+		/// <returns>Size with dimension</returns>
 		public static String FileSizeToString(UInt64 length)
 		{
 			UInt64 constSize = 1;

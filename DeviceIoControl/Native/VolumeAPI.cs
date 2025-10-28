@@ -34,7 +34,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>An array of DISK_EXTENT structures</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-			public DISK_EXTENT[] Extents;//TODO: Если дисков больше 10, то метод DeviceIoControl вернёт ERROR_MORE_DATA.
+			public DISK_EXTENT[] Extents;//TODO: If there are more than 10 disks, the DeviceIoControl method will return ERROR_MORE_DATA.
 		}
 
 	}
