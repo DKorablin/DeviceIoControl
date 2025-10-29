@@ -168,9 +168,10 @@ jobs:
         generateReleaseNotes: true
     - name: Creating NuGet package
       run: >
-        dotnet pack ${{env.SolutionName}}\${{env.SolutionName}}.csproj --no-build --no-restore -o ${{env.ArtifactsDir}}\nupkg
+        dotnet pack ${{env.SolutionName}}\${{env.SolutionName}}.csproj --no-build --no-restore -c Release -o ${{env.ArtifactsDir}}\nupkg
         /p:ArtifactsDir="${{env.ArtifactsDir}}"
         /p:PackageVersion=${{needs.version.outputs.new_version}}
+        /p:GenerateDocumentationFile=true
         /p:IncludeSymbols=true
         /p:DebugType=Portable
         /p:EmbedUntrackedSources=true
