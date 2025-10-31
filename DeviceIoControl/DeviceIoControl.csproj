@@ -11,6 +11,12 @@
 		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<Optimize>true</Optimize>
+		<PublishSingleFile>true</PublishSingleFile>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+	</PropertyGroup>
+
 	<!--nuspec-->
 	<PropertyGroup>
 		<PackageId>AlphaOmega.DeviceIoControl</PackageId>
@@ -25,14 +31,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\docs" />
+		<AssemblyAttributes Include="AssemblyMetadata" Condition="'$(TargetFramework)' == 'netstandard2.0'">
+			<_Parameter1>ProjectUrl</_Parameter1>
+			<_Parameter2>https://github.com/DKorablin/DeviceIoControl</_Parameter2>
+		</AssemblyAttributes>
 	</ItemGroup>
 
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<Optimize>true</Optimize>
-		<PublishSingleFile>true</PublishSingleFile>
-		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\docs" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
 			<Link>PinnedBufferReader.cs</Link>
