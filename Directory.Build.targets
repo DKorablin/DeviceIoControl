@@ -23,7 +23,7 @@
 				<_Parameter1>$(SolutionName)</_Parameter1>
 			</AssemblyAttributes>
 			<AssemblyAttributes Include="AssemblyCopyright">
-				<_Parameter1>Copyright © Danila Korablin 2013-2025</_Parameter1>
+				<_Parameter1>Copyright © Danila Korablin 2013-$([System.DateTime]::Now.Year)</_Parameter1>
 			</AssemblyAttributes>
 		</ItemGroup>
 		<MakeDir Directories="$(IntermediateOutputPath)" />
