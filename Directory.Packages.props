@@ -8,7 +8,7 @@
 			<PrivateAssets>All</PrivateAssets>
 		</GlobalPackageReference>
 		<!--Analyzers-->
-		<GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.8.0.113526">
+		<GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
 			<PrivateAssets>All</PrivateAssets>
 			<IncludeAssets>Runtime; Build; Native; contentfiles; Analyzers; buildtransitive</IncludeAssets>
 		</GlobalPackageReference>
